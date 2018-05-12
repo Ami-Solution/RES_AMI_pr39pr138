@@ -7,7 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Button x:Name="AddBtn" Content="ADD" HorizontalAlignment="Left" Margin="52,38,0,0" VerticalAlignment="Top" Width="74" Click="AddBtn_Click"/>
+        <Button x:Name="AddBtn" Content="ADD" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Width="74" Click="AddBtn_Click"/>
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding AvailableAMIDevices}" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="299" Margin="100,10,0,0" VerticalAlignment="Top" Width="407">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Key}"  Width="120"/>
+                <DataGridTextColumn Header="Status"   Width="120"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="RmvBtn" Content="REMOVE" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Width="74" Click="RmvBtn_Click" />
+        <Button x:Name="turnOnBtn" Content="TURN ON" HorizontalAlignment="Left" Margin="10,116,0,0" VerticalAlignment="Top" Width="74" />
+        <Button x:Name="turnOffBtn" Content="TURN OFF" HorizontalAlignment="Left" Margin="10,158,0,0" VerticalAlignment="Top" Width="74" />
 
     </Grid>
 </Window>
