@@ -20,16 +20,21 @@ namespace AMI_Device
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
+    public partial class MainWindow : Window, INotifyPropertyChanged
+	{
         private static Dictionary<string, AMICharacteristics> availableAMIDevices = new Dictionary<string, AMICharacteristics>();
         public static Dictionary<string, AMICharacteristics> AvailableAMIDevices { get => availableAMIDevices; set => availableAMIDevices = value; }
 
         private static Random rand = new Random();
-        public MainWindow()
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		public MainWindow()
         {
             InitializeComponent();
-        }
+
+			this.DataContext = this;
+		}
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -44,12 +49,20 @@ namespace AMI_Device
             ami.Measurements.Add(TypeMeasurement.ReactivePower, S);
 
             AvailableAMIDevices.Add(ami.Name, ami);
-        }
+
+			dataGrid.Items.Refresh();
+
+		}
 
         private void RmvBtn_Click(object sender, RoutedEventArgs e)
         {
-            object key = dataGrid.SelectedItem; //nisam proverio, jer nisam jos bindovao
-            AvailableAMIDevices.Remove((string)key);
-        }
+			if (dataGrid.SelectedItem != null)
+			{
+				KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
+				AvailableAMIDevices.Remove(obj.Key);
+				dataGrid.Items.Refresh();
+			}
+  
+		}
     }
 }

@@ -14,6 +14,7 @@ namespace AMI_Agregator
 		//sam agregator sadrzi svoj id, i buffer
 		//buffer je dictionari i cine ga: device_id i novi dictionari: typeMeasurment i lista vrednost
 		//															   struja,napon,akt snaga, reakt snaga, i svaka sadrzi svoju listu vrednosti
+
 		public Dictionary<string, AMIAgregator> agregators { get; set; }
 
 		public List<string> agregator_ids { get; set; }
