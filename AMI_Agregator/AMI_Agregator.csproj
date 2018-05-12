@@ -95,6 +95,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{40502C77-6D82-4AC7-AF95-E12D16C775D1}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Enums\Storage.csproj">
       <Project>{dea77fec-8a00-449e-ab2e-b6aad165ad01}</Project>
       <Name>Storage</Name>
