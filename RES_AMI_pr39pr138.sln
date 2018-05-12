@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMI_Agregator", "RES_AMI_pr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMI_Device", "AMI_Device\AMI_Device.csproj", "{189ADF00-D946-4D6D-AE41-047E0D2DB41D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage", "Enums\Storage.csproj", "{DEA77FEC-8A00-449E-AB2E-B6AAD165AD01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{189ADF00-D946-4D6D-AE41-047E0D2DB41D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{189ADF00-D946-4D6D-AE41-047E0D2DB41D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{189ADF00-D946-4D6D-AE41-047E0D2DB41D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA77FEC-8A00-449E-AB2E-B6AAD165AD01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA77FEC-8A00-449E-AB2E-B6AAD165AD01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA77FEC-8A00-449E-AB2E-B6AAD165AD01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA77FEC-8A00-449E-AB2E-B6AAD165AD01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
