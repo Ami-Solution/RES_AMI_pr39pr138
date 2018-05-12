@@ -33,5 +33,10 @@ namespace AMI_Device
         {
             //treba da se storuje izabrani agregat iz liste
         }
+
+        private void CnlBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -45,5 +45,11 @@ namespace AMI_Device
 
             AvailableAMIDevices.Add(ami.Name, ami);
         }
+
+        private void RmvBtn_Click(object sender, RoutedEventArgs e)
+        {
+            object key = dataGrid.SelectedItem; //nisam proverio, jer nisam jos bindovao
+            AvailableAMIDevices.Remove((string)key);
+        }
     }
 }
