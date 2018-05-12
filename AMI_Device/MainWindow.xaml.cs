@@ -34,9 +34,9 @@ namespace AMI_Device
             double I = rand.Next(300);
             double P = rand.Next(300);
             double S = rand.Next(300);
-            //ami.Measurements
+            ami.Measurements.Add()
 
-            //availableAMIDevices.Add(ami.Name,ami);
+            availableAMIDevices.Add(ami.Name,ami);
             
         }
     }
