@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Storage;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +23,8 @@ namespace AMI_Device
     public partial class MainWindow : Window
     {
         private static Dictionary<string, AMICharacteristics> availableAMIDevices = new Dictionary<string, AMICharacteristics>();
+        public static Dictionary<string, AMICharacteristics> AvailableAMIDevices { get => availableAMIDevices; set => availableAMIDevices = value; }
+
         private static Random rand = new Random();
         public MainWindow()
         {
@@ -34,10 +38,12 @@ namespace AMI_Device
             double I = rand.Next(300);
             double P = rand.Next(300);
             double S = rand.Next(300);
-            ami.Measurements.Add()
+            ami.Measurements.Add(TypeMeasurement.Voltage, V);
+            ami.Measurements.Add(TypeMeasurement.Current, I);
+            ami.Measurements.Add(TypeMeasurement.ActivePower, P);
+            ami.Measurements.Add(TypeMeasurement.ReactivePower, S);
 
-            availableAMIDevices.Add(ami.Name,ami);
-            
+            AvailableAMIDevices.Add(ami.Name, ami);
         }
     }
 }

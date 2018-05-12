@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Enums
+namespace Storage
 {
     public enum TypeMeasurement
     {
-        Voltage,
+        Voltage =0,
         Current,
         ActivePower,
         ReactivePower

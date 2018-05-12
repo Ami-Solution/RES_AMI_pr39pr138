@@ -14,6 +14,7 @@ namespace AMI_Device
         public int CreationTime { get; set; }
 
         public Dictionary<Enum, double> Measurements { get; set; }
+        public int AgregatorID { get; set; }
 
         public AMICharacteristics()
         {
