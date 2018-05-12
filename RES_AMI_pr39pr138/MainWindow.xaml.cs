@@ -23,6 +23,7 @@ namespace RES_AMI_pr39pr138
 		public MainWindow()
 		{
 			InitializeComponent();
+			//izmena
 		}
 	}
 }
