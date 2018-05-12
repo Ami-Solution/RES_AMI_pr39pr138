@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace RES_AMI_pr39pr138
+namespace AMI_Agregator
 {
 	/// <summary>
 	/// Interaction logic for App.xaml

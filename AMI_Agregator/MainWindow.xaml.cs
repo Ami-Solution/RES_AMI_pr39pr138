@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace RES_AMI_pr39pr138
+namespace AMI_Agregator
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -23,7 +23,6 @@ namespace RES_AMI_pr39pr138
 		public MainWindow()
 		{
 			InitializeComponent();
-
 		}
 	}
 }

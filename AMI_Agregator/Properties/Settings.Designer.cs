@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RES_AMI_pr39pr138.Properties
+namespace AMI_Agregator.Properties
 {
 
 

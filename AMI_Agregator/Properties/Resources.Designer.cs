@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RES_AMI_pr39pr138.Properties
+namespace AMI_Agregator.Properties
 {
 
 
@@ -44,7 +44,7 @@ namespace RES_AMI_pr39pr138.Properties
 			{
 				if ((resourceMan == null))
 				{
-					global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RES_AMI_pr39pr138.Properties.Resources", typeof(Resources).Assembly);
+					global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AMI_Agregator.Properties.Resources", typeof(Resources).Assembly);
 					resourceMan = temp;
 				}
 				return resourceMan;
