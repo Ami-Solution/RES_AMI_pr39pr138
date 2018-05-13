@@ -1,8 +1,10 @@
-﻿using Storage;
+﻿using Common;
+using Storage;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,19 +22,19 @@ namespace AMI_Device
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window
 	{
         private static Dictionary<string, AMICharacteristics> availableAMIDevices = new Dictionary<string, AMICharacteristics>();
         public static Dictionary<string, AMICharacteristics> AvailableAMIDevices { get => availableAMIDevices; set => availableAMIDevices = value; }
 
         private static Random rand = new Random();
+        public static IAMI_Agregator defaultProxy; //za pocetku konekciju koja uvek traje
 
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		public MainWindow()
         {
             InitializeComponent();
-
+            Connect();
 			this.DataContext = this;
 		}
 
@@ -47,6 +49,9 @@ namespace AMI_Device
             ami.Measurements.Add(TypeMeasurement.Current, I);
             ami.Measurements.Add(TypeMeasurement.ActivePower, P);
             ami.Measurements.Add(TypeMeasurement.ReactivePower, S);
+            AgregatorChoosing choosingWindow = new AgregatorChoosing();
+            choosingWindow.ShowDialog();
+            ami.AgregatorID = AgregatorChoosing.agregatorName;
 
             AvailableAMIDevices.Add(ami.Name, ami);
 
@@ -64,5 +69,13 @@ namespace AMI_Device
 			}
   
 		}
+
+        private static void Connect()
+        {
+            var binding = new NetTcpBinding();
+            string address = $"net.tcp://localhost:8003/IAMI_Agregator";
+            ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
+            defaultProxy = factory.CreateChannel();
+        }
     }
 }

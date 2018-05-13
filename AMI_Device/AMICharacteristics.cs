@@ -15,7 +15,10 @@ namespace AMI_Device
 
         public Dictionary<Enum, double> Measurements { get; set; }
 
-        public int AgregatorID { get; set; }
+        public string AgregatorID { get; set; }
+        public string Status { get => status; set => status = value; }
+
+        private string status = "OFF";
 
         public AMICharacteristics()
         {

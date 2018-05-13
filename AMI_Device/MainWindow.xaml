@@ -11,7 +11,8 @@
         <DataGrid x:Name="dataGrid" ItemsSource="{Binding AvailableAMIDevices}" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="299" Margin="100,10,0,0" VerticalAlignment="Top" Width="407">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Key}" Width="120"/>
-                <DataGridTextColumn Header="Status"  Width="120"/>
+                <DataGridTextColumn Header="Agregator name" Binding="{Binding Value.AgregatorID}"  Width="120"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Value.Status}"  Width="120"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="RmvBtn" Content="REMOVE" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Width="74" Click="RmvBtn_Click" />
