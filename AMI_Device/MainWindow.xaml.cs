@@ -67,7 +67,7 @@ namespace AMI_Device
             {
 
             }
-
+			
             dataGrid.Items.Refresh();
 
         }

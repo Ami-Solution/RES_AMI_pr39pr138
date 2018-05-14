@@ -20,7 +20,9 @@ namespace AMI_Device
         public Dictionary<Enum, double> Measurements { get; set; }
 
         public string AgregatorID { get; set; }
+
         public string Status { get => status; set => status = value; }
+
         public IAMI_Agregator Proxy { get => proxy; set => proxy = value; }  
 
         public AMICharacteristics()
