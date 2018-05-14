@@ -57,13 +57,15 @@ namespace AMI_Device
             AgregatorChoosing choosingWindow = new AgregatorChoosing(); // za biranje Agregata
             choosingWindow.ShowDialog();
             ami.AgregatorID = AgregatorChoosing.agregatorName; //dodelimo izabrani agregat (agregator1)
+            
             string substraction = ami.AgregatorID.Substring(9);
             int ID = Int32.Parse(substraction);
             ami.Connect(ID);
+            substraction = "agregator"+ID;
 
             AvailableAMIDevices.Add(ami.Name, ami);
 
-            if(ami.Proxy.AddDevice(ami.Name,substraction)) //treba da promenis
+            if(ami.Proxy.AddDevice(substraction, ami.Name)) 
             {
 
             }
