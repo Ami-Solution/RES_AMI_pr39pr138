@@ -57,13 +57,10 @@ namespace AMI_Agregator
 
 		public AMIAgregator()
 		{
-			this.Agregator_code = "agregator" + (agregators.Count() + 1);
 
-			InitialiseBuffer(buffer);
-			CreateHost(this.host);
 		}
 
-        private AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
+        public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
         {
             this.Agregator_code = name;
 			this.Status = "ON";
@@ -85,7 +82,7 @@ namespace AMI_Agregator
 			}
 			else
 			{
-				address = $"net.tcp://localhost:{9000 + agregators.Count() + 1}/IAMI_Agregator";
+				address = $"net.tcp://localhost:{9000 + MainWindow.agregators.Count() + 1}/IAMI_Agregator";
 			}
 
 			host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));

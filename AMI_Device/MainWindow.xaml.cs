@@ -63,11 +63,11 @@ namespace AMI_Device
 
             AvailableAMIDevices.Add(ami.Name, ami);
 
-            if(ami.Proxy.AddDevice(ami.Name,substraction)) 
+            if(ami.Proxy.AddDevice(ami.Name,substraction)) //treba da promenis
             {
 
             }
-
+			
             dataGrid.Items.Refresh();
 
         }

@@ -34,7 +34,7 @@ namespace AMI_Agregator
 			InitializeComponent();
 
 			AMIAgregator novi2 = new AMIAgregator("agregator2");
-			AMIAgregator.agregators.Add(novi2.Agregator_code, novi2);
+			agregators.Add(novi2.Agregator_code, novi2);
 
 			Connect();
 
