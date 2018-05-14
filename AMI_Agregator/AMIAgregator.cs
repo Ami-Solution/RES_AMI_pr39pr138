@@ -84,12 +84,12 @@ namespace AMI_Agregator
 			string address = "";
 			if (agregators == null) // zbog prvog statickog agregata
 			{
-				address = $"net.tcp://localhost:{9001}/IAMI_Agregator"; //+1 zato sto se prvo napravi agregat, pa se onda tek doda u listu agregata (njegova pozicija je broj agregata +1)
+				address = $"net.tcp://localhost:{9001}/IAMI_Agregator"; 
 			}
 			else
 			{
-				address = $"net.tcp://localhost:{9000 + agregators.Count() + 1}/IAMI_Agregator";
-			}
+				address = $"net.tcp://localhost:{9000 + agregators.Count() + 1}/IAMI_Agregator"; //+1 zato sto se prvo napravi agregat, pa se onda tek doda u listu agregata (njegova pozicija je broj agregata +1)
+            }
 
 			host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
 			host.Description.Behaviors.Add(new ServiceDebugBehavior { IncludeExceptionDetailInFaults = true });

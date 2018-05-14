@@ -23,28 +23,23 @@ namespace AMI_Device
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-	{
+    {
         private static Dictionary<string, AMICharacteristics> availableAMIDevices = new Dictionary<string, AMICharacteristics>();
         public static Dictionary<string, AMICharacteristics> AvailableAMIDevices { get => availableAMIDevices; set => availableAMIDevices = value; }
 
         private static Random rand = new Random();
 
         public static IAMI_Agregator defaultProxy; //za pocetku konekciju koja uvek traje
-		public static IAMI_Agregator test1; //za uredjaj1, ovako nesto
-		public static IAMI_Agregator test2; //za uredjaj2
-        public static IAMI_Agregator reusableProxy; //za svaki device posebno
 
 
         public MainWindow()
         {
             InitializeComponent();
-			AMICharacteristics ami = new AMICharacteristics();
-			Connect(); //defaultni se poziva sa ovom
-			Connect(test1); //ostali mogu ovako nesto
-			Connect(test2);
-
-			this.DataContext = this;
-		}
+            AMICharacteristics ami = new AMICharacteristics();
+            Connect(); //defaultni se poziva sa ovom
+            
+            this.DataContext = this;
+        }
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -61,34 +56,30 @@ namespace AMI_Device
 
             AgregatorChoosing choosingWindow = new AgregatorChoosing(); // za biranje Agregata
             choosingWindow.ShowDialog();
-            ami.AgregatorID = AgregatorChoosing.agregatorName; //dodelimo izabrani agregat
-            tempConnection();
+            ami.AgregatorID = AgregatorChoosing.agregatorName; //dodelimo izabrani agregat (agregator1)
+            string substraction = ami.AgregatorID.Substring(9);
+            int ID = Int32.Parse(substraction);
+            ami.Connect(ID+1);
 
             AvailableAMIDevices.Add(ami.Name, ami);
 
-			dataGrid.Items.Refresh();
+            if(ami.Proxy.AddDevice(ami.Name,substraction))
+            {
 
-		}
+            }
+
+            dataGrid.Items.Refresh();
+
+        }
 
         private void RmvBtn_Click(object sender, RoutedEventArgs e)
         {
-			if (dataGrid.SelectedItem != null)
-			{
-				KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
-				AvailableAMIDevices.Remove(obj.Key);
-				dataGrid.Items.Refresh();
-			}
-  
-		}
-
-        private static void tempConnection()
-        {
-            var binding = new NetTcpBinding();
-            //int start = 9000;
-            //start += defaultProxy.ListOfAgregatorIDs().Count;
-            string address = $"net.tcp://localhost:9001/IAMI_Agregator";
-            ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
-            reusableProxy = factory.CreateChannel();
+            if (dataGrid.SelectedItem != null)
+            {
+                KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
+                AvailableAMIDevices.Remove(obj.Key);
+                dataGrid.Items.Refresh();
+            }
         }
 
         private static void Connect()
@@ -104,8 +95,8 @@ namespace AMI_Device
             if (dataGrid.SelectedItem != null)
             {
                 KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
-                AMICharacteristics ami=new AMICharacteristics();
-                AvailableAMIDevices.TryGetValue(obj.Key,out ami);
+                AMICharacteristics ami = new AMICharacteristics();
+                AvailableAMIDevices.TryGetValue(obj.Key, out ami);
 
                 ami.Status = "ON";
                 dataGrid.Items.Refresh();
@@ -113,12 +104,6 @@ namespace AMI_Device
         }
     }
 
-		private static void Connect(IAMI_Agregator ag)
-		{
-			var binding = new NetTcpBinding();
-			string address = $"net.tcp://localhost:9001/IAMI_Agregator";
-			ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
-			ag = factory.CreateChannel();
-		}
-	}
+
 }
+
