@@ -59,11 +59,11 @@ namespace AMI_Device
             ami.AgregatorID = AgregatorChoosing.agregatorName; //dodelimo izabrani agregat (agregator1)
             string substraction = ami.AgregatorID.Substring(9);
             int ID = Int32.Parse(substraction);
-            ami.Connect(ID+1);
+            ami.Connect(ID);
 
             AvailableAMIDevices.Add(ami.Name, ami);
 
-            if(ami.Proxy.AddDevice(ami.Name,substraction))
+            if(ami.Proxy.AddDevice(ami.Name,substraction)) //mala izmenica
             {
 
             }
