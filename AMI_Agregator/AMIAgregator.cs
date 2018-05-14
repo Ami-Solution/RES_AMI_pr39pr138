@@ -19,7 +19,7 @@ namespace AMI_Agregator
 
 		public string Agregator_code { get; set; }
 
-		private ServiceHost Host;
+		private ServiceHost Host { get; set; }
 
 		public string Status { get; set; } = "OFF";
 
@@ -41,10 +41,10 @@ namespace AMI_Agregator
 								"DEVICE_ID1",
 								new Dictionary<TypeMeasurement, List<double>>()
 								{
-									{ TypeMeasurement.ActivePower, null },
-									{ TypeMeasurement.ReactivePower, null },
-									{ TypeMeasurement.Current, null },
-									{ TypeMeasurement.Voltage, null },
+									{ TypeMeasurement.ActivePower, new List<double>() },
+									{ TypeMeasurement.ReactivePower, new List<double>() },
+									{ TypeMeasurement.Current, new List<double>() },
+									{ TypeMeasurement.Voltage, new List<double>() },
 								}
 							},
 
@@ -123,10 +123,10 @@ namespace AMI_Agregator
 					device_code,
 					new Dictionary<TypeMeasurement, List<double>>()
 					{
-						{ TypeMeasurement.ActivePower, null },
-						{ TypeMeasurement.ReactivePower, null },
-						{ TypeMeasurement.Current, null },
-						{ TypeMeasurement.Voltage, null },
+						{ TypeMeasurement.ActivePower, new List<double>() },
+						{ TypeMeasurement.ReactivePower, new List<double>() },
+						{ TypeMeasurement.Current, new List<double>() },
+						{ TypeMeasurement.Voltage, new List<double>() },
 					});
 
 			}
