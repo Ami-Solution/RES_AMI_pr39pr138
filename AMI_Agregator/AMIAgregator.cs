@@ -13,27 +13,23 @@ namespace AMI_Agregator
 	public class AMIAgregator : IAMI_Agregator
 	{
 
-		//predefinisan dictionari koji sadrzi: agregator_id i sam agregator.
-		//sam agregator sadrzi svoj id, i buffer
-		//buffer je dictionari i cine ga: device_id i novi dictionari: typeMeasurment i lista vrednost
-		public static Dictionary<string, AMIAgregator> agregators;
-
 		#region properties
 		//device_code, <TipVrednost, lista vrednosti>
 		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer { get; set; }
 
 		public string Agregator_code { get; set; }
 
-		private ServiceHost host;
+		private ServiceHost Host;
+
+		public string Status { get; set; } = "OFF";
 
 		#endregion properties
-
 
 		#region constructors
 		static AMIAgregator()
 		{
 
-			agregators = new Dictionary<string, AMIAgregator>()
+			MainWindow.agregators = new Dictionary<string, AMIAgregator>()
 			{
 				{
 					"agregator1",
@@ -61,15 +57,20 @@ namespace AMI_Agregator
 
 		public AMIAgregator()
 		{
-			
-		}
-
-        public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
-        {
-            this.Agregator_code = name;
+			this.Agregator_code = "agregator" + (MainWindow.agregators.Count() + 1);
+			this.Status = "ON";
 
 			InitialiseBuffer(buffer);
-			CreateHost(this.host);
+			CreateHost(this.Host);
+		}
+
+        private AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
+        {
+            this.Agregator_code = name;
+			this.Status = "ON";
+
+			InitialiseBuffer(buffer);
+			CreateHost(this.Host);
 		}
 		#endregion constructors
 
@@ -79,14 +80,14 @@ namespace AMI_Agregator
 			host = new ServiceHost(typeof(AMIAgregator));
 			NetTcpBinding binding = new NetTcpBinding();
 			string address = "";
-			if (agregators == null) // zbog prvog statickog agregata
+			if (MainWindow.agregators == null) // zbog prvog statickog agregata
 			{
 				address = $"net.tcp://localhost:{9001}/IAMI_Agregator"; 
 			}
 			else
 			{
-				address = $"net.tcp://localhost:{9000 + agregators.Count() + 1}/IAMI_Agregator"; //+1 zato sto se prvo napravi agregat, pa se onda tek doda u listu agregata (njegova pozicija je broj agregata +1)
-            }
+				address = $"net.tcp://localhost:{9000 + agregators.Count() + 1}/IAMI_Agregator";
+			}
 
 			host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
 			host.Description.Behaviors.Add(new ServiceDebugBehavior { IncludeExceptionDetailInFaults = true });
@@ -116,13 +117,13 @@ namespace AMI_Agregator
 		{
 			bool retVal = true;
 
-			if (agregators[agregator_code].buffer.ContainsKey(device_code))
+			if (MainWindow.agregators[agregator_code].buffer.ContainsKey(device_code))
 			{
 				retVal = false;
 			}
 			else
 			{
-				agregators[agregator_code].buffer.Add(
+				MainWindow.agregators[agregator_code].buffer.Add(
 					device_code,
 					new Dictionary<TypeMeasurement, List<double>>()
 					{
@@ -144,7 +145,7 @@ namespace AMI_Agregator
 
 			foreach (var keyValue in values)
 			{
-				agregators[agregator_code].buffer[device_code][keyValue.Key].Add(keyValue.Value);
+				MainWindow.agregators[agregator_code].buffer[device_code][keyValue.Key].Add(keyValue.Value);
 			}
 
 			return retVal;
@@ -158,7 +159,7 @@ namespace AMI_Agregator
         public List<string> ListOfAgregatorIDs()
         {
             List<string> retList = new List<string>();
-            foreach(var ID in agregators)
+            foreach(var ID in MainWindow.agregators)
             {
                 retList.Add(ID.Key);
             }
