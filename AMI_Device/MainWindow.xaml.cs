@@ -29,9 +29,10 @@ namespace AMI_Device
 
         private static Random rand = new Random();
         public static IAMI_Agregator defaultProxy; //za pocetku konekciju koja uvek traje
+        public static IAMI_Agregator reusableProxy; //za svaki device posebno
 
 
-		public MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
 			AMICharacteristics ami = new AMICharacteristics();
@@ -46,13 +47,16 @@ namespace AMI_Device
             double I = rand.Next(300);
             double P = rand.Next(300);
             double S = rand.Next(300);
+
             ami.Measurements.Add(TypeMeasurement.Voltage, V);
             ami.Measurements.Add(TypeMeasurement.Current, I);
             ami.Measurements.Add(TypeMeasurement.ActivePower, P);
             ami.Measurements.Add(TypeMeasurement.ReactivePower, S);
-            AgregatorChoosing choosingWindow = new AgregatorChoosing();
+
+            AgregatorChoosing choosingWindow = new AgregatorChoosing(); // za biranje Agregata
             choosingWindow.ShowDialog();
-            ami.AgregatorID = AgregatorChoosing.agregatorName;
+            ami.AgregatorID = AgregatorChoosing.agregatorName; //dodelimo izabrani agregat
+            tempConnection();
 
             AvailableAMIDevices.Add(ami.Name, ami);
 
@@ -71,12 +75,35 @@ namespace AMI_Device
   
 		}
 
+        private static void tempConnection()
+        {
+            var binding = new NetTcpBinding();
+            //int start = 9000;
+            //start += defaultProxy.ListOfAgregatorIDs().Count;
+            string address = $"net.tcp://localhost:9001/IAMI_Agregator";
+            ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
+            reusableProxy = factory.CreateChannel();
+        }
+
         private static void Connect()
         {
             var binding = new NetTcpBinding();
             string address = $"net.tcp://localhost:8003/IAMI_Agregator";
             ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
             defaultProxy = factory.CreateChannel();
+        }
+
+        private void turnOnBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (dataGrid.SelectedItem != null)
+            {
+                KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
+                AMICharacteristics ami=new AMICharacteristics();
+                AvailableAMIDevices.TryGetValue(obj.Key,out ami);
+
+                ami.Status = "ON";
+                dataGrid.Items.Refresh();
+            }
         }
     }
 }
