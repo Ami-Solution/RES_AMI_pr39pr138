@@ -17,7 +17,7 @@ namespace AMI_Device
 
         public int CreationTime { get; set; }
 
-        public Dictionary<Enum, double> Measurements { get; set; }
+        public Dictionary<Storage.TypeMeasurement, double> Measurements { get; set; }
 
         public string AgregatorID { get; set; }
 
@@ -27,7 +27,7 @@ namespace AMI_Device
 
         public AMICharacteristics()
         {
-            Measurements = new Dictionary<Enum, double>();
+            Measurements = new Dictionary<Storage.TypeMeasurement, double>();
             Name = PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics); //generise random string
             CreationTime = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; // vreme po unix timestamp formatu (racuna od 1970 do danas sekunde)
         }

@@ -63,11 +63,14 @@ namespace AMI_Device
             ami.Connect(ID);
             substraction = "agregator"+ID;
 
-            AvailableAMIDevices.Add(ami.Name, ami);
-
-            if(ami.Proxy.AddDevice(substraction, ami.Name)) 
+            if(!availableAMIDevices.ContainsKey(ami.Name))
             {
+                AvailableAMIDevices.Add(ami.Name, ami); //ukoliko se desi da je name isti
+            }         
 
+            if(!ami.Proxy.AddDevice(substraction, ami.Name)) 
+            {
+                AddBtn_Click( sender, e);
             }
 			
             dataGrid.Items.Refresh();

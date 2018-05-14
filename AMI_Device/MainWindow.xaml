@@ -8,7 +8,7 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Button x:Name="AddBtn" Content="ADD" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Width="74" Click="AddBtn_Click"/>
-        <DataGrid x:Name="dataGrid" ItemsSource="{Binding AvailableAMIDevices}" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="299" Margin="100,10,0,0" VerticalAlignment="Top" Width="407">
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding AvailableAMIDevices}" IsReadOnly="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="299" Margin="100,10,0,0" VerticalAlignment="Top" Width="407">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Key}" Width="120"/>
                 <DataGridTextColumn Header="Agregator name" Binding="{Binding Value.AgregatorID}"  Width="120"/>
