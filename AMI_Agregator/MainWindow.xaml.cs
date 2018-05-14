@@ -30,9 +30,6 @@ namespace AMI_Agregator
 
 			AMIAgregator novi2 = new AMIAgregator();
 			AMIAgregator.agregators.Add(novi2.Agregator_code, novi2);
-			AMIAgregator novi3 = new AMIAgregator();
-			AMIAgregator.agregators.Add(novi3.Agregator_code, novi3);
-			AMIAgregator novi4 = new AMIAgregator();
 
 			Connect();
 		}

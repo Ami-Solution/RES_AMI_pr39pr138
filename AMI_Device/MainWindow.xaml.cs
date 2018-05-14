@@ -28,14 +28,20 @@ namespace AMI_Device
         public static Dictionary<string, AMICharacteristics> AvailableAMIDevices { get => availableAMIDevices; set => availableAMIDevices = value; }
 
         private static Random rand = new Random();
+
         public static IAMI_Agregator defaultProxy; //za pocetku konekciju koja uvek traje
+		public static IAMI_Agregator test1; //za uredjaj1, ovako nesto
+		public static IAMI_Agregator test2; //za uredjaj2
 
 
 		public MainWindow()
         {
             InitializeComponent();
 			AMICharacteristics ami = new AMICharacteristics();
-			Connect();
+			Connect(); //defaultni se poziva sa ovom
+			Connect(test1); //ostali mogu ovako nesto
+			Connect(test2);
+
 			this.DataContext = this;
 		}
 
@@ -78,5 +84,13 @@ namespace AMI_Device
             ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
             defaultProxy = factory.CreateChannel();
         }
-    }
+
+		private static void Connect(IAMI_Agregator ag)
+		{
+			var binding = new NetTcpBinding();
+			string address = $"net.tcp://localhost:9001/IAMI_Agregator";
+			ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
+			ag = factory.CreateChannel();
+		}
+	}
 }
