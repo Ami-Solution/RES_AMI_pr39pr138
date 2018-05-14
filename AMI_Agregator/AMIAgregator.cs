@@ -61,10 +61,7 @@ namespace AMI_Agregator
 
 		public AMIAgregator()
 		{
-			this.Agregator_code = "agregator" + (agregators.Count() + 1);
-
-			InitialiseBuffer(buffer);
-			CreateHost(this.host);
+			
 		}
 
         public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
