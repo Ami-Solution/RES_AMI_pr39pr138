@@ -37,7 +37,7 @@ namespace AMI_Device
             InitializeComponent();
             AMICharacteristics ami = new AMICharacteristics();
             Connect(); //defaultni se poziva sa ovom
-            
+
             this.DataContext = this;
         }
 
@@ -57,22 +57,19 @@ namespace AMI_Device
             AgregatorChoosing choosingWindow = new AgregatorChoosing(); // za biranje Agregata
             choosingWindow.ShowDialog();
             ami.AgregatorID = AgregatorChoosing.agregatorName; //dodelimo izabrani agregat (agregator1)
-            
+
             string substraction = ami.AgregatorID.Substring(9);
             int ID = Int32.Parse(substraction);
             ami.Connect(ID);
-            substraction = "agregator"+ID;
+            substraction = "agregator" + ID;
 
-            if(!availableAMIDevices.ContainsKey(ami.Name))
-            {
-                AvailableAMIDevices.Add(ami.Name, ami); //ukoliko se desi da je name isti
-            }         
+            AvailableAMIDevices.Add(ami.Name, ami);
 
-            if(!ami.Proxy.AddDevice(substraction, ami.Name)) 
+            if (!ami.Proxy.AddDevice(substraction, ami.Name))
             {
-                AddBtn_Click( sender, e);
+                AddBtn_Click(sender, e);
             }
-			
+
             dataGrid.Items.Refresh();
 
         }
