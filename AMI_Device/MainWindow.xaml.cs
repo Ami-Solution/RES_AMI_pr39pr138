@@ -34,7 +34,8 @@ namespace AMI_Device
 		public MainWindow()
         {
             InitializeComponent();
-            Connect();
+			AMICharacteristics ami = new AMICharacteristics();
+			Connect();
 			this.DataContext = this;
 		}
 

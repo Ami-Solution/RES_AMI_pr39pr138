@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
@@ -10,66 +11,94 @@ namespace AMI_Agregator
 {
 	public class AMIAgregator : IAMI_Agregator
 	{
+		
 		//predefinisan dictionari koji sadrzi: agregator_id i sam agregator.
 		//sam agregator sadrzi svoj id, i buffer
 		//buffer je dictionari i cine ga: device_id i novi dictionari: typeMeasurment i lista vrednost
-		//															   struja,napon,akt snaga, reakt snaga, i svaka sadrzi svoju listu vrednosti
+		public static Dictionary<string, AMIAgregator> agregators = new Dictionary<string, AMIAgregator>()
+			{
+				{
+					"agregator1",
+					new AMIAgregator("agregator1")
+					{
 
-		public Dictionary<string, AMIAgregator> agregators { get; set; }
+						buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
+						{
+							{
+								"DEVICE_ID1",
+								new Dictionary<TypeMeasurement, List<double>>()
+								{
+									{ TypeMeasurement.ActivePower, null },
+									{ TypeMeasurement.ReactivePower, null },
+									{ TypeMeasurement.Current, null },
+									{ TypeMeasurement.Voltage, null },
+								}
+							},
 
-		public List<string> agregator_ids { get; set; }
+							{
+								"DEVICE_ID2",
+								new Dictionary<TypeMeasurement, List<double>>()
+								{
+									{ TypeMeasurement.ActivePower, null },
+									{ TypeMeasurement.ReactivePower, null },
+									{ TypeMeasurement.Current, null },
+									{ TypeMeasurement.Voltage, null },
+								}
+							}
+						}
+					}
+				},
+			};
 
+		#region properties
+		//device_code, <TipVrednost, lista vrednosti>
+		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer { get; set; }
+
+		public string Agregator_code { get; set; }
+		#endregion properties
+
+
+		#region constructors
 		public AMIAgregator()
 		{
-            agregators = new Dictionary<string, AMIAgregator>()
-            {
-                {
-                    "agregator1",
-                    new AMIAgregator("agregator1")
-                    {
-                        
-                        buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
-                        {
-                            {
-                                "DEVICE_ID1",
-                                new Dictionary<TypeMeasurement, List<double>>()
-                                {
-                                    { TypeMeasurement.ActivePower, null },
-                                    { TypeMeasurement.ReactivePower, null },
-                                    { TypeMeasurement.Current, null },
-                                    { TypeMeasurement.Voltage, null },
-                                }
-                            },
-
-                            {
-                                "DEVICE_ID2",
-                                new Dictionary<TypeMeasurement, List<double>>()
-                                {
-                                    { TypeMeasurement.ActivePower, null },
-                                    { TypeMeasurement.ReactivePower, null },
-                                    { TypeMeasurement.Current, null },
-                                    { TypeMeasurement.Voltage, null },
-                                }
-                            }
-                        }
-                    }
-                },
-
-            };
-                       
-            agregator_ids = agregators.Keys.ToList();
+			this.Agregator_code = "agregator" + (agregators.Count() + 1);
+			this.buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
+			{
+				{
+					"",
+					new Dictionary<TypeMeasurement, List<double>>()
+					{
+						{ TypeMeasurement.ActivePower, null },
+						{ TypeMeasurement.ReactivePower, null },
+						{ TypeMeasurement.Current, null },
+						{ TypeMeasurement.Voltage, null },
+					}
+				}
+			};
 		}
 
         public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
         {
             this.Agregator_code = name;
-        }
+			this.buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
+			{
+				{
+					"",
+					new Dictionary<TypeMeasurement, List<double>>()
+					{
+						{ TypeMeasurement.ActivePower, null },
+						{ TypeMeasurement.ReactivePower, null },
+						{ TypeMeasurement.Current, null },
+						{ TypeMeasurement.Voltage, null },
+					}
+				}
+			};
 
-		public string Agregator_code { get; set; }
+		}
+		#endregion constructors
 
-		//device_code, <TipVrednost, lista vrednosti>
-		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer { get; set; }
 
+		#region methods
 		//provera da li agregator sadrzi uredjaj koji treba da mu se doda
 		public bool AddDevice(string agregator_code, string device_code)
 		{
@@ -81,7 +110,15 @@ namespace AMI_Agregator
 			}
 			else
 			{
-				agregators[agregator_code].buffer.ContainsKey(device_code); // ovo izmeni, treba da dodaje
+				agregators[agregator_code].buffer.Add(
+								device_code,
+								new Dictionary<TypeMeasurement, List<double>>()
+								{
+									{ TypeMeasurement.ActivePower, null },
+									{ TypeMeasurement.ReactivePower, null },
+									{ TypeMeasurement.Current, null },
+									{ TypeMeasurement.Voltage, null },
+								});
 			}
 
 			return retVal;
@@ -115,6 +152,7 @@ namespace AMI_Agregator
 
             return retList;
         }
+		#endregion methods
 
-    }
+	}
 }
