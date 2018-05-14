@@ -86,7 +86,7 @@ namespace AMI_Agregator
 			}
 			else
 			{
-				address = $"net.tcp://localhost:{9000 + MainWindow.agregators.Count() + 1}/IAMI_Agregator"; //+1 zato sto se prvo napravi agregat, pa se onda tek doda u listu agregata (njegova pozicija je broj agregata +1)
+				address = $"net.tcp://localhost:{9000 + agregators.Count() + 1}/IAMI_Agregator";
 			}
 
 			host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
