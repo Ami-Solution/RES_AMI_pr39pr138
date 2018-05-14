@@ -23,25 +23,32 @@ namespace AMI_Agregator
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-        private static ServiceHost host;
+		//predefinisan dictionari koji sadrzi: agregator_id i sam agregator.
+		//sam agregator sadrzi svoj id, i buffer
+		//buffer je dictionari i cine ga: device_id i novi dictionari: typeMeasurment i lista vrednost
+		public static Dictionary<string, AMIAgregator> agregators { get; set; }
+
+		private static ServiceHost Host;
 		public MainWindow()
 		{
 			InitializeComponent();
 
 			AMIAgregator novi2 = new AMIAgregator();
-			AMIAgregator.agregators.Add(novi2.Agregator_code, novi2);
+			agregators.Add(novi2.Agregator_code, novi2);
 
 			Connect();
+
+			this.DataContext = this;
 		}
 
         private static void Connect()
         {
             NetTcpBinding binding = new NetTcpBinding();
             string address = $"net.tcp://localhost:8003/IAMI_Agregator";
-            host = new ServiceHost(typeof(AMIAgregator));
-            host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
-            host.Description.Behaviors.Add(new ServiceDebugBehavior { IncludeExceptionDetailInFaults = true });
-            host.AddServiceEndpoint(typeof(IAMI_Agregator), binding, address);
+            Host = new ServiceHost(typeof(AMIAgregator));
+            Host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
+            Host.Description.Behaviors.Add(new ServiceDebugBehavior { IncludeExceptionDetailInFaults = true });
+            Host.AddServiceEndpoint(typeof(IAMI_Agregator), binding, address);
 
             Start();
         }
@@ -50,7 +57,7 @@ namespace AMI_Agregator
         {
             try
             {
-                host.Open();
+                Host.Open();
                 Console.WriteLine($"Default AMI Agregator connection started succesffully.");
             }
             catch (Exception e)
@@ -64,7 +71,7 @@ namespace AMI_Agregator
         {
             try
             {
-                host.Close();
+                Host.Close();
                 Console.WriteLine($"Default AMI Agregator connection closed succesffully.");
             }
             catch (Exception e)

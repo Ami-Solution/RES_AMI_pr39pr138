@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AMI_Agregator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" Height="350" Width="525">
+	<Grid>
+		<Button x:Name="AddBtn" Content="ADD" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Width="74"/>
+		<DataGrid x:Name="dataGrid" IsReadOnly="True" ItemsSource="{Binding agregators}" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="299" Margin="100,10,0,0" VerticalAlignment="Top" Width="407">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Agregator name" Binding="{Binding Key}" Width="*"/>
+				<DataGridTextColumn Header="Status" Binding="{Binding Value.Status}"  Width="*"/>
+			</DataGrid.Columns>
+		</DataGrid>
+		<Button x:Name="RmvBtn" Content="REMOVE" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Width="74"/>
+		<Button x:Name="turnOnBtn" Content="TURN ON" HorizontalAlignment="Left" Margin="10,116,0,0" VerticalAlignment="Top" Width="74" />
+		<Button x:Name="turnOffBtn" Content="TURN OFF" HorizontalAlignment="Left" Margin="10,158,0,0" VerticalAlignment="Top" Width="74" />
+	</Grid>
 </Window>

@@ -41,7 +41,6 @@ namespace AMI_Device
 			Connect(); //defaultni se poziva sa ovom
 			Connect(test1); //ostali mogu ovako nesto
 			Connect(test2);
-
 			this.DataContext = this;
 		}
 
