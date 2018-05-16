@@ -104,12 +104,17 @@ namespace AMI_Agregator
 
 		private void turnOnBtn_Click(object sender, RoutedEventArgs e)
 		{
+
 			if (dataGrid.SelectedItem != null)
 			{
 				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
-				agregators[keyValue.Key].State = Storage.State.On;
-				agregators[keyValue.Key].ConnectToSystemManagement();
-
+				
+				if (agregators[keyValue.Key].State == Storage.State.Off)
+				{
+					agregators[keyValue.Key].State = Storage.State.On;
+					Task t = Task.Factory.StartNew(() => agregators[keyValue.Key].SendToLocalStorage(agregators[keyValue.Key]));
+				}
+				
 			}
 
 			dataGrid.Items.Refresh();
@@ -120,7 +125,10 @@ namespace AMI_Agregator
 			if (dataGrid.SelectedItem != null)
 			{
 				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
-				agregators[keyValue.Key].State = Storage.State.Off;
+				if (agregators[keyValue.Key].State == Storage.State.On)
+				{
+					agregators[keyValue.Key].State = Storage.State.Off;
+				}
 
 			}
 

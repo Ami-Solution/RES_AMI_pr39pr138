@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Storage;
@@ -66,6 +68,11 @@ namespace AMI_Agregator
         public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
         {
             this.Agregator_code = name;
+
+			var binding = new NetTcpBinding();
+			string address = $"net.tcp://localhost:8004/IAMI_System_Management";
+			ChannelFactory<IAMI_System_Management> factory = new ChannelFactory<IAMI_System_Management>(binding, new EndpointAddress(address));
+			Proxy = factory.CreateChannel();
 
 			InitialiseBuffer(Buffer);
 			CreateHost(this.Host);
@@ -166,19 +173,13 @@ namespace AMI_Agregator
 			return retVal;
 		}
 
-		public void ConnectToSystemManagement()
+		public void SendToLocalStorage(AMIAgregator ag)
 		{
-			var binding = new NetTcpBinding();
-			string address = $"net.tcp://localhost:8004/IAMI_System_Management";
-			ChannelFactory<IAMI_System_Management> factory = new ChannelFactory<IAMI_System_Management>(binding, new EndpointAddress(address));
-			Proxy = factory.CreateChannel();
-
-			//implementirati task da salje svakih 5 minuta podatke u bazu
-		}
-
-		public void SendToLocalStorage(string device_code, DateTime timestamp)
-		{
-			//implementirati da salje podatke u bazu svakih 5 minuta (proksi na AMI_System_Managment)
+			while (ag.State == State.On)
+			{
+				Thread.Sleep(5000);
+				ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Buffer);
+			}
 		}
 
 		public List<string> ListOfAgregatorIDs()
