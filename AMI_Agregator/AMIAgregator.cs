@@ -37,33 +37,6 @@ namespace AMI_Agregator
 		static AMIAgregator()
 		{
 			MainWindow.agregators = new Dictionary<string, AMIAgregator>();
-			/*
-			MainWindow.agregators = new Dictionary<string, AMIAgregator>()
-			{
-				{
-					"agregator1",
-					new AMIAgregator("agregator1")
-					{
-						Dates = new List<DateTime>(){ DateTime.Now },
-						State = State.OFF,
-						Buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
-						{
-							{
-								"DEVICE_ID1",
-								new Dictionary<TypeMeasurement, List<double>>()
-								{
-									{ TypeMeasurement.ActivePower, new List<double>() { 105 } },
-									{ TypeMeasurement.ReactivePower, new List<double>() { 110 } },
-									{ TypeMeasurement.CurrentP, new List<double>() { 115 } },
-									{ TypeMeasurement.Voltage, new List<double>() { 120 } },
-								}
-							},
-
-						}
-					}
-				},
-			};
-			*/
 		}
 		
 		public AMIAgregator()
@@ -155,6 +128,7 @@ namespace AMI_Agregator
 						MainWindow.agregators[agregator_code].Buffer[device_code][keyValue.Key].Add(keyValue.Value);
 					}
 
+					//dodavanja datuma u listu, tek nakon sto se upisu sva 4 merenja
 					MainWindow.agregators[agregator_code].Dates.Add(dateTime);
 				}
 				else
@@ -170,13 +144,15 @@ namespace AMI_Agregator
 			return retVal;
 		}
 
-		public void SendToLocalStorage(AMIAgregator ag)
+		public void SendToSystemMenagement(AMIAgregator ag)
 		{
 			while (ag.State == State.ON)
 			{
 				Thread.Sleep(5000);
 
-				if (ag.Dates.Count() > 0) //imamo cetiri merenja, mozda se desi da device upise tek jedno, a on vec posalje u bazu (baza ocekuje 4)
+				//imamo cetiri merenja, mozda se desi da device upise tek jedno, a on vec posalje u bazu (baza ocekuje 4)
+				//datum se dodaje u listu tek kada se upisu sva 4 merenja
+				if (ag.Dates.Count() > 0) 
 				{
 					Task t = Task.Factory.StartNew(() => ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Dates, ag.Buffer));
 				}

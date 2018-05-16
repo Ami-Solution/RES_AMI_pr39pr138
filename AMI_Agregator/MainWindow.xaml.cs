@@ -103,7 +103,8 @@ namespace AMI_Agregator
 				{
 					agregators[keyValue.Key].State = Storage.State.ON;
 
-					Task t = Task.Factory.StartNew(() => agregators[keyValue.Key].SendToLocalStorage(agregators[keyValue.Key]));
+					//task, zbog toga sto ce da se freezuje, i na svakih 5 minuta da salje podatke u local storage
+					Task t = Task.Factory.StartNew(() => agregators[keyValue.Key].SendToSystemMenagement(agregators[keyValue.Key]));
 				}
 				
 			}
