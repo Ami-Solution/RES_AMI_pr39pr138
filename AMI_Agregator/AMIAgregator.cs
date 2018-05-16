@@ -178,7 +178,7 @@ namespace AMI_Agregator
 			while (ag.State == State.On)
 			{
 				Thread.Sleep(5000);
-				ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Buffer);
+				//ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Buffer);
 			}
 		}
 
