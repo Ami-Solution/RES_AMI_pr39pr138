@@ -21,7 +21,7 @@ namespace AMI_Agregator
 
 		private ServiceHost Host { get; set; }
 
-		public string Status { get; set; } = "OFF";
+		public State State { get; set; } = State.Off;
 
 		#endregion properties
 
@@ -63,7 +63,6 @@ namespace AMI_Agregator
         public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
         {
             this.Agregator_code = name;
-			this.Status = "ON";
 
 			InitialiseBuffer(buffer);
 			CreateHost(this.Host);
@@ -82,7 +81,7 @@ namespace AMI_Agregator
 			}
 			else
 			{
-				address = $"net.tcp://localhost:{9000 + MainWindow.agregators.Count() + 1}/IAMI_Agregator";
+				address = $"net.tcp://localhost:{9000 + MainWindow.agregatorNumber}/IAMI_Agregator";
 			}
 
 			host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
@@ -135,14 +134,31 @@ namespace AMI_Agregator
 		}
 
 		//prihvatimo koji device salje vrednosti. Vrednosti su tipa Struja-100, Napon-200, Snaga-300
-		public bool ReceiveDataFromDevice(string agregator_code, string device_code, Dictionary<TypeMeasurement, double> values)
+		public string ReceiveDataFromDevice(string agregator_code, string device_code, Dictionary<TypeMeasurement, double> values)
 		{
-			bool retVal = true;
+			string retVal = "ON";
 
-			foreach (var keyValue in values)
+			AMIAgregator ag = new AMIAgregator();
+
+			if (MainWindow.agregators.TryGetValue(agregator_code, out ag))
 			{
-				MainWindow.agregators[agregator_code].buffer[device_code][keyValue.Key].Add(keyValue.Value);
+				if (ag.State == State.On)
+				{
+					foreach (var keyValue in values)
+					{
+						MainWindow.agregators[agregator_code].buffer[device_code][keyValue.Key].Add(keyValue.Value);
+					}
+				}
+				else
+				{
+					retVal = "OF";
+				}
 			}
+			else
+			{
+				retVal = "DELETED";
+			}
+			
 
 			return retVal;
 		}
@@ -162,6 +178,7 @@ namespace AMI_Agregator
 
             return retList;
         }
+
 		#endregion methods
 
 	}

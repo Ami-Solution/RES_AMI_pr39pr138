@@ -28,13 +28,14 @@ namespace AMI_Agregator
 		//buffer je dictionari i cine ga: device_id i novi dictionari: typeMeasurment i lista vrednost
 		public static Dictionary<string, AMIAgregator> agregators { get; set; }
 
+		public static int agregatorNumber = 1;
+
 		private static ServiceHost Host;
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			AMIAgregator novi2 = new AMIAgregator("agregator2");
-			agregators.Add(novi2.Agregator_code, novi2);
+			AMIAgregator a = new AMIAgregator(); // to initalise predefined agregators
 
 			Connect();
 
@@ -80,5 +81,49 @@ namespace AMI_Agregator
             }
 
         }
-    }
+
+		private void AddBtn_Click(object sender, RoutedEventArgs e)
+		{
+			AMIAgregator agregator = new AMIAgregator("agregator" + (++agregatorNumber));
+			agregators.Add(agregator.Agregator_code, agregator);
+
+			dataGrid.Items.Refresh();
+		}
+
+		private void RmvBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (dataGrid.SelectedItem != null)
+			{
+				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
+				agregators.Remove(keyValue.Key);
+
+			}
+
+			dataGrid.Items.Refresh();
+		}
+
+		private void turnOnBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (dataGrid.SelectedItem != null)
+			{
+				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
+				agregators[keyValue.Key].State = Storage.State.On;
+
+			}
+
+			dataGrid.Items.Refresh();
+		}
+
+		private void turnOffBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (dataGrid.SelectedItem != null)
+			{
+				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
+				agregators[keyValue.Key].State = Storage.State.Off;
+
+			}
+
+			dataGrid.Items.Refresh();
+		}
+	}
 }
