@@ -48,7 +48,7 @@ namespace AMI_Agregator
 								{
 									{ TypeMeasurement.ActivePower, new List<double>() },
 									{ TypeMeasurement.ReactivePower, new List<double>() },
-									{ TypeMeasurement.Current, new List<double>() },
+									{ TypeMeasurement.CurrentP, new List<double>() },
 									{ TypeMeasurement.Voltage, new List<double>() },
 								}
 							},
@@ -110,7 +110,7 @@ namespace AMI_Agregator
 					{
 						{ TypeMeasurement.ActivePower, null },
 						{ TypeMeasurement.ReactivePower, null },
-						{ TypeMeasurement.Current, null },
+						{ TypeMeasurement.CurrentP, null },
 						{ TypeMeasurement.Voltage, null },
 					}
 				}
@@ -134,7 +134,7 @@ namespace AMI_Agregator
 					{
 						{ TypeMeasurement.ActivePower, new List<double>() },
 						{ TypeMeasurement.ReactivePower, new List<double>() },
-						{ TypeMeasurement.Current, new List<double>() },
+						{ TypeMeasurement.CurrentP, new List<double>() },
 						{ TypeMeasurement.Voltage, new List<double>() },
 					});
 
@@ -177,7 +177,7 @@ namespace AMI_Agregator
 			while (ag.State == State.ON)
 			{
 				Thread.Sleep(5000);
-				//ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Buffer);
+				ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Buffer);
 			}
 		}
 

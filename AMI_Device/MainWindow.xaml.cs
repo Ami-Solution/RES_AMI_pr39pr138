@@ -52,7 +52,7 @@ namespace AMI_Device
             double S = rand.Next(300);
 
             ami.Measurements.Add(TypeMeasurement.Voltage, V);
-            ami.Measurements.Add(TypeMeasurement.Current, I);
+            ami.Measurements.Add(TypeMeasurement.CurrentP, I);
             ami.Measurements.Add(TypeMeasurement.ActivePower, P);
             ami.Measurements.Add(TypeMeasurement.ReactivePower, S);
 

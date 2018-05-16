@@ -9,7 +9,7 @@ namespace Storage
     public enum TypeMeasurement
     {
         Voltage = 0,
-        Current,
+        CurrentP,
         ActivePower,
         ReactivePower,
     }
