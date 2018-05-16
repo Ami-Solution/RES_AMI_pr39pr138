@@ -1,17 +1,20 @@
 ﻿using Common;
 using MlkPwgen;
+using Storage;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AMI_Device
 {
     public class AMICharacteristics : IAMI_Device
     {
-        private string status = "OFF";
+		private State status = State.Off;
         private IAMI_Agregator proxy;
         public string Device_code { get; set; }
 
@@ -21,7 +24,7 @@ namespace AMI_Device
 
         public string AgregatorID { get; set; }
 
-        public string Status { get => status; set => status = value; }
+        public State Status { get => status; set => status = value; }
 
         public IAMI_Agregator Proxy { get => proxy; set => proxy = value; }  
 
@@ -40,5 +43,22 @@ namespace AMI_Device
             ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
             this.proxy = factory.CreateChannel();
         }
-    }
+
+		public void SendDataToAgregator(AMICharacteristics ami)
+		{
+			string retVal = "";
+			do
+			{
+				Trace.WriteLine("Nesto kao saljem ???");
+				retVal = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, ami.Device_code, ami.Measurements);
+				Thread.Sleep(5000);
+
+			} while (ami.Status == State.On && retVal == "ON");
+
+			/* Ovde sada treba da se implementira sta se radi ako se obrise agregat, ili ako se agregat ugasi
+			 * 
+			 */
+		}
+
+	}
 }

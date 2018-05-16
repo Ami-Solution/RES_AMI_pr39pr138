@@ -2,9 +2,21 @@
 using Storage;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.ServiceModel;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AMI_Device
 {
@@ -14,12 +26,13 @@ namespace AMI_Device
     public partial class MainWindow : Window
     {
         private static Dictionary<string, AMICharacteristics> availableAMIDevices = new Dictionary<string, AMICharacteristics>();
+
         public static Dictionary<string, AMICharacteristics> AvailableAMIDevices { get => availableAMIDevices; set => availableAMIDevices = value; }
 
         private static Random rand = new Random();
 
         public static IAMI_Agregator defaultProxy; //za pocetku konekciju koja uvek traje
-        private static AMICharacteristics ami;
+
 
         public MainWindow()
         {
@@ -85,47 +98,36 @@ namespace AMI_Device
         {
             if (dataGrid.SelectedItem != null)
             {
-                KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
-                ami = new AMICharacteristics();
-                AvailableAMIDevices.TryGetValue(obj.Key, out ami);
+                KeyValuePair<string, AMICharacteristics> keyValue = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
+				
+				if (AvailableAMIDevices[keyValue.Key].Status == State.Off) // ukoliko spamujemo tur on, a vec je ukljucen, da ne pravi vise taskova
+				{
+					AvailableAMIDevices[keyValue.Key].Status = State.On;
+					Task t = Task.Factory.StartNew(() => AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key]));
 
-                ami.Status = "ON";
+				};
+
                 dataGrid.Items.Refresh();
-
-                //worker.DoWork += new DoWorkEventHandler(worker_DoWork);
-                //System.Timers.Timer t = new System.Timers.Timer(1000); //  1 second interval
-                //t.Elapsed += (s, k) =>
-                //{
-                //    // don't try to start the work if it's still busy with the previous run...
-                //    if (!worker.IsBusy)
-                //        worker.RunWorkerAsync();
-                //};
-                Task t = Task.Factory.StartNew(() => worker_DoWork());
             }
-        }
-
-        private void worker_DoWork()
-        {
-            string retBool = "ON";
-
-            while (ami.Status != "OFF" || retBool.Equals("OFF") || retBool.Equals("DELETED"))
-            {
-                retBool = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, ami.Device_code, ami.Measurements);
-                Task.Delay(1000);
-            }
-
         }
 
         private void turnOffBtn_Click(object sender, RoutedEventArgs e)
         {
             if (dataGrid.SelectedItem != null)
             {
-                ami.Status = "OFF";
+				KeyValuePair<string, AMICharacteristics> keyValue = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
+
+				if (AvailableAMIDevices[keyValue.Key].Status == State.On) // spam za turn off
+				{
+					AvailableAMIDevices[keyValue.Key].Status = State.Off;
+				};
+
                 dataGrid.Items.Refresh();
-                Task.WaitAll();
+
             }
             
         }
+
     }
 }
 
