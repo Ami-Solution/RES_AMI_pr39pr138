@@ -100,10 +100,17 @@ namespace AMI_Device
             {
                 KeyValuePair<string, AMICharacteristics> keyValue = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
 				
-				if (AvailableAMIDevices[keyValue.Key].Status == State.Off) // ukoliko spamujemo tur on, a vec je ukljucen, da ne pravi vise taskova
+				if (AvailableAMIDevices[keyValue.Key].Status == State.OFF) // ukoliko spamujemo tur on, a vec je ukljucen, da ne pravi vise taskova
 				{
-					AvailableAMIDevices[keyValue.Key].Status = State.On;
-					Task t = Task.Factory.StartNew(() => AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key]));
+					AvailableAMIDevices[keyValue.Key].Status = State.ON;
+					Task t = Task.Factory.StartNew(() =>
+					{
+						AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key]);
+						this.Dispatcher.Invoke(() =>
+						{
+							dataGrid.Items.Refresh();
+						});
+					});
 
 				};
 
@@ -117,9 +124,9 @@ namespace AMI_Device
             {
 				KeyValuePair<string, AMICharacteristics> keyValue = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
 
-				if (AvailableAMIDevices[keyValue.Key].Status == State.On) // spam za turn off
+				if (AvailableAMIDevices[keyValue.Key].Status == State.ON) // spam za turn off
 				{
-					AvailableAMIDevices[keyValue.Key].Status = State.Off;
+					AvailableAMIDevices[keyValue.Key].Status = State.OFF;
 				};
 
                 dataGrid.Items.Refresh();

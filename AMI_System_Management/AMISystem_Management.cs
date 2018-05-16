@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace AMY_System_Management
 {
@@ -18,6 +19,9 @@ namespace AMY_System_Management
 
 		public bool SendDataToDataBase(string agregator_code, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
+			string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+
+
 			//implementirati logiku za slanje u bazu podataka //
 			Trace.WriteLine($"Agregat {agregator_code} je poslao buffer!");
 			return true;

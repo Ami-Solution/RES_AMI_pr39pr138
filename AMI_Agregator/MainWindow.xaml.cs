@@ -109,9 +109,9 @@ namespace AMI_Agregator
 			{
 				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
 				
-				if (agregators[keyValue.Key].State == Storage.State.Off)
+				if (agregators[keyValue.Key].State == Storage.State.OFF)
 				{
-					agregators[keyValue.Key].State = Storage.State.On;
+					agregators[keyValue.Key].State = Storage.State.ON;
 					Task t = Task.Factory.StartNew(() => agregators[keyValue.Key].SendToLocalStorage(agregators[keyValue.Key]));
 				}
 				
@@ -125,9 +125,9 @@ namespace AMI_Agregator
 			if (dataGrid.SelectedItem != null)
 			{
 				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
-				if (agregators[keyValue.Key].State == Storage.State.On)
+				if (agregators[keyValue.Key].State == Storage.State.ON)
 				{
-					agregators[keyValue.Key].State = Storage.State.Off;
+					agregators[keyValue.Key].State = Storage.State.OFF;
 				}
 
 			}

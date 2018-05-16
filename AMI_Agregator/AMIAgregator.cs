@@ -23,7 +23,7 @@ namespace AMI_Agregator
 
 		private ServiceHost Host { get; set; }
 
-		public State State { get; set; } = State.Off;
+		public State State { get; set; } = State.OFF;
 
 		public IAMI_System_Management Proxy { get; set; }
 
@@ -39,7 +39,7 @@ namespace AMI_Agregator
 					"agregator1",
 					new AMIAgregator("agregator1")
 					{
-						State = State.Off,
+						State = State.OFF,
 						Buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
 						{
 							{
@@ -152,7 +152,7 @@ namespace AMI_Agregator
 
 			if (MainWindow.agregators.TryGetValue(agregator_code, out ag))
 			{
-				if (ag.State == State.On)
+				if (ag.State == State.ON)
 				{
 					foreach (var keyValue in values)
 					{
@@ -174,7 +174,7 @@ namespace AMI_Agregator
 
 		public void SendToLocalStorage(AMIAgregator ag)
 		{
-			while (ag.State == State.On)
+			while (ag.State == State.ON)
 			{
 				Thread.Sleep(5000);
 				//ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Buffer);

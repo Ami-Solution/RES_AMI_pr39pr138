@@ -16,7 +16,7 @@ namespace Storage
 
 	public enum State
 	{
-		Off = 0,
-		On,
+		OFF = 0,
+		ON,
 	}
 }
