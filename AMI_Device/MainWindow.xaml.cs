@@ -103,7 +103,14 @@ namespace AMI_Device
 				if (AvailableAMIDevices[keyValue.Key].Status == State.OFF) // ukoliko spamujemo tur on, a vec je ukljucen, da ne pravi vise taskova
 				{
 					AvailableAMIDevices[keyValue.Key].Status = State.ON;
-					Task t = Task.Factory.StartNew(() => AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key]));
+					Task t = Task.Factory.StartNew(() =>
+					{
+						AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key]);
+						this.Dispatcher.Invoke(() =>
+						{
+							dataGrid.Items.Refresh();
+						});
+					});
 
 				};
 

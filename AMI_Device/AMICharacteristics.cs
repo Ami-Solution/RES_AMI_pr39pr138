@@ -51,9 +51,12 @@ namespace AMI_Device
 			{
 				Trace.WriteLine("Nesto kao saljem ???");
 				retVal = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, ami.Device_code, ami.Measurements);
-				Thread.Sleep(1000);
+				Thread.Sleep(5000);
 
 			} while (ami.Status == State.ON && retVal == "ON");
+
+			if (retVal == "OFF")
+				ami.Status = State.OFF;
 
 			/* Ovde sada treba da se implementira sta se radi ako se obrise agregat, ili ako se agregat ugasi
 			 * 
