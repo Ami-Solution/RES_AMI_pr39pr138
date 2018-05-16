@@ -161,14 +161,13 @@ namespace AMI_Agregator
 				}
 				else
 				{
-					retVal = "OF";
+					retVal = "OFF";
 				}
 			}
 			else
 			{
 				retVal = "DELETED";
 			}
-			
 
 			return retVal;
 		}

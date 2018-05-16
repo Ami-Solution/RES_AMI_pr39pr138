@@ -44,14 +44,14 @@ namespace AMI_Device
             this.proxy = factory.CreateChannel();
         }
 
-		public void worker_DoWork(AMICharacteristics ami)
+		public void SendDataToAgregator(AMICharacteristics ami)
 		{
 			string retVal = "";
 			do
 			{
 				Trace.WriteLine("Nesto kao saljem ???");
 				retVal = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, ami.Device_code, ami.Measurements);
-				Thread.Sleep(1000);
+				Thread.Sleep(5000);
 
 			} while (ami.Status == State.On && retVal == "ON");
 
