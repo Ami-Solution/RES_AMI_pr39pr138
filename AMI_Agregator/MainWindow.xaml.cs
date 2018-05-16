@@ -30,7 +30,7 @@ namespace AMI_Agregator
 
 		public static int agregatorNumber = 1;
 
-		private static ServiceHost Host;
+		private static ServiceHost host;
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -46,10 +46,10 @@ namespace AMI_Agregator
         {
             NetTcpBinding binding = new NetTcpBinding();
             string address = $"net.tcp://localhost:8003/IAMI_Agregator";
-            Host = new ServiceHost(typeof(AMIAgregator));
-            Host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
-            Host.Description.Behaviors.Add(new ServiceDebugBehavior { IncludeExceptionDetailInFaults = true });
-            Host.AddServiceEndpoint(typeof(IAMI_Agregator), binding, address);
+            host = new ServiceHost(typeof(AMIAgregator));
+            host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
+            host.Description.Behaviors.Add(new ServiceDebugBehavior { IncludeExceptionDetailInFaults = true });
+            host.AddServiceEndpoint(typeof(IAMI_Agregator), binding, address);
 
             Start();
         }
@@ -58,7 +58,7 @@ namespace AMI_Agregator
         {
             try
             {
-                Host.Open();
+                host.Open();
                 Console.WriteLine($"Default AMI Agregator connection started succesffully.");
             }
             catch (Exception e)
@@ -72,7 +72,7 @@ namespace AMI_Agregator
         {
             try
             {
-                Host.Close();
+                host.Close();
                 Console.WriteLine($"Default AMI Agregator connection closed succesffully.");
             }
             catch (Exception e)
@@ -108,6 +108,7 @@ namespace AMI_Agregator
 			{
 				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
 				agregators[keyValue.Key].State = Storage.State.On;
+				agregators[keyValue.Key].ConnectToSystemManagement();
 
 			}
 

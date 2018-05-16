@@ -13,7 +13,7 @@ namespace AMI_Device
     {
         private string status = "OFF";
         private IAMI_Agregator proxy;
-        public string Name { get; set; }
+        public string Device_code { get; set; }
 
         public int CreationTime { get; set; }
 
@@ -28,7 +28,7 @@ namespace AMI_Device
         public AMICharacteristics()
         {
             Measurements = new Dictionary<Storage.TypeMeasurement, double>();
-            Name = PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics); //generise random string
+            Device_code = PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics); //generise random string
             CreationTime = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; // vreme po unix timestamp formatu (racuna od 1970 do danas sekunde)
         }
 

@@ -11,7 +11,7 @@
 		<DataGrid x:Name="dataGrid" IsReadOnly="True" ItemsSource="{Binding agregators}" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="299" Margin="100,10,0,0" VerticalAlignment="Top" Width="407">
 			<DataGrid.Columns>
 				<DataGridTextColumn Header="Agregator name" Binding="{Binding Key}" Width="*"/>
-				<DataGridTextColumn Header="Status" Binding="{Binding Value.Status}"  Width="*"/>
+				<DataGridTextColumn Header="Status" Binding="{Binding Value.State}"  Width="*"/>
 			</DataGrid.Columns>
 		</DataGrid>
 		<Button x:Name="RmvBtn" Content="REMOVE" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Width="74" Click="RmvBtn_Click"/>

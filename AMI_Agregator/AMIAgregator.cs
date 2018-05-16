@@ -15,13 +15,15 @@ namespace AMI_Agregator
 
 		#region properties
 		//device_code, <TipVrednost, lista vrednosti>
-		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer { get; set; }
+		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> Buffer { get; set; }
 
 		public string Agregator_code { get; set; }
 
 		private ServiceHost Host { get; set; }
 
 		public State State { get; set; } = State.Off;
+
+		public IAMI_System_Management Proxy { get; set; }
 
 		#endregion properties
 
@@ -35,7 +37,8 @@ namespace AMI_Agregator
 					"agregator1",
 					new AMIAgregator("agregator1")
 					{
-						buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
+						State = State.Off,
+						Buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
 						{
 							{
 								"DEVICE_ID1",
@@ -64,7 +67,7 @@ namespace AMI_Agregator
         {
             this.Agregator_code = name;
 
-			InitialiseBuffer(buffer);
+			InitialiseBuffer(Buffer);
 			CreateHost(this.Host);
 		}
 		#endregion constructors
@@ -92,7 +95,7 @@ namespace AMI_Agregator
 
 		private void InitialiseBuffer(Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
-			this.buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
+			this.Buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
 			{
 				{
 					"",
@@ -112,13 +115,13 @@ namespace AMI_Agregator
 		{
 			bool retVal = true;
 
-			if (MainWindow.agregators[agregator_code].buffer.ContainsKey(device_code))
+			if (MainWindow.agregators[agregator_code].Buffer.ContainsKey(device_code))
 			{
 				retVal = false;
 			}
 			else
 			{
-				MainWindow.agregators[agregator_code].buffer.Add(
+				MainWindow.agregators[agregator_code].Buffer.Add(
 					device_code,
 					new Dictionary<TypeMeasurement, List<double>>()
 					{
@@ -146,7 +149,7 @@ namespace AMI_Agregator
 				{
 					foreach (var keyValue in values)
 					{
-						MainWindow.agregators[agregator_code].buffer[device_code][keyValue.Key].Add(keyValue.Value);
+						MainWindow.agregators[agregator_code].Buffer[device_code][keyValue.Key].Add(keyValue.Value);
 					}
 				}
 				else
@@ -163,12 +166,22 @@ namespace AMI_Agregator
 			return retVal;
 		}
 
+		public void ConnectToSystemManagement()
+		{
+			var binding = new NetTcpBinding();
+			string address = $"net.tcp://localhost:8004/IAMI_System_Management";
+			ChannelFactory<IAMI_System_Management> factory = new ChannelFactory<IAMI_System_Management>(binding, new EndpointAddress(address));
+			Proxy = factory.CreateChannel();
+
+			//implementirati task da salje svakih 5 minuta podatke u bazu
+		}
+
 		public void SendToLocalStorage(string device_code, DateTime timestamp)
 		{
 			//implementirati da salje podatke u bazu svakih 5 minuta (proksi na AMI_System_Managment)
 		}
 
-        public List<string> ListOfAgregatorIDs()
+		public List<string> ListOfAgregatorIDs()
         {
             List<string> retList = new List<string>();
             foreach(var ID in MainWindow.agregators)

@@ -63,9 +63,9 @@ namespace AMI_Device
             ami.Connect(ID);
             substraction = "agregator" + ID;
 
-            AvailableAMIDevices.Add(ami.Name, ami);
+            AvailableAMIDevices.Add(ami.Device_code, ami);
 
-            if (!ami.Proxy.AddDevice(substraction, ami.Name))
+            if (!ami.Proxy.AddDevice(substraction, ami.Device_code))
             {
                 AddBtn_Click(sender, e);
             }
