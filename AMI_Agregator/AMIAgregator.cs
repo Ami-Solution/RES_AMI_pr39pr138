@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Storage;
@@ -15,13 +17,15 @@ namespace AMI_Agregator
 
 		#region properties
 		//device_code, <TipVrednost, lista vrednosti>
-		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer { get; set; }
+		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> Buffer { get; set; }
 
 		public string Agregator_code { get; set; }
 
 		private ServiceHost Host { get; set; }
 
-		public string Status { get; set; } = "OFF";
+		public State State { get; set; } = State.Off;
+
+		public IAMI_System_Management Proxy { get; set; }
 
 		#endregion properties
 
@@ -35,7 +39,8 @@ namespace AMI_Agregator
 					"agregator1",
 					new AMIAgregator("agregator1")
 					{
-						buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
+						State = State.Off,
+						Buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
 						{
 							{
 								"DEVICE_ID1",
@@ -63,9 +68,13 @@ namespace AMI_Agregator
         public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
         {
             this.Agregator_code = name;
-			this.Status = "ON";
 
-			InitialiseBuffer(buffer);
+			var binding = new NetTcpBinding();
+			string address = $"net.tcp://localhost:8004/IAMI_System_Management";
+			ChannelFactory<IAMI_System_Management> factory = new ChannelFactory<IAMI_System_Management>(binding, new EndpointAddress(address));
+			Proxy = factory.CreateChannel();
+
+			InitialiseBuffer(Buffer);
 			CreateHost(this.Host);
 		}
 		#endregion constructors
@@ -82,7 +91,7 @@ namespace AMI_Agregator
 			}
 			else
 			{
-				address = $"net.tcp://localhost:{9000 + MainWindow.agregators.Count() + 1}/IAMI_Agregator";
+				address = $"net.tcp://localhost:{9000 + MainWindow.agregatorNumber}/IAMI_Agregator";
 			}
 
 			host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
@@ -93,7 +102,7 @@ namespace AMI_Agregator
 
 		private void InitialiseBuffer(Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
-			this.buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
+			this.Buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
 			{
 				{
 					"",
@@ -113,13 +122,13 @@ namespace AMI_Agregator
 		{
 			bool retVal = true;
 
-			if (MainWindow.agregators[agregator_code].buffer.ContainsKey(device_code))
+			if (MainWindow.agregators[agregator_code].Buffer.ContainsKey(device_code))
 			{
 				retVal = false;
 			}
 			else
 			{
-				MainWindow.agregators[agregator_code].buffer.Add(
+				MainWindow.agregators[agregator_code].Buffer.Add(
 					device_code,
 					new Dictionary<TypeMeasurement, List<double>>()
 					{
@@ -135,24 +144,45 @@ namespace AMI_Agregator
 		}
 
 		//prihvatimo koji device salje vrednosti. Vrednosti su tipa Struja-100, Napon-200, Snaga-300
-		public bool ReceiveDataFromDevice(string agregator_code, string device_code, Dictionary<TypeMeasurement, double> values)
+		public string ReceiveDataFromDevice(string agregator_code, string device_code, Dictionary<TypeMeasurement, double> values)
 		{
-			bool retVal = true;
+			string retVal = "ON";
 
-			foreach (var keyValue in values)
+			AMIAgregator ag = new AMIAgregator();
+
+			if (MainWindow.agregators.TryGetValue(agregator_code, out ag))
 			{
-				MainWindow.agregators[agregator_code].buffer[device_code][keyValue.Key].Add(keyValue.Value);
+				if (ag.State == State.On)
+				{
+					foreach (var keyValue in values)
+					{
+						MainWindow.agregators[agregator_code].Buffer[device_code][keyValue.Key].Add(keyValue.Value);
+					}
+				}
+				else
+				{
+					retVal = "OF";
+				}
 			}
+			else
+			{
+				retVal = "DELETED";
+			}
+			
 
 			return retVal;
 		}
 
-		public void SendToLocalStorage(string device_code, DateTime timestamp)
+		public void SendToLocalStorage(AMIAgregator ag)
 		{
-			//implementirati da salje podatke u bazu svakih 5 minuta (proksi na AMI_System_Managment)
+			while (ag.State == State.On)
+			{
+				Thread.Sleep(5000);
+				ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Buffer);
+			}
 		}
 
-        public List<string> ListOfAgregatorIDs()
+		public List<string> ListOfAgregatorIDs()
         {
             List<string> retList = new List<string>();
             foreach(var ID in MainWindow.agregators)
@@ -162,6 +192,7 @@ namespace AMI_Agregator
 
             return retList;
         }
+
 		#endregion methods
 
 	}

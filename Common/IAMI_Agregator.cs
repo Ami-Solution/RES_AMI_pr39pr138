@@ -14,7 +14,7 @@ namespace Common
         [OperationContract]
 		bool AddDevice(string agregator_code, string device_code);
         [OperationContract]
-        bool ReceiveDataFromDevice(string agregator_code, string device_code, Dictionary<TypeMeasurement, double> values);
+        string ReceiveDataFromDevice(string agregator_code, string device_code, Dictionary<TypeMeasurement, double> values);
         [OperationContract]
         List<string> ListOfAgregatorIDs();
 	}

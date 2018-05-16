@@ -28,13 +28,14 @@ namespace AMI_Agregator
 		//buffer je dictionari i cine ga: device_id i novi dictionari: typeMeasurment i lista vrednost
 		public static Dictionary<string, AMIAgregator> agregators { get; set; }
 
-		private static ServiceHost Host;
+		public static int agregatorNumber = 1;
+
+		private static ServiceHost host;
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			AMIAgregator novi2 = new AMIAgregator("agregator2");
-			agregators.Add(novi2.Agregator_code, novi2);
+			AMIAgregator a = new AMIAgregator(); // to initalise predefined agregators
 
 			Connect();
 
@@ -45,10 +46,10 @@ namespace AMI_Agregator
         {
             NetTcpBinding binding = new NetTcpBinding();
             string address = $"net.tcp://localhost:8003/IAMI_Agregator";
-            Host = new ServiceHost(typeof(AMIAgregator));
-            Host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
-            Host.Description.Behaviors.Add(new ServiceDebugBehavior { IncludeExceptionDetailInFaults = true });
-            Host.AddServiceEndpoint(typeof(IAMI_Agregator), binding, address);
+            host = new ServiceHost(typeof(AMIAgregator));
+            host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
+            host.Description.Behaviors.Add(new ServiceDebugBehavior { IncludeExceptionDetailInFaults = true });
+            host.AddServiceEndpoint(typeof(IAMI_Agregator), binding, address);
 
             Start();
         }
@@ -57,7 +58,7 @@ namespace AMI_Agregator
         {
             try
             {
-                Host.Open();
+                host.Open();
                 Console.WriteLine($"Default AMI Agregator connection started succesffully.");
             }
             catch (Exception e)
@@ -71,7 +72,7 @@ namespace AMI_Agregator
         {
             try
             {
-                Host.Close();
+                host.Close();
                 Console.WriteLine($"Default AMI Agregator connection closed succesffully.");
             }
             catch (Exception e)
@@ -80,5 +81,58 @@ namespace AMI_Agregator
             }
 
         }
-    }
+
+		private void AddBtn_Click(object sender, RoutedEventArgs e)
+		{
+			AMIAgregator agregator = new AMIAgregator("agregator" + (++agregatorNumber));
+			agregators.Add(agregator.Agregator_code, agregator);
+
+			dataGrid.Items.Refresh();
+		}
+
+		private void RmvBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (dataGrid.SelectedItem != null)
+			{
+				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
+				agregators.Remove(keyValue.Key);
+
+			}
+
+			dataGrid.Items.Refresh();
+		}
+
+		private void turnOnBtn_Click(object sender, RoutedEventArgs e)
+		{
+
+			if (dataGrid.SelectedItem != null)
+			{
+				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
+				
+				if (agregators[keyValue.Key].State == Storage.State.Off)
+				{
+					agregators[keyValue.Key].State = Storage.State.On;
+					Task t = Task.Factory.StartNew(() => agregators[keyValue.Key].SendToLocalStorage(agregators[keyValue.Key]));
+				}
+				
+			}
+
+			dataGrid.Items.Refresh();
+		}
+
+		private void turnOffBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (dataGrid.SelectedItem != null)
+			{
+				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
+				if (agregators[keyValue.Key].State == Storage.State.On)
+				{
+					agregators[keyValue.Key].State = Storage.State.Off;
+				}
+
+			}
+
+			dataGrid.Items.Refresh();
+		}
+	}
 }
