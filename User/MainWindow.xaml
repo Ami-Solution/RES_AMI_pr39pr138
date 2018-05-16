@@ -1,0 +1,16 @@
+﻿<Window x:Class="User.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:User"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Button x:Name="devBtn" Content="DEVICES" HorizontalAlignment="Left" Margin="36,279,0,0" VerticalAlignment="Top" Width="207" Height="104" Click="devBtn_Click" FontSize="36"/>
+        <Button x:Name="agrBtn" Content="AGREGATOR" HorizontalAlignment="Left" Margin="290,279,0,0" VerticalAlignment="Top" Width="207" Height="104"  FontSize="36" Click="agrBtn_Click"/>
+        <Button x:Name="SystBtn" Content="SYSTEM" HorizontalAlignment="Left" Margin="548,279,0,0" VerticalAlignment="Top" Width="207" Height="104"  FontSize="36" Click="SystBtn_Click"/>
+        <Label x:Name="label" Content="WELCOME TO AMIVERSE" HorizontalAlignment="Left" Margin="100,27,-27,0" VerticalAlignment="Top" Width="719" Height="70" FontSize="48" FontWeight="Bold"/>
+
+    </Grid>
+</Window>

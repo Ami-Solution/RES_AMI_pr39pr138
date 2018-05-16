@@ -14,7 +14,7 @@ namespace AMI_Device
 {
     public class AMICharacteristics : IAMI_Device
     {
-		private State status = State.Off;
+		private State status = State.OFF;
         private IAMI_Agregator proxy;
         public string Device_code { get; set; }
 
@@ -51,9 +51,9 @@ namespace AMI_Device
 			{
 				Trace.WriteLine("Nesto kao saljem ???");
 				retVal = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, ami.Device_code, ami.Measurements);
-				Thread.Sleep(5000);
+				Thread.Sleep(1000);
 
-			} while (ami.Status == State.On && retVal == "ON");
+			} while (ami.Status == State.ON && retVal == "ON");
 
 			/* Ovde sada treba da se implementira sta se radi ako se obrise agregat, ili ako se agregat ugasi
 			 * 

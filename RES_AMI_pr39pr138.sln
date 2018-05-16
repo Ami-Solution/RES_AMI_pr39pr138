@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMI_System_Management", "AM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{40502C77-6D82-4AC7-AF95-E12D16C775D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User", "User\User.csproj", "{9EEF4D77-7400-429D-A3B7-C5D66FFFF71D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{40502C77-6D82-4AC7-AF95-E12D16C775D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40502C77-6D82-4AC7-AF95-E12D16C775D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40502C77-6D82-4AC7-AF95-E12D16C775D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EEF4D77-7400-429D-A3B7-C5D66FFFF71D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EEF4D77-7400-429D-A3B7-C5D66FFFF71D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EEF4D77-7400-429D-A3B7-C5D66FFFF71D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EEF4D77-7400-429D-A3B7-C5D66FFFF71D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
