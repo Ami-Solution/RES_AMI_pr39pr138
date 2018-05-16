@@ -18,7 +18,7 @@ namespace AMY_System_Management
 
 		public bool SendDataToDataBase(string agregator_code, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
-			//implementirati logiku za slanje u bazu podataka 
+			//implementirati logiku za slanje u bazu podataka //
 			Trace.WriteLine($"Agregat {agregator_code} je poslao buffer!");
 			return true;
 		}
