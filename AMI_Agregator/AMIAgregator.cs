@@ -123,6 +123,7 @@ namespace AMI_Agregator
 			{
 				if (ag.State == State.ON)
 				{
+					Trace.WriteLine("Prihvatam podatke");
 					foreach (var keyValue in values)
 					{
 						MainWindow.agregators[agregator_code].Buffer[device_code][keyValue.Key].Add(keyValue.Value);
@@ -152,7 +153,7 @@ namespace AMI_Agregator
 
 				//imamo cetiri merenja, mozda se desi da device upise tek jedno, a on vec posalje u bazu (baza ocekuje 4)
 				//datum se dodaje u listu tek kada se upisu sva 4 merenja
-				if (ag.Dates.Count() > 0) 
+				if (ag.Dates.Count() > 1) 
 				{
 					Task t = Task.Factory.StartNew(() => ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Dates, ag.Buffer));
 				}

@@ -20,6 +20,7 @@ namespace AMY_System_Management
 
 		public bool SendDataToDataBase(string agregator_code, List<DateTime> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
+			Trace.WriteLine($"Agregat: {agregator_code}, broj merenja: {dateTimeList.Count()*4}, pocetak: {DateTime.Now} !");
 			if (buffer.Count != 0)
 			{
 				string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
@@ -35,19 +36,19 @@ namespace AMY_System_Management
 					double ReactivePower = 0;
 					DateTime dateTime;
 
+					//ne salje dobro u bazu podataka, vreme je lose, i raspored vrednosti
 					foreach (var keyValue in buffer)
 					{
 						Device_Code = keyValue.Key;
-						
-
-						dateTime = dateTimeList[0];
-						dateTimeList.RemoveAt(0);
-
 
 						foreach (var pair in keyValue.Value)
 						{
+							dateTime = dateTimeList[0];
+							dateTimeList.RemoveAt(0);
+
 							for (int i = 0; i < pair.Value.Count(); i++)
 							{
+								
 								Voltage = pair.Value[i];
 								CurrentP = pair.Value[i];
 								ActivePower = pair.Value[i];
@@ -68,7 +69,7 @@ namespace AMY_System_Management
 				}
 			}
 
-			Trace.WriteLine($"Agregat {agregator_code} je poslao buffer!");
+			Trace.WriteLine($"Agregat: {agregator_code}, ispraznjen buffer, kraj: {DateTime.Now} !");
 			return true;
 		}
 	}
