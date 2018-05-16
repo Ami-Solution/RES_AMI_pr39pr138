@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="IAMI_Agregator.cs" />
     <Compile Include="IAMI_System_Management.cs" />
+    <Compile Include="IAMI_Device.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

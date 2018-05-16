@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AMI_Device
 {
-    public class AMICharacteristics
+    public class AMICharacteristics : IAMI_Device
     {
         private string status = "OFF";
         private IAMI_Agregator proxy;
