@@ -161,7 +161,7 @@ namespace AMI_Agregator
 				}
 				else
 				{
-					retVal = "OF";
+					retVal = "OFF";
 				}
 			}
 			else

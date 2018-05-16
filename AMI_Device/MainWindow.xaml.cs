@@ -2,21 +2,9 @@
 using Storage;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace AMI_Device
 {
@@ -118,8 +106,9 @@ namespace AMI_Device
 
         private void worker_DoWork()
         {
-            bool retBool = true;
-            while (ami.Status != "OFF" || retBool == false)
+            string retBool = "ON";
+
+            while (ami.Status != "OFF" || retBool.Equals("OFF") || retBool.Equals("DELETED"))
             {
                 retBool = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, ami.Device_code, ami.Measurements);
                 Task.Delay(1000);
