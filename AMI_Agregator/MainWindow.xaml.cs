@@ -102,6 +102,7 @@ namespace AMI_Agregator
 				if (agregators[keyValue.Key].State == Storage.State.OFF)
 				{
 					agregators[keyValue.Key].State = Storage.State.ON;
+
 					Task t = Task.Factory.StartNew(() => agregators[keyValue.Key].SendToLocalStorage(agregators[keyValue.Key]));
 				}
 				

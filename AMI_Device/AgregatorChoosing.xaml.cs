@@ -38,8 +38,10 @@ namespace AMI_Device
         {
             //treba da se storuje izabrani agregat iz liste
             int selected = IDcmbBox.SelectedIndex;
-            agregatorName = existingAgregators[selected];
-            
+			if (selected != -1)
+			{
+				agregatorName = existingAgregators[selected];
+			}
         }
 
         private void okBtn_Click(object sender, RoutedEventArgs e)

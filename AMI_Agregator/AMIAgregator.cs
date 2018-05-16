@@ -19,6 +19,8 @@ namespace AMI_Agregator
 		//device_code, <TipVrednost, lista vrednosti>
 		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> Buffer { get; set; }
 
+		public List<DateTime> Dates { get; set; }
+
 		public string Agregator_code { get; set; }
 
 		private ServiceHost Host { get; set; }
@@ -30,15 +32,19 @@ namespace AMI_Agregator
 		#endregion properties
 
 		#region constructors
+
+		
 		static AMIAgregator()
 		{
-
+			MainWindow.agregators = new Dictionary<string, AMIAgregator>();
+			/*
 			MainWindow.agregators = new Dictionary<string, AMIAgregator>()
 			{
 				{
 					"agregator1",
 					new AMIAgregator("agregator1")
 					{
+						Dates = new List<DateTime>(){ DateTime.Now },
 						State = State.OFF,
 						Buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
 						{
@@ -46,10 +52,10 @@ namespace AMI_Agregator
 								"DEVICE_ID1",
 								new Dictionary<TypeMeasurement, List<double>>()
 								{
-									{ TypeMeasurement.ActivePower, new List<double>() },
-									{ TypeMeasurement.ReactivePower, new List<double>() },
-									{ TypeMeasurement.CurrentP, new List<double>() },
-									{ TypeMeasurement.Voltage, new List<double>() },
+									{ TypeMeasurement.ActivePower, new List<double>() { 105 } },
+									{ TypeMeasurement.ReactivePower, new List<double>() { 110 } },
+									{ TypeMeasurement.CurrentP, new List<double>() { 115 } },
+									{ TypeMeasurement.Voltage, new List<double>() { 120 } },
 								}
 							},
 
@@ -57,9 +63,9 @@ namespace AMI_Agregator
 					}
 				},
 			};
-
+			*/
 		}
-
+		
 		public AMIAgregator()
 		{
 
@@ -68,6 +74,7 @@ namespace AMI_Agregator
         public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
         {
             this.Agregator_code = name;
+			Dates = new List<DateTime>();
 
 			var binding = new NetTcpBinding();
 			string address = $"net.tcp://localhost:8004/IAMI_System_Management";
@@ -102,19 +109,8 @@ namespace AMI_Agregator
 
 		private void InitialiseBuffer(Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
-			this.Buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>()
-			{
-				{
-					"",
-					new Dictionary<TypeMeasurement, List<double>>()
-					{
-						{ TypeMeasurement.ActivePower, null },
-						{ TypeMeasurement.ReactivePower, null },
-						{ TypeMeasurement.CurrentP, null },
-						{ TypeMeasurement.Voltage, null },
-					}
-				}
-			};
+			this.Buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>();
+			
 		}
 
 		//provera da li agregator sadrzi uredjaj koji treba da mu se doda
@@ -144,7 +140,7 @@ namespace AMI_Agregator
 		}
 
 		//prihvatimo koji device salje vrednosti. Vrednosti su tipa Struja-100, Napon-200, Snaga-300
-		public string ReceiveDataFromDevice(string agregator_code, string device_code, Dictionary<TypeMeasurement, double> values)
+		public string ReceiveDataFromDevice(string agregator_code, DateTime dateTime, string device_code, Dictionary<TypeMeasurement, double> values)
 		{
 			string retVal = "ON";
 
@@ -158,6 +154,8 @@ namespace AMI_Agregator
 					{
 						MainWindow.agregators[agregator_code].Buffer[device_code][keyValue.Key].Add(keyValue.Value);
 					}
+
+					MainWindow.agregators[agregator_code].Dates.Add(dateTime);
 				}
 				else
 				{
@@ -177,7 +175,11 @@ namespace AMI_Agregator
 			while (ag.State == State.ON)
 			{
 				Thread.Sleep(5000);
-				ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Buffer);
+
+				if (ag.Dates.Count() > 0) //imamo cetiri merenja, mozda se desi da device upise tek jedno, a on vec posalje u bazu (baza ocekuje 4)
+				{
+					Task t = Task.Factory.StartNew(() => ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Dates, ag.Buffer));
+				}
 			}
 		}
 

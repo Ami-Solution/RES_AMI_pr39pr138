@@ -49,9 +49,9 @@ namespace AMI_Device
 			string retVal = "";
 			do
 			{
-				Trace.WriteLine("Nesto kao saljem ???");
-				retVal = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, ami.Device_code, ami.Measurements);
-				Thread.Sleep(5000);
+				Trace.WriteLine("Nesto kao saljem ??? " + DateTime.Now);
+				retVal = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, DateTime.Now, ami.Device_code, ami.Measurements);
+				Thread.Sleep(1000);
 
 			} while (ami.Status == State.ON && retVal == "ON");
 

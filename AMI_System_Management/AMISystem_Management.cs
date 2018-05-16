@@ -18,15 +18,54 @@ namespace AMY_System_Management
 
 		}
 
-		public bool SendDataToDataBase(string agregator_code, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
+		public bool SendDataToDataBase(string agregator_code, List<DateTime> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
-			using (SqlConnection con = new SqlConnection(CS))
+			if (buffer.Count != 0)
 			{
-				SqlCommand cmd = new SqlCommand($"INSERT INTO AMI_Tables(Agregator_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) VALUES('{agregator_code}', 1, 2, 3, 4, 1)", con);
-				con.Open();
-				cmd.ExecuteReader();
+				string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+				using (SqlConnection con = new SqlConnection(CS))
+				{
+					con.Open();
+					SqlCommand cmd;
 
+					string Device_Code = "";
+					double Voltage = 0;
+					double CurrentP = 0;
+					double ActivePower = 0;
+					double ReactivePower = 0;
+					DateTime dateTime;
+
+					foreach (var keyValue in buffer)
+					{
+						Device_Code = keyValue.Key;
+						
+
+						dateTime = dateTimeList[0];
+						dateTimeList.RemoveAt(0);
+
+
+						foreach (var pair in keyValue.Value)
+						{
+							for (int i = 0; i < pair.Value.Count(); i++)
+							{
+								Voltage = pair.Value[i];
+								CurrentP = pair.Value[i];
+								ActivePower = pair.Value[i];
+								ReactivePower = pair.Value[i];
+
+								cmd = new SqlCommand($"INSERT INTO AMI_Tables(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) VALUES('{agregator_code}', '{Device_Code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')", con);
+								cmd.ExecuteReader();
+
+							}
+						}
+					}
+
+					// brisanje iz bafera nakon upisivanja u bazu
+					buffer[Device_Code].Remove(TypeMeasurement.ActivePower);
+					buffer[Device_Code].Remove(TypeMeasurement.ReactivePower);
+					buffer[Device_Code].Remove(TypeMeasurement.CurrentP);
+					buffer[Device_Code].Remove(TypeMeasurement.Voltage);
+				}
 			}
 
 			Trace.WriteLine($"Agregat {agregator_code} je poslao buffer!");

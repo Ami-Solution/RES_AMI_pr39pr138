@@ -58,22 +58,26 @@ namespace AMI_Device
 
             AgregatorChoosing choosingWindow = new AgregatorChoosing(); // za biranje Agregata
             choosingWindow.ShowDialog();
-            ami.AgregatorID = AgregatorChoosing.agregatorName; //dodelimo izabrani agregat (agregator1)
 
-            string substraction = ami.AgregatorID.Substring(9);
-            int ID = Int32.Parse(substraction);
-            ami.Connect(ID);
-            substraction = "agregator" + ID;
+			if (AgregatorChoosing.agregatorName != null)
+			{
 
-            AvailableAMIDevices.Add(ami.Device_code, ami);
+				ami.AgregatorID = AgregatorChoosing.agregatorName; //dodelimo izabrani agregat (agregator1)
 
-            if (!ami.Proxy.AddDevice(substraction, ami.Device_code))
-            {
-                AddBtn_Click(sender, e);
-            }
+				string substraction = ami.AgregatorID.Substring(9);
+				int ID = Int32.Parse(substraction);
+				ami.Connect(ID);
+				substraction = "agregator" + ID;
 
-            dataGrid.Items.Refresh();
+				AvailableAMIDevices.Add(ami.Device_code, ami);
 
+				if (!ami.Proxy.AddDevice(substraction, ami.Device_code))
+				{
+					AddBtn_Click(sender, e);
+				}
+
+				dataGrid.Items.Refresh();
+			}
         }
 
         private void RmvBtn_Click(object sender, RoutedEventArgs e)
