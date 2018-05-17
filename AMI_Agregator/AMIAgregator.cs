@@ -12,6 +12,7 @@ using Storage;
 
 namespace AMI_Agregator
 {
+
 	public class AMIAgregator : IAMI_Agregator
 	{
 

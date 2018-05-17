@@ -69,7 +69,18 @@ namespace AMI_Device
 				ami.Connect(ID);
 				substraction = "agregator" + ID;
 
-				AvailableAMIDevices.Add(ami.Device_code, ami);
+                if(AvailableAMIDevices.ContainsKey(ami.Device_code))
+                {
+                    if(AvailableAMIDevices[ami.Device_code].AgregatorID != ami.AgregatorID)
+                    {
+                        ami.Device_code += P;
+                        AvailableAMIDevices.Add(ami.Device_code, ami); //ako je name isti, ali razl agr, dodaj
+                    }
+                }else
+                {
+                    AvailableAMIDevices.Add(ami.Device_code, ami); //ako nema, dodaj ga
+                }
+				
 
 				if (!ami.Proxy.AddDevice(substraction, ami.Device_code))
 				{
@@ -104,7 +115,7 @@ namespace AMI_Device
             {
                 KeyValuePair<string, AMICharacteristics> keyValue = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
 				
-				if (AvailableAMIDevices[keyValue.Key].Status == State.OFF) // ukoliko spamujemo tur on, a vec je ukljucen, da ne pravi vise taskova
+				if (AvailableAMIDevices[keyValue.Key].Status == State.OFF) // ukoliko spamujemo turn on, a vec je ukljucen, da ne pravi vise taskova
 				{
 					AvailableAMIDevices[keyValue.Key].Status = State.ON;
 					Task t = Task.Factory.StartNew(() =>

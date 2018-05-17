@@ -12,13 +12,15 @@ using System.Threading.Tasks;
 
 namespace AMI_Device
 {
+    
     public class AMICharacteristics : IAMI_Device
     {
 		private State status = State.OFF;
         private IAMI_Agregator proxy;
+        private static System.Random rand = new System.Random();
         public string Device_code { get; set; }
 
-        public int CreationTime { get; set; }
+        public DateTime CreationTime { get; set; }
 
         public Dictionary<Storage.TypeMeasurement, double> Measurements { get; set; }
 
@@ -31,8 +33,8 @@ namespace AMI_Device
         public AMICharacteristics()
         {
             Measurements = new Dictionary<Storage.TypeMeasurement, double>();
-            Device_code = PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics); //generise random string
-            CreationTime = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; // vreme po unix timestamp formatu (racuna od 1970 do danas sekunde)
+            Device_code = "pera";//PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics); //generise random string
+            CreationTime = DateTime.Now; 
         }
 
         public void Connect(int id)
@@ -44,16 +46,28 @@ namespace AMI_Device
             this.proxy = factory.CreateChannel();
         }
 
-		public void SendDataToAgregator(AMICharacteristics ami)
+		public void SendDataToAgregator(AMICharacteristics ami) //ako stoji AMIChar ne mogu da dodam u interfejs, a ako ne dodam u interfejs, ne mozemo UNIT test
 		{
 			string retVal = "";
 			do
 			{
-				retVal = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, DateTime.Now, ami.Device_code, ami.Measurements);
+				retVal = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, ami.CreationTime, ami.Device_code, ami.Measurements);
 				Trace.WriteLine(DateTime.Now);
 				Thread.Sleep(1000);
 
-			} while (ami.Status == State.ON && retVal == "ON");
+                double V = rand.Next(300);
+                double I = rand.Next(300);
+                double P = rand.Next(300);
+                double S = rand.Next(300);
+
+                ami.Measurements.Clear(); //posto hocemo da imamo samo 4 vrednosti
+
+                ami.Measurements.Add(TypeMeasurement.Voltage, V);
+                ami.Measurements.Add(TypeMeasurement.CurrentP, I);
+                ami.Measurements.Add(TypeMeasurement.ActivePower, P);
+                ami.Measurements.Add(TypeMeasurement.ReactivePower, S);
+
+            } while (ami.Status == State.ON && retVal == "ON");
 
 			if (retVal == "OFF")
 				ami.Status = State.OFF;

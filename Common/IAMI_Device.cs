@@ -12,5 +12,6 @@ namespace Common
     {
         [OperationContract]
         void Connect(int id);
+
     }
 }
