@@ -120,7 +120,7 @@ namespace AMI_Device
 					AvailableAMIDevices[keyValue.Key].Status = State.ON;
 					Task t = Task.Factory.StartNew(() =>
 					{
-						AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key]);
+						AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key].AgregatorID,DateTime.Now, AvailableAMIDevices[keyValue.Key].Device_code, AvailableAMIDevices[keyValue.Key].Measurements);
 						this.Dispatcher.Invoke(() =>
 						{
 							dataGrid.Items.Refresh();

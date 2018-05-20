@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User", "User\User.csproj", "{9EEF4D77-7400-429D-A3B7-C5D66FFFF71D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMI_Device_Test", "AMI_Device_Test\AMI_Device_Test.csproj", "{4A2FDB30-92B6-420E-B2AA-8BFAEF06044B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{9EEF4D77-7400-429D-A3B7-C5D66FFFF71D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EEF4D77-7400-429D-A3B7-C5D66FFFF71D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EEF4D77-7400-429D-A3B7-C5D66FFFF71D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A2FDB30-92B6-420E-B2AA-8BFAEF06044B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A2FDB30-92B6-420E-B2AA-8BFAEF06044B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A2FDB30-92B6-420E-B2AA-8BFAEF06044B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A2FDB30-92B6-420E-B2AA-8BFAEF06044B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

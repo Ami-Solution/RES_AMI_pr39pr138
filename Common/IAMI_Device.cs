@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -12,6 +13,7 @@ namespace Common
     {
         [OperationContract]
         void Connect(int id);
-
+        [OperationContract]
+        void SendDataToAgregator(string agrID, DateTime time, string devID, Dictionary<TypeMeasurement, double> measurement);
     }
 }

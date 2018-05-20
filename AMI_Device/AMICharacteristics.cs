@@ -33,7 +33,7 @@ namespace AMI_Device
         public AMICharacteristics()
         {
             Measurements = new Dictionary<Storage.TypeMeasurement, double>();
-            Device_code = "pera";//PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics); //generise random string
+            Device_code = PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics); //generise random string
             CreationTime = DateTime.Now; 
         }
 
@@ -46,12 +46,13 @@ namespace AMI_Device
             this.proxy = factory.CreateChannel();
         }
 
-		public void SendDataToAgregator(AMICharacteristics ami) //ako stoji AMIChar ne mogu da dodam u interfejs, a ako ne dodam u interfejs, ne mozemo UNIT test
+		public void SendDataToAgregator(string agrID,DateTime time,string devID,Dictionary<TypeMeasurement,double> measurement) //ako stoji AMIChar ne mogu da dodam u interfejs, a ako ne dodam u interfejs, ne mozemo UNIT test
 		{
 			string retVal = "";
-			do
+            AMICharacteristics ami = MainWindow.AvailableAMIDevices[devID];
+            do
 			{
-				retVal = ami.Proxy.ReceiveDataFromDevice(ami.AgregatorID, ami.CreationTime, ami.Device_code, ami.Measurements);
+                retVal = ami.Proxy.ReceiveDataFromDevice(agrID,time,devID,measurement);
 				Trace.WriteLine(DateTime.Now);
 				Thread.Sleep(1000);
 
