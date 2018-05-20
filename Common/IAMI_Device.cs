@@ -14,6 +14,6 @@ namespace Common
         [OperationContract]
         void Connect(int id);
         [OperationContract]
-        void SendDataToAgregator(string agrID, DateTime time, string devID, Dictionary<TypeMeasurement, double> measurement);
+        void SendDataToAgregator(string agrID, string devID, Dictionary<TypeMeasurement, double> measurement);
     }
 }

@@ -124,7 +124,7 @@ namespace AMI_Agregator
 			{
 				if (ag.State == State.ON)
 				{
-					Trace.WriteLine("Prihvatam podatke");
+					//Trace.WriteLine("Prihvatam podatke");
 					foreach (var keyValue in values)
 					{
 						MainWindow.agregators[agregator_code].Buffer[device_code][keyValue.Key].Add(keyValue.Value);
@@ -156,7 +156,16 @@ namespace AMI_Agregator
 				//datum se dodaje u listu tek kada se upisu sva 4 merenja
 				if (ag.Dates.Count() > 1) 
 				{
-					Task t = Task.Factory.StartNew(() => ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Dates, ag.Buffer));
+					ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Dates, ag.Buffer);
+					foreach (var keyValue in ag.Buffer)
+					{
+						//praznjenje bafera nakon sto se posalje u bazu podataka
+						ag.Buffer[keyValue.Key][TypeMeasurement.ActivePower] = new List<double>();
+						ag.Buffer[keyValue.Key][TypeMeasurement.ReactivePower] = new List<double>();
+						ag.Buffer[keyValue.Key][TypeMeasurement.Voltage] = new List<double>();
+						ag.Buffer[keyValue.Key][TypeMeasurement.CurrentP] = new List<double>();
+						ag.Dates = new List<DateTime>();
+					}
 				}
 			}
 		}

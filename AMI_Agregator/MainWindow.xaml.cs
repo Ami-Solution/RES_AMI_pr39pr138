@@ -1,4 +1,5 @@
 ﻿using Common;
+using Storage;
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
@@ -104,7 +105,11 @@ namespace AMI_Agregator
 					agregators[keyValue.Key].State = Storage.State.ON;
 
 					//task, zbog toga sto ce da se freezuje, i na svakih 5 minuta da salje podatke u local storage
-					Task t = Task.Factory.StartNew(() => agregators[keyValue.Key].SendToSystemMenagement(agregators[keyValue.Key]));
+					Task t = Task.Factory.StartNew(() =>
+					{
+						agregators[keyValue.Key].SendToSystemMenagement(agregators[keyValue.Key]);
+
+					});
 				}
 				
 			}
