@@ -63,6 +63,10 @@
       <Project>{189ADF00-D946-4D6D-AE41-047E0D2DB41D}</Project>
       <Name>AMI_Device</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{40502C77-6D82-4AC7-AF95-E12D16C775D1}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Enums\Storage.csproj">
       <Project>{DEA77FEC-8A00-449E-AB2E-B6AAD165AD01}</Project>
       <Name>Storage</Name>
