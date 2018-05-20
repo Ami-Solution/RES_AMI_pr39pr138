@@ -20,7 +20,7 @@ namespace AMY_System_Management
 
 		public bool SendDataToDataBase(string agregator_code, List<DateTime> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
-			Trace.WriteLine($"Agregat: {agregator_code}, broj merenja: {dateTimeList.Count()*4}, pocetak: {DateTime.Now} !");
+			Trace.WriteLine($"Agregat: {agregator_code}, broj merenja: {dateTimeList.Count()}, pocetak: {DateTime.Now} !");
 			if (buffer.Count != 0)
 			{
 				string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
@@ -30,42 +30,60 @@ namespace AMY_System_Management
 					SqlCommand cmd;
 
 					string Device_Code = "";
-					double Voltage = 0;
-					double CurrentP = 0;
-					double ActivePower = 0;
-					double ReactivePower = 0;
-					DateTime dateTime;
+					List<double> Voltage = new List<double>().ToList(); //to list zbog nekog buga
+					List<double> CurrentP = new List<double>().ToList();
+					List<double> ActivePower = new List<double>().ToList();
+					List<double> ReactivePower = new List<double>().ToList();
+
+					//dateTime = dateTimeList[0];
+					//dateTimeList.RemoveAt(0);
 
 					//ne salje dobro u bazu podataka, vreme je lose, i raspored vrednosti
 					foreach (var keyValue in buffer)
 					{
+						string query = $"INSERT INTO AMI_Tables(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
+						$"VALUES";
+
 						Device_Code = keyValue.Key;
 
 						foreach (var pair in keyValue.Value)
 						{
-							dateTime = dateTimeList[0];
-							dateTimeList.RemoveAt(0);
 
-							for (int i = 0; i < pair.Value.Count(); i++)
-							{
-								
-								Voltage = pair.Value[i];
-								CurrentP = pair.Value[i];
-								ActivePower = pair.Value[i];
-								ReactivePower = pair.Value[i];
+							if(pair.Key == TypeMeasurement.CurrentP)
+								CurrentP = pair.Value;
 
-								cmd = new SqlCommand($"INSERT INTO AMI_Tables(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) VALUES('{agregator_code}', '{Device_Code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')", con);
-								cmd.ExecuteReader();
+							if (pair.Key == TypeMeasurement.ActivePower)
+								ActivePower = pair.Value;
 
-							}
+							if (pair.Key == TypeMeasurement.Voltage)
+								Voltage = pair.Value;
+
+							if (pair.Key == TypeMeasurement.ReactivePower)
+								ReactivePower = pair.Value;
+
 						}
+
+						for (int i = 0; i < CurrentP.Count(); i++)
+						{
+							if (i == CurrentP.Count() - 1)
+							{
+								query += $" ('{agregator_code}', '{Device_Code}', {Voltage[i]}, {CurrentP[i]}, {ActivePower[i]}, {ReactivePower[i]}, '{dateTimeList[i]}')";
+								break;
+							}
+
+							query += $" ('{agregator_code}', '{Device_Code}', {Voltage[i]}, {CurrentP[i]}, {ActivePower[i]}, {ReactivePower[i]}, '{dateTimeList[i]}'), ";
+
+							// brisanje iz bafera nakon upisivanja u bazu
+							
+						}
+
+						cmd = new SqlCommand(query, con);
+						cmd.ExecuteReader();
+
 					}
 
-					// brisanje iz bafera nakon upisivanja u bazu
-					buffer[Device_Code].Remove(TypeMeasurement.ActivePower);
-					buffer[Device_Code].Remove(TypeMeasurement.ReactivePower);
-					buffer[Device_Code].Remove(TypeMeasurement.CurrentP);
-					buffer[Device_Code].Remove(TypeMeasurement.Voltage);
+					//brisanje vremena
+					dateTimeList = new List<DateTime>();
 				}
 			}
 

@@ -46,14 +46,14 @@ namespace AMI_Device
             this.proxy = factory.CreateChannel();
         }
 
-		public void SendDataToAgregator(string agrID,string devID,Dictionary<TypeMeasurement,double> measurement) //ako stoji AMIChar ne mogu da dodam u interfejs, a ako ne dodam u interfejs, ne mozemo UNIT test
+		public void SendDataToAgregator(string agrID, string devID, Dictionary<TypeMeasurement,double> measurement) //ako stoji AMIChar ne mogu da dodam u interfejs, a ako ne dodam u interfejs, ne mozemo UNIT test
 		{
 			string retVal = "";
             AMICharacteristics ami = MainWindow.AvailableAMIDevices[devID];
             do
 			{
-                retVal = ami.Proxy.ReceiveDataFromDevice(agrID,DateTime.Now,devID,measurement);
-				Trace.WriteLine(DateTime.Now);
+                retVal = ami.Proxy.ReceiveDataFromDevice(agrID, DateTime.Now, devID,measurement);
+				//Trace.WriteLine(DateTime.Now);
 				Thread.Sleep(1000);
 
                 double V = rand.Next(300);
