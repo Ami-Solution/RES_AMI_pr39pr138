@@ -39,12 +39,33 @@ namespace AMI_Device
         {
             InitializeComponent();
             AMICharacteristics ami = new AMICharacteristics();
+
             Connect(); //defaultni se poziva sa ovom
+
+			LoadDevicesFromLocalDatabase();
 
             this.DataContext = this;
         }
 
-        private void AddBtn_Click(object sender, RoutedEventArgs e)
+		private void LoadDevicesFromLocalDatabase()
+		{
+			//prihvatamo dictionary: agregator_code - device_codes (svi njegovi uredjaji)
+			var list = defaultProxy.AgregatorsAndTheirDevices();
+
+			//prolazimo kroz svaki par u recniku
+			foreach (var keyValue in list)
+			{
+				//prolazimo kroz svaki uredjaj u listi
+				foreach (var device_code in keyValue.Value)
+				{
+					AvailableAMIDevices.Add(device_code, new AMICharacteristics(device_code, keyValue.Key));
+				}
+			}
+
+			dataGrid.Items.Refresh();
+		}
+
+		private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             AMICharacteristics ami = new AMICharacteristics();
             ami.GenerateRandomValues();
@@ -92,6 +113,8 @@ namespace AMI_Device
             string address = $"net.tcp://localhost:8003/IAMI_Agregator";
             ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
             defaultProxy = factory.CreateChannel();
+
+			
         }
 
         private void turnOnBtn_Click(object sender, RoutedEventArgs e)
@@ -109,7 +132,7 @@ namespace AMI_Device
 						//provera ce se vrsiti u metodi SendDataToAgregator
 						while (AvailableAMIDevices[keyValue.Key].Status == State.ON)
 						{
-							AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key].AgregatorID, AvailableAMIDevices[keyValue.Key].Device_code, AvailableAMIDevices[keyValue.Key].Measurements);
+							AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key].AgregatorID, keyValue.Key, AvailableAMIDevices[keyValue.Key].Measurements);
 							this.Dispatcher.Invoke(() =>
 							{
 								dataGrid.Items.Refresh();

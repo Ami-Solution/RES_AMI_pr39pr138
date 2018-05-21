@@ -72,7 +72,9 @@ namespace AMI_Agregator
 					{
 						while (rdr.Read())
 						{
-							agregators[agregator_codes[i]].Buffer.Add(rdr["Device_Code"].ToString(), new Dictionary<TypeMeasurement, List<double>>());
+							string device_code = rdr["Device_Code"].ToString();
+							agregators[agregator_codes[i]].Buffer.Add(device_code, new Dictionary<TypeMeasurement, List<double>>());
+							agregators[agregator_codes[i]].listOfDevices.Add(device_code);
 						}
 					}
 				}
@@ -83,6 +85,7 @@ namespace AMI_Agregator
 					//prolazimo kroz sve agregate(objekte) iz gore navedenog recnika
 					foreach (var keyValue2 in agregators.Values)
 					{
+						List<DateTime> dateTimes = new List<DateTime>();
 						//prolazimo kroz svaki baffer svakog agregata
 						foreach (var keyValue3 in keyValue2.Buffer)
 						{
@@ -90,7 +93,7 @@ namespace AMI_Agregator
 							List<double> CurrentP = new List<double>();
 							List<double> ActivePower = new List<double>();
 							List<double> ReactivePower = new List<double>();
-
+							
 							cmd.CommandText = $"SELECT * FROM AMI_Agregators_Table where Agregator_Code like '{keyValue2.Agregator_code}' and Device_Code like '{keyValue3.Key}'";
 
 							using (SqlDataReader rdr = cmd.ExecuteReader())
@@ -101,6 +104,7 @@ namespace AMI_Agregator
 									CurrentP.Add(Convert.ToDouble(rdr["CurrentP"]));
 									ActivePower.Add(Convert.ToDouble(rdr["ActivePower"]));
 									ReactivePower.Add(Convert.ToDouble(rdr["ReactivePower"]));
+									dateTimes.Add(Convert.ToDateTime(rdr["DateAndTime"]));
 								}
 							}
 
@@ -109,6 +113,8 @@ namespace AMI_Agregator
 							keyValue2.Buffer[keyValue3.Key][TypeMeasurement.Voltage] = Voltage;
 							keyValue2.Buffer[keyValue3.Key][TypeMeasurement.CurrentP] = CurrentP;
 						}
+
+						keyValue2.Dates = dateTimes;
 					}
 				}
 

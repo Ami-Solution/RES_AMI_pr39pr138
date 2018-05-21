@@ -19,7 +19,7 @@ namespace AMI_Device
     /// </summary>
     public partial class AgregatorChoosing : Window
     {
-        static List<string> existingAgregators=new List<string>();
+		static Dictionary<string, List<string>> existingAgregators = new Dictionary<string, List<string>>();
         public static string agregatorName;
         public AgregatorChoosing()
         {
@@ -29,18 +29,18 @@ namespace AMI_Device
         private void comboBox_Loaded(object sender, RoutedEventArgs e)
         {
             //ovde smestim agregate koji treba da se izlistaju
-            existingAgregators = MainWindow.defaultProxy.ListOfAgregatorIDs();
-            IDcmbBox.ItemsSource = existingAgregators;
+            existingAgregators = MainWindow.defaultProxy.AgregatorsAndTheirDevices();
+            IDcmbBox.ItemsSource = existingAgregators.Keys;
             IDcmbBox.SelectedIndex = 0;
         }
 
         private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //treba da se storuje izabrani agregat iz liste
-            int selected = IDcmbBox.SelectedIndex;
-			if (selected != -1)
+            string selected = IDcmbBox.SelectedItem.ToString();
+			if (selected != "")
 			{
-				agregatorName = existingAgregators[selected];
+				agregatorName = selected;
 			}
         }
 

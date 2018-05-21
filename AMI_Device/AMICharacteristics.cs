@@ -40,6 +40,17 @@ namespace AMI_Device
 			CreationTime = DateTime.Now;
 		}
 
+		public AMICharacteristics(string device_code, string agregator_code)
+		{
+			this.Added = true;
+			this.Device_code = device_code;
+			this.AgregatorID = agregator_code;
+			string id = agregator_code.Substring(9);
+			Connect(Convert.ToInt32(id));
+
+			Measurements = new Dictionary<Storage.TypeMeasurement, double>();
+		}
+
 		public void Connect(int id)
 		{
 			var binding = new NetTcpBinding();

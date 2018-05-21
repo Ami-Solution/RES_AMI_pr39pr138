@@ -32,6 +32,8 @@ namespace AMI_Agregator
 
 		public IAMI_System_Management Proxy { get; set; }
 
+		public List<string> listOfDevices { get; set; }
+
 		#endregion properties
 
 		#region constructors
@@ -51,6 +53,7 @@ namespace AMI_Agregator
 		{
 			this.Agregator_code = name;
 			Dates = new List<DateTime>();
+			listOfDevices = new List<string>();
 
 			var binding = new NetTcpBinding();
 			string address = $"net.tcp://localhost:8004/IAMI_System_Management";
@@ -111,6 +114,7 @@ namespace AMI_Agregator
 						{ TypeMeasurement.Voltage, new List<double>() },
 						});
 
+					MainWindow.agregators[agregator_code].listOfDevices.Add(device_code);
 				}
 			}
 			else //ako je iskljucen agregat
@@ -149,7 +153,7 @@ namespace AMI_Agregator
 		{
 			while (ag.State == State.ON)
 			{
-				Thread.Sleep(3000);
+				Thread.Sleep(10000);
 
 				//imamo cetiri merenja, mozda se desi da device upise tek jedno, a on vec posalje u bazu (baza ocekuje 4)
 				//datum se dodaje u listu tek kada se upisu sva 4 merenja
@@ -231,12 +235,13 @@ namespace AMI_Agregator
 			}
 		}
 
-		public List<string> ListOfAgregatorIDs()
+		public Dictionary<string, List<string>> AgregatorsAndTheirDevices()
 		{
-			List<string> retList = new List<string>();
+			Dictionary<string, List<string>> retList = new Dictionary<string, List<string>>();
+
 			foreach (var ID in MainWindow.agregators)
 			{
-				retList.Add(ID.Key);
+				retList.Add(ID.Key, MainWindow.agregators[ID.Key].listOfDevices);
 			}
 
 			return retList;
