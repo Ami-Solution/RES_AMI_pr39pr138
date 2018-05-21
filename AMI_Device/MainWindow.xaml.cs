@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,34 +47,24 @@ namespace AMI_Device
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             AMICharacteristics ami = new AMICharacteristics();
-            double V = rand.Next(300);
-            double I = rand.Next(300);
-            double P = rand.Next(300);
-            double S = rand.Next(300);
-
-            ami.Measurements.Add(TypeMeasurement.Voltage, V);
-            ami.Measurements.Add(TypeMeasurement.CurrentP, I);
-            ami.Measurements.Add(TypeMeasurement.ActivePower, P);
-            ami.Measurements.Add(TypeMeasurement.ReactivePower, S);
+            ami.GenerateRandomValues();
 
             AgregatorChoosing choosingWindow = new AgregatorChoosing(); // za biranje Agregata
             choosingWindow.ShowDialog();
 
 			if (AgregatorChoosing.agregatorName != null)
 			{
-
 				ami.AgregatorID = AgregatorChoosing.agregatorName; //dodelimo izabrani agregat (agregator1)
 
 				string substraction = ami.AgregatorID.Substring(9);
 				int ID = Int32.Parse(substraction);
 				ami.Connect(ID);
-				substraction = "agregator" + ID;
 
                 if(AvailableAMIDevices.ContainsKey(ami.Device_code))
                 {
                     if(AvailableAMIDevices[ami.Device_code].AgregatorID != ami.AgregatorID)
                     {
-                        ami.Device_code += P;
+                        ami.Device_code += 'P';
                         AvailableAMIDevices.Add(ami.Device_code, ami); //ako je name isti, ali razl agr, dodaj
                     }
                 }else
@@ -81,12 +72,6 @@ namespace AMI_Device
                     AvailableAMIDevices.Add(ami.Device_code, ami); //ako nema, dodaj ga
                 }
 				
-
-				if (!ami.Proxy.AddDevice(substraction, ami.Device_code))
-				{
-					AddBtn_Click(sender, e);
-				}
-
 				dataGrid.Items.Refresh();
 			}
         }
@@ -97,7 +82,7 @@ namespace AMI_Device
             {
                 KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
                 AvailableAMIDevices.Remove(obj.Key);
-                dataGrid.Items.Refresh();
+				dataGrid.Items.Refresh();
             }
         }
 
@@ -120,11 +105,18 @@ namespace AMI_Device
 					AvailableAMIDevices[keyValue.Key].Status = State.ON;
 					Task t = Task.Factory.StartNew(() =>
 					{
-						AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key].AgregatorID, AvailableAMIDevices[keyValue.Key].Device_code, AvailableAMIDevices[keyValue.Key].Measurements);
-						this.Dispatcher.Invoke(() =>
+						//svaki sekund ce slati podatke, bez obzira da li je upaljen ili ugasen agregat
+						//provera ce se vrsiti u metodi SendDataToAgregator
+						while (AvailableAMIDevices[keyValue.Key].Status == State.ON)
 						{
-							dataGrid.Items.Refresh();
-						});
+							AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key].AgregatorID, AvailableAMIDevices[keyValue.Key].Device_code, AvailableAMIDevices[keyValue.Key].Measurements);
+							this.Dispatcher.Invoke(() =>
+							{
+								dataGrid.Items.Refresh();
+							});
+
+							Thread.Sleep(1000);
+						}
 					});
 
 				};

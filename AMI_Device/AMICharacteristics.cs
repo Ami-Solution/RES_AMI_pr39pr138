@@ -12,70 +12,86 @@ using System.Threading.Tasks;
 
 namespace AMI_Device
 {
-    
-    public class AMICharacteristics : IAMI_Device
-    {
+
+	public class AMICharacteristics : IAMI_Device
+	{
 		private State status = State.OFF;
-        private IAMI_Agregator proxy;
-        private static System.Random rand = new System.Random();
-        public string Device_code { get; set; }
+		private IAMI_Agregator proxy;
+		private static System.Random rand = new System.Random();
 
-        public DateTime CreationTime { get; set; }
+		public bool Added { get; set; } = false;
 
-        public Dictionary<Storage.TypeMeasurement, double> Measurements { get; set; }
+		public string Device_code { get; set; }
 
-        public string AgregatorID { get; set; }
+		public DateTime CreationTime { get; set; }
 
-        public State Status { get => status; set => status = value; }
+		public Dictionary<Storage.TypeMeasurement, double> Measurements { get; set; }
 
-        public IAMI_Agregator Proxy { get => proxy; set => proxy = value; }  
+		public string AgregatorID { get; set; }
 
-        public AMICharacteristics()
-        {
-            Measurements = new Dictionary<Storage.TypeMeasurement, double>();
-            Device_code = PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics); //generise random string
-            CreationTime = DateTime.Now; 
-        }
+		public State Status { get => status; set => status = value; }
 
-        public void Connect(int id)
-        {
-            var binding = new NetTcpBinding();
-            int start = 9000+id;
-            string address = $"net.tcp://localhost:{start}/IAMI_Agregator";
-            ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
-            this.proxy = factory.CreateChannel();
-        }
+		public IAMI_Agregator Proxy { get => proxy; set => proxy = value; }
 
-		public void SendDataToAgregator(string agrID, string devID, Dictionary<TypeMeasurement,double> measurement) //ako stoji AMIChar ne mogu da dodam u interfejs, a ako ne dodam u interfejs, ne mozemo UNIT test
+		public AMICharacteristics()
+		{
+			Measurements = new Dictionary<Storage.TypeMeasurement, double>();
+			Device_code = PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics); //generise random string
+			CreationTime = DateTime.Now;
+		}
+
+		public void Connect(int id)
+		{
+			var binding = new NetTcpBinding();
+			int start = 9000 + id;
+			string address = $"net.tcp://localhost:{start}/IAMI_Agregator";
+			ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
+			this.proxy = factory.CreateChannel();
+		}
+
+		public void SendDataToAgregator(string agrID, string devID, Dictionary<TypeMeasurement, double> measurement) //ako stoji AMIChar ne mogu da dodam u interfejs, a ako ne dodam u interfejs, ne mozemo UNIT test
 		{
 			string retVal = "";
-            AMICharacteristics ami = MainWindow.AvailableAMIDevices[devID];
-            do
+			AMICharacteristics ami = MainWindow.AvailableAMIDevices[devID];
+
+			//ako uredjaj nije prikljucen na agregat
+			if (!ami.Added)
 			{
-                retVal = ami.Proxy.ReceiveDataFromDevice(agrID, DateTime.Now, devID,measurement);
-				//Trace.WriteLine(DateTime.Now);
-				Thread.Sleep(1000);
+				retVal = ami.Proxy.AddDevice(agrID, devID);
+				
+				if (retVal == "ADDED") //ako je uspesno dodat
+				{
+					ami.Added = true;
+					ami.Proxy.ReceiveDataFromDevice(agrID, DateTime.Now, devID, measurement);
+					ami.GenerateRandomValues();
+				}
+				else if(retVal == "DUPLICATE") // ako je duplikat, dodaje se uredjaju nova vrednost imena
+				{
+					ami.Device_code = PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics);
+				}
+			}
+			else
+			{
+				ami.Proxy.ReceiveDataFromDevice(agrID, DateTime.Now, devID, measurement);
+				ami.GenerateRandomValues();
+			}
 
-                double V = rand.Next(300);
-                double I = rand.Next(300);
-                double P = rand.Next(300);
-                double S = rand.Next(300);
+		}
 
-                ami.Measurements.Clear(); //posto hocemo da imamo samo 4 vrednosti
+		//dodata metoda za generisanje random vrednosti, zbog ponavljanja koda
+		public void GenerateRandomValues()
+		{
+			double V = rand.Next(300);
+			double I = rand.Next(300);
+			double P = rand.Next(300);
+			double S = rand.Next(300);
 
-                ami.Measurements.Add(TypeMeasurement.Voltage, V);
-                ami.Measurements.Add(TypeMeasurement.CurrentP, I);
-                ami.Measurements.Add(TypeMeasurement.ActivePower, P);
-                ami.Measurements.Add(TypeMeasurement.ReactivePower, S);
+			Measurements.Clear(); //posto hocemo da imamo samo 4 vrednosti
 
-            } while (ami.Status == State.ON && retVal == "ON");
-
-			if (retVal == "OFF")
-				ami.Status = State.OFF;
-
-			/* Ovde sada treba da se implementira sta se radi ako se obrise agregat, ili ako se agregat ugasi
-			 * 
-			 */
+			Measurements.Add(TypeMeasurement.Voltage, V);
+			Measurements.Add(TypeMeasurement.CurrentP, I);
+			Measurements.Add(TypeMeasurement.ActivePower, P);
+			Measurements.Add(TypeMeasurement.ReactivePower, S);
 		}
 
 	}

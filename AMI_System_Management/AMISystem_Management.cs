@@ -20,6 +20,8 @@ namespace AMY_System_Management
 
 		public bool SendDataToDataBase(string agregator_code, List<DateTime> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
+			//dodam devajs, dok je off, on udje ovde i pokusa da salje u bazu i za njega
+			//System.InvalidOperationException: 'Collection was modified; enumeration operation may not execute.' ???
 			Trace.WriteLine($"Agregat: {agregator_code}, broj merenja: {dateTimeList.Count()}, pocetak: {DateTime.Now} !");
 			if (buffer.Count != 0)
 			{
@@ -30,7 +32,7 @@ namespace AMY_System_Management
 					SqlCommand cmd;
 
 					string Device_Code = "";
-					List<double> Voltage = new List<double>().ToList(); //to list zbog nekog buga
+					List<double> Voltage = new List<double>().ToList(); //tolist zbog nekog buga
 					List<double> CurrentP = new List<double>().ToList();
 					List<double> ActivePower = new List<double>().ToList();
 					List<double> ReactivePower = new List<double>().ToList();
@@ -63,22 +65,27 @@ namespace AMY_System_Management
 
 						}
 
-						for (int i = 0; i < CurrentP.Count(); i++)
+						if (CurrentP.Count() > 0) // ako se neki uredjaj iskljuci, on ce i dalje biti u baferu, ali nece imati vrednosti
+												  // za slanje u bazu podataka
 						{
-							if (i == CurrentP.Count() - 1)
+
+							for (int i = 0; i < CurrentP.Count(); i++)
 							{
-								query += $" ('{agregator_code}', '{Device_Code}', {Voltage[i]}, {CurrentP[i]}, {ActivePower[i]}, {ReactivePower[i]}, '{dateTimeList[i]}')";
-								break;
+								if (i == CurrentP.Count() - 1)
+								{
+									query += $" ('{agregator_code}', '{Device_Code}', {Voltage[i]}, {CurrentP[i]}, {ActivePower[i]}, {ReactivePower[i]}, '{dateTimeList[i]}')";
+									break;
+								}
+
+								query += $" ('{agregator_code}', '{Device_Code}', {Voltage[i]}, {CurrentP[i]}, {ActivePower[i]}, {ReactivePower[i]}, '{dateTimeList[i]}'), ";
+
+								// brisanje iz bafera nakon upisivanja u bazu
+
 							}
 
-							query += $" ('{agregator_code}', '{Device_Code}', {Voltage[i]}, {CurrentP[i]}, {ActivePower[i]}, {ReactivePower[i]}, '{dateTimeList[i]}'), ";
-
-							// brisanje iz bafera nakon upisivanja u bazu
-							
+							cmd = new SqlCommand(query, con);
+							cmd.ExecuteReader();
 						}
-
-						cmd = new SqlCommand(query, con);
-						cmd.ExecuteReader();
 
 					}
 

@@ -88,36 +88,41 @@ namespace AMI_Agregator
 		}
 
 		//provera da li agregator sadrzi uredjaj koji treba da mu se doda
-		public bool AddDevice(string agregator_code, string device_code)
+		public string AddDevice(string agregator_code, string device_code)
 		{
-			bool retVal = true;
+			string retVal = "ADDED";
 
-			if (MainWindow.agregators[agregator_code].Buffer.ContainsKey(device_code))
+			if (MainWindow.agregators[agregator_code].State == State.ON)
 			{
-				retVal = false;
-			}
-			else
-			{
-				MainWindow.agregators[agregator_code].Buffer.Add(
-					device_code,
-					new Dictionary<TypeMeasurement, List<double>>()
-					{
+				if (MainWindow.agregators[agregator_code].Buffer.ContainsKey(device_code))
+				{
+					retVal = "DUPLICATE"; //ako postoji vec devajs sa istim kodom u agregatoru
+				}
+				else
+				{
+					MainWindow.agregators[agregator_code].Buffer.Add(
+						device_code,
+						new Dictionary<TypeMeasurement, List<double>>()
+						{
 						{ TypeMeasurement.ActivePower, new List<double>() },
 						{ TypeMeasurement.ReactivePower, new List<double>() },
 						{ TypeMeasurement.CurrentP, new List<double>() },
 						{ TypeMeasurement.Voltage, new List<double>() },
-					});
+						});
 
+				}
+			}
+			else //ako je iskljucen agregat
+			{
+				retVal = "OFF";
 			}
 
 			return retVal;
 		}
 
 		//prihvatimo koji device salje vrednosti. Vrednosti su tipa Struja-100, Napon-200, Snaga-300
-		public string ReceiveDataFromDevice(string agregator_code, DateTime dateTime, string device_code, Dictionary<TypeMeasurement, double> values)
+		public void ReceiveDataFromDevice(string agregator_code, DateTime dateTime, string device_code, Dictionary<TypeMeasurement, double> values)
 		{
-			string retVal = "ON";
-
 			AMIAgregator ag = new AMIAgregator();
 
 			if (MainWindow.agregators.TryGetValue(agregator_code, out ag))
@@ -133,24 +138,15 @@ namespace AMI_Agregator
 					//dodavanja datuma u listu, tek nakon sto se upisu sva 4 merenja
 					MainWindow.agregators[agregator_code].Dates.Add(dateTime);
 				}
-				else
-				{
-					retVal = "OFF";
-				}
-			}
-			else
-			{
-				retVal = "DELETED";
 			}
 
-			return retVal;
 		}
 
 		public void SendToSystemMenagement(AMIAgregator ag)
 		{
 			while (ag.State == State.ON)
 			{
-				Thread.Sleep(5000);
+				Thread.Sleep(3000);
 
 				//imamo cetiri merenja, mozda se desi da device upise tek jedno, a on vec posalje u bazu (baza ocekuje 4)
 				//datum se dodaje u listu tek kada se upisu sva 4 merenja
