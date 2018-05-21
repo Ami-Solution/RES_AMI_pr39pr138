@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
@@ -34,20 +36,20 @@ namespace AMI_Agregator
 
 		#region constructors
 
-		
+
 		static AMIAgregator()
 		{
 			MainWindow.agregators = new Dictionary<string, AMIAgregator>();
 		}
-		
+
 		public AMIAgregator()
 		{
 
 		}
 
-        public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
-        {
-            this.Agregator_code = name;
+		public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
+		{
+			this.Agregator_code = name;
 			Dates = new List<DateTime>();
 
 			var binding = new NetTcpBinding();
@@ -68,7 +70,7 @@ namespace AMI_Agregator
 			string address = "";
 			if (MainWindow.agregators == null) // zbog prvog statickog agregata
 			{
-				address = $"net.tcp://localhost:{9001}/IAMI_Agregator"; 
+				address = $"net.tcp://localhost:{9001}/IAMI_Agregator";
 			}
 			else
 			{
@@ -84,7 +86,6 @@ namespace AMI_Agregator
 		private void InitialiseBuffer(Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
 			this.Buffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>();
-			
 		}
 
 		//provera da li agregator sadrzi uredjaj koji treba da mu se doda
@@ -124,7 +125,7 @@ namespace AMI_Agregator
 		public void ReceiveDataFromDevice(string agregator_code, DateTime dateTime, string device_code, Dictionary<TypeMeasurement, double> values)
 		{
 			AMIAgregator ag = new AMIAgregator();
-
+			
 			if (MainWindow.agregators.TryGetValue(agregator_code, out ag))
 			{
 				if (ag.State == State.ON)
@@ -137,9 +138,11 @@ namespace AMI_Agregator
 
 					//dodavanja datuma u listu, tek nakon sto se upisu sva 4 merenja
 					MainWindow.agregators[agregator_code].Dates.Add(dateTime);
+
+					//saljemo podatke u lokalnu bazu podataka
+					SendToLocalDatabase(agregator_code, dateTime, device_code, values);
 				}
 			}
-
 		}
 
 		public void SendToSystemMenagement(AMIAgregator ag)
@@ -150,32 +153,95 @@ namespace AMI_Agregator
 
 				//imamo cetiri merenja, mozda se desi da device upise tek jedno, a on vec posalje u bazu (baza ocekuje 4)
 				//datum se dodaje u listu tek kada se upisu sva 4 merenja
-				if (ag.Dates.Count() > 1) 
+				if (ag.Dates.Count() > 1)
 				{
-					ag.Proxy.SendDataToDataBase(ag.Agregator_code, ag.Dates, ag.Buffer);
-					foreach (var keyValue in ag.Buffer)
+					if (ag.Proxy.SendDataToSystemDataBase(ag.Agregator_code, ag.Dates, ag.Buffer))
 					{
-						//praznjenje bafera nakon sto se posalje u bazu podataka
-						ag.Buffer[keyValue.Key][TypeMeasurement.ActivePower] = new List<double>();
-						ag.Buffer[keyValue.Key][TypeMeasurement.ReactivePower] = new List<double>();
-						ag.Buffer[keyValue.Key][TypeMeasurement.Voltage] = new List<double>();
-						ag.Buffer[keyValue.Key][TypeMeasurement.CurrentP] = new List<double>();
-						ag.Dates = new List<DateTime>();
+						DeleteFromLocalDatabase(ag.Agregator_code);
+
+						foreach (var keyValue in ag.Buffer)
+						{
+							//praznjenje bafera nakon sto se posalje u bazu podataka
+							ag.Buffer[keyValue.Key][TypeMeasurement.ActivePower] = new List<double>();
+							ag.Buffer[keyValue.Key][TypeMeasurement.ReactivePower] = new List<double>();
+							ag.Buffer[keyValue.Key][TypeMeasurement.Voltage] = new List<double>();
+							ag.Buffer[keyValue.Key][TypeMeasurement.CurrentP] = new List<double>();
+							ag.Dates = new List<DateTime>();
+						}
 					}
+
+					
 				}
 			}
 		}
 
-		public List<string> ListOfAgregatorIDs()
-        {
-            List<string> retList = new List<string>();
-            foreach(var ID in MainWindow.agregators)
-            {
-                retList.Add(ID.Key);
-            }
+		private void DeleteFromLocalDatabase(string agregator_code)
+		{
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				con.Open();
+				SqlCommand cmd;
 
-            return retList;
-        }
+				string query = $"DELETE FROM AMI_Agregators_Table WHERE Agregator_Code like '{agregator_code}'";
+
+				cmd = new SqlCommand(query, con);
+				cmd.ExecuteReader();
+
+			}
+		}
+
+		private void SendToLocalDatabase(string agregator_code, DateTime dateTime, string device_code, Dictionary<TypeMeasurement, double> values)
+		{
+			double Voltage = 0; 
+			double CurrentP = 0;
+			double ActivePower = 0;
+			double ReactivePower = 0;
+
+			//vadimo rednosti iz recninka
+			foreach (var keyValue in values)
+			{
+
+				if (keyValue.Key == TypeMeasurement.CurrentP)
+					CurrentP = keyValue.Value;
+
+				if (keyValue.Key == TypeMeasurement.ActivePower)
+					ActivePower = keyValue.Value;
+
+				if (keyValue.Key == TypeMeasurement.Voltage)
+					Voltage = keyValue.Value;
+
+				if (keyValue.Key == TypeMeasurement.ReactivePower)
+					ReactivePower = keyValue.Value;
+
+			}
+
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				con.Open();
+				SqlCommand cmd;
+				
+				//% kod agregator_coda zbog toga sto iz nekog razloga u bazu upise razmaka posle imena - ???
+				string query = $"INSERT INTO AMI_Agregators_Table(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
+				$"VALUES(TRIM('{agregator_code}'), '{device_code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')";
+
+				cmd = new SqlCommand(query, con);
+				cmd.ExecuteReader();
+
+			}
+		}
+
+		public List<string> ListOfAgregatorIDs()
+		{
+			List<string> retList = new List<string>();
+			foreach (var ID in MainWindow.agregators)
+			{
+				retList.Add(ID.Key);
+			}
+
+			return retList;
+		}
 
 		#endregion methods
 

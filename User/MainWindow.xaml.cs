@@ -1,5 +1,5 @@
 ﻿using AMI_Agregator;
-using AMY_System_Management;
+using AMI_System_Management;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +42,7 @@ namespace User
 
         private void SystBtn_Click(object sender, RoutedEventArgs e)
         {
-            AMY_System_Management.MainWindow window = new AMY_System_Management.MainWindow();
+            AMI_System_Management.MainWindow window = new AMI_System_Management.MainWindow();
             window.Show();
         }
     }

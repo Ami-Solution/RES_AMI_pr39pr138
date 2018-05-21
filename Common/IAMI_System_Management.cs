@@ -12,6 +12,6 @@ namespace Common
 	public interface IAMI_System_Management
 	{
 		[OperationContract]
-		bool SendDataToDataBase(string agregator_code, List<DateTime> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer);
+		bool SendDataToSystemDataBase(string agregator_code, List<DateTime> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer);
 	}
 }

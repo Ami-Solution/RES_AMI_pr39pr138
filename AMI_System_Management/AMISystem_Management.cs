@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
 
-namespace AMY_System_Management
+namespace AMI_System_Management
 {
 	public class AMISystem_Management : IAMI_System_Management
 	{
@@ -18,14 +18,14 @@ namespace AMY_System_Management
 
 		}
 
-		public bool SendDataToDataBase(string agregator_code, List<DateTime> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
+		public bool SendDataToSystemDataBase(string agregator_code, List<DateTime> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
 			//dodam devajs, dok je off, on udje ovde i pokusa da salje u bazu i za njega
 			//System.InvalidOperationException: 'Collection was modified; enumeration operation may not execute.' ???
 			Trace.WriteLine($"Agregat: {agregator_code}, broj merenja: {dateTimeList.Count()}, pocetak: {DateTime.Now} !");
 			if (buffer.Count != 0)
 			{
-				string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+				string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
 				using (SqlConnection con = new SqlConnection(CS))
 				{
 					con.Open();

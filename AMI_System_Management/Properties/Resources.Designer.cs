@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AMY_System_Management.Properties
+namespace AMI_System_Management.Properties
 {
 
 
