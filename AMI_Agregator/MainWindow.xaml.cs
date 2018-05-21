@@ -2,6 +2,8 @@
 using Storage;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Threading.Tasks;
@@ -25,15 +27,95 @@ namespace AMI_Agregator
 		public MainWindow()
 		{
 			InitializeComponent();
+			AMIAgregator initialise = new AMIAgregator();
 
-			AMIAgregator a = new AMIAgregator(); // to initalise predefined agregators
+			LoadFromLocalDataBase();
 
 			Connect();
 
 			this.DataContext = this;
 		}
 
-        private static void Connect()
+		private void LoadFromLocalDataBase()
+		{
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				SqlCommand cmd = new SqlCommand();
+				con.Open();
+				cmd.Connection = con;
+				cmd.CommandText = "SELECT DISTINCT(Agregator_Code) FROM AMI_Agregators_Table";
+
+				Dictionary<string, Dictionary<TypeMeasurement, List<double>>> loadedBuffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>();
+
+				List<string> agregator_codes = new List<string>();
+
+				//svi agregati se izdvoje ovde
+				using (SqlDataReader rdr = cmd.ExecuteReader())
+				{
+					while (rdr.Read())
+					{
+						MainWindow.agregatorNumber++;
+						string agregator_code = rdr["Agregator_Code"].ToString();
+						agregators.Add(agregator_code, new AMIAgregator(agregator_code));
+						agregator_codes.Add(agregator_code);
+
+					}
+				}
+
+				//treba mi Device_Code, Dictionary<TypeMeasurement, List<double>>>()
+				for (int i = 0; i < agregator_codes.Count; i++)
+				{
+					cmd.CommandText = $"SELECT DISTINCT(Device_Code) FROM AMI_Agregators_Table where Agregator_Code like '{agregator_codes[i]}'";
+
+					using (SqlDataReader rdr = cmd.ExecuteReader())
+					{
+						while (rdr.Read())
+						{
+							agregators[agregator_codes[i]].Buffer.Add(rdr["Device_Code"].ToString(), new Dictionary<TypeMeasurement, List<double>>());
+						}
+					}
+				}
+
+				// prolazimo kroz recnik: agregator_code, agregator(objekat)
+				foreach (var keyValue in agregators)
+				{
+					//prolazimo kroz sve agregate(objekte) iz gore navedenog recnika
+					foreach (var keyValue2 in agregators.Values)
+					{
+						//prolazimo kroz svaki baffer svakog agregata
+						foreach (var keyValue3 in keyValue2.Buffer)
+						{
+							List<double> Voltage = new List<double>();
+							List<double> CurrentP = new List<double>();
+							List<double> ActivePower = new List<double>();
+							List<double> ReactivePower = new List<double>();
+
+							cmd.CommandText = $"SELECT * FROM AMI_Agregators_Table where Agregator_Code like '{keyValue2.Agregator_code}' and Device_Code like '{keyValue3.Key}'";
+
+							using (SqlDataReader rdr = cmd.ExecuteReader())
+							{
+								while (rdr.Read())
+								{
+									Voltage.Add(Convert.ToDouble(rdr["Voltage"]));
+									CurrentP.Add(Convert.ToDouble(rdr["CurrentP"]));
+									ActivePower.Add(Convert.ToDouble(rdr["ActivePower"]));
+									ReactivePower.Add(Convert.ToDouble(rdr["ReactivePower"]));
+								}
+							}
+
+							keyValue2.Buffer[keyValue3.Key][TypeMeasurement.ActivePower] = ActivePower;
+							keyValue2.Buffer[keyValue3.Key][TypeMeasurement.ReactivePower] = ReactivePower;
+							keyValue2.Buffer[keyValue3.Key][TypeMeasurement.Voltage] = Voltage;
+							keyValue2.Buffer[keyValue3.Key][TypeMeasurement.CurrentP] = CurrentP;
+						}
+					}
+				}
+
+			}
+		}
+
+		private static void Connect()
         {
             NetTcpBinding binding = new NetTcpBinding();
             string address = $"net.tcp://localhost:8003/IAMI_Agregator";

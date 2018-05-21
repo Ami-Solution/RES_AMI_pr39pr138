@@ -20,6 +20,7 @@ namespace AMI_System_Management
 
 		public bool SendDataToSystemDataBase(string agregator_code, List<DateTime> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
+			bool retVal = false;
 			//dodam devajs, dok je off, on udje ovde i pokusa da salje u bazu i za njega
 			//System.InvalidOperationException: 'Collection was modified; enumeration operation may not execute.' ???
 			Trace.WriteLine($"Agregat: {agregator_code}, broj merenja: {dateTimeList.Count()}, pocetak: {DateTime.Now} !");
@@ -84,7 +85,9 @@ namespace AMI_System_Management
 							}
 
 							cmd = new SqlCommand(query, con);
-							cmd.ExecuteReader();
+							cmd.ExecuteNonQuery();
+
+							retVal = true;
 						}
 
 					}
@@ -95,7 +98,7 @@ namespace AMI_System_Management
 			}
 
 			Trace.WriteLine($"Agregat: {agregator_code}, ispraznjen buffer, kraj: {DateTime.Now} !");
-			return true;
+			return retVal;
 		}
 	}
 }

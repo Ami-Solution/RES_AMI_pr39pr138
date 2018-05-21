@@ -157,7 +157,7 @@ namespace AMI_Agregator
 				{
 					if (ag.Proxy.SendDataToSystemDataBase(ag.Agregator_code, ag.Dates, ag.Buffer))
 					{
-						DeleteFromLocalDatabase(ag.Agregator_code);
+						//DeleteFromLocalDatabase(ag.Agregator_code);
 
 						foreach (var keyValue in ag.Buffer)
 						{
@@ -222,12 +222,11 @@ namespace AMI_Agregator
 				con.Open();
 				SqlCommand cmd;
 				
-				//% kod agregator_coda zbog toga sto iz nekog razloga u bazu upise razmaka posle imena - ???
 				string query = $"INSERT INTO AMI_Agregators_Table(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
 				$"VALUES(TRIM('{agregator_code}'), '{device_code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')";
 
 				cmd = new SqlCommand(query, con);
-				cmd.ExecuteReader();
+				cmd.ExecuteNonQuery();
 
 			}
 		}
