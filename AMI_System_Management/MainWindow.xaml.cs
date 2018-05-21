@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AMY_System_Management
+namespace AMI_System_Management
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

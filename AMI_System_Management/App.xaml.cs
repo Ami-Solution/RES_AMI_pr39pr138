@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AMY_System_Management
+namespace AMI_System_Management
 {
 	/// <summary>
 	/// Interaction logic for App.xaml

@@ -12,9 +12,9 @@ namespace Common
 	public interface IAMI_Agregator
 	{
         [OperationContract]
-		bool AddDevice(string agregator_code, string device_code);
+		string AddDevice(string agregator_code, string device_code);
         [OperationContract]
-        string ReceiveDataFromDevice(string agregator_code, DateTime datetime, string device_code, Dictionary<TypeMeasurement, double> values);
+        void ReceiveDataFromDevice(string agregator_code, DateTime datetime, string device_code, Dictionary<TypeMeasurement, double> values);
         [OperationContract]
         List<string> ListOfAgregatorIDs();
 	}
