@@ -188,5 +188,38 @@ namespace AMI_System_Management
 			return retVal;
 		}
 
+		public static Dictionary<DateTime, List<double>> GetDatesAndValuesFromDataBase(string device_code,  DateTime selectedDate)
+		{
+			Dictionary<DateTime, List<double>> retVal = new Dictionary<DateTime, List<double>>();
+
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				string query = $"SELECT CurrentP, Voltage, ActivePower, ReactivePower, DateAndTime FROM AMI_Tables WHERE Device_Code like '{device_code}' AND DateAndTime >= '{selectedDate}' AND DateAndTime < '{selectedDate.Date.AddDays(1)}'";
+				SqlCommand cmd = new SqlCommand(query, con);
+				con.Open();
+
+				//ovde ce biti vrednosti,napone,struje,snage,reaktivne snage, bas tim redom
+				List<double> vrednostiMerenja = new List<double>();
+
+				using (SqlDataReader rdr = cmd.ExecuteReader())
+				{
+					while (rdr.Read())
+					{
+						vrednostiMerenja.Add(Convert.ToDouble(rdr["Voltage"]));
+						vrednostiMerenja.Add(Convert.ToDouble(rdr["CurrentP"]));
+						vrednostiMerenja.Add(Convert.ToDouble(rdr["ActivePower"]));
+						vrednostiMerenja.Add(Convert.ToDouble(rdr["ReactivePower"]));
+						retVal.Add(Convert.ToDateTime(rdr["DateAndTime"]), vrednostiMerenja); // u recnik dodajemo: Datum - napon,struja,snaga,reaktivna snaga
+					}
+				}
+
+			}
+
+			return retVal;
+		}
+
+		
+
 	}
 }
