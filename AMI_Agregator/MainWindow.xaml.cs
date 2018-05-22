@@ -31,7 +31,7 @@ namespace AMI_Agregator
 
 			LoadFromLocalDataBase();
 
-			Connect();
+			OpenServices();
 
 			this.DataContext = this;
 		}
@@ -112,16 +112,17 @@ namespace AMI_Agregator
 							keyValue2.Buffer[keyValue3.Key][TypeMeasurement.ReactivePower] = ReactivePower;
 							keyValue2.Buffer[keyValue3.Key][TypeMeasurement.Voltage] = Voltage;
 							keyValue2.Buffer[keyValue3.Key][TypeMeasurement.CurrentP] = CurrentP;
+							keyValue2.Dates[keyValue3.Key] = dateTimes;
 						}
 
-						keyValue2.Dates = dateTimes;
+						
 					}
 				}
 
 			}
 		}
 
-		private static void Connect()
+		private static void OpenServices()
         {
             NetTcpBinding binding = new NetTcpBinding();
             string address = $"net.tcp://localhost:8003/IAMI_Agregator";

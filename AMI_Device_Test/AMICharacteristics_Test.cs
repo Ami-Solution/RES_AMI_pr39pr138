@@ -80,7 +80,7 @@ namespace AMI_Device_Test
             ami.Status = State.ON;
             Mock<IAMI_Agregator> moq = new Mock<IAMI_Agregator>();
             //mock.Setup(x => x.DoSomething(It.IsAny<string>(), It.IsAny<int>())).Returns((string x, int y) => x);
-            moq.Setup(x => x.ReceiveDataFromDevice(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<Dictionary<TypeMeasurement, double>>())).Returns("OFF");
+            //moq.Setup(x => x.ReceiveDataFromDevice(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<Dictionary<TypeMeasurement, double>>())).Returns("OFF");
             IAMI_Agregator agr1 = moq.Object;
             MainWindow.AvailableAMIDevices.Add(devID, ami);
             ami.Proxy = agr1;

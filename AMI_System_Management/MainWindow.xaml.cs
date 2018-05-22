@@ -25,14 +25,19 @@ namespace AMI_System_Management
 	{
 		private static ServiceHost host;
 
+		public static IAMI_Agregator defaultProxy;
+
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			Connect();
+			AMISystem_Management ami_sys_man = new AMISystem_Management();
+
+			OpenServices(); 
+
 		}
 
-		private static void Connect()
+		private static void OpenServices()
 		{
 			NetTcpBinding binding = new NetTcpBinding();
 			string address = $"net.tcp://localhost:8004/IAMI_System_Management";
@@ -69,6 +74,120 @@ namespace AMI_System_Management
 			{
 				Console.WriteLine($"Default AMI System Management connection didn't close succesffully - error: {e.Message}");
 			}
+
+		}
+
+		private void devicesLoadedComboBox_Loaded(object sender, RoutedEventArgs e)
+		{
+			List<string> allDevices = AMISystem_Management.GetAllDevicesFromDataBase();
+			allDevices.Insert(0, "ALL DEVICES");
+			deviceComboBox.ItemsSource = allDevices;
+			deviceComboBox.SelectedIndex = 0;
+		}
+
+		private void agregatorsLoadedComboBox_Loaded(object sender, RoutedEventArgs e)
+		{
+			List<string> allAgregators = AMISystem_Management.GetAllAgregatorsFromDataBase();
+			allAgregators.Insert(0, "SELECT AGREGATOR");
+			agregatorsComboBox.ItemsSource = allAgregators;
+			agregatorsComboBox.SelectedIndex = 0;
+		}
+
+		private void deviceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			List<string> selectDate = new List<string>() { "SELECT DATE" };
+			List<DateTime> dates = new List<DateTime>();
+
+			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
+			{
+				deviceDatesComboBox.ItemsSource = selectDate;
+				deviceDatesComboBox.SelectedIndex = 0;
+			}
+			else
+			{
+				DateTime minDate = AMISystem_Management.GetEarliestDateFromDatabase(deviceComboBox.SelectedValue.ToString());
+
+				while (minDate.Date <= DateTime.Now.Date)
+				{
+					dates.Add(minDate.Date);
+					minDate = minDate.Date.AddDays(1);
+				}
+
+				deviceDatesComboBox.ItemsSource = dates;
+				deviceDatesComboBox.SelectedIndex = 0;
+			}
+
+		}
+
+		private void agregatorsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			List<string> selectDate = new List<string>() { "SELECT DATE" };
+			List<DateTime> dates = new List<DateTime>();
+
+			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
+			{
+				agregatorDatesComboBox.ItemsSource = selectDate;
+				agregatorDatesComboBox.SelectedIndex = 0;
+			}
+			else
+			{
+				DateTime minDate = AMISystem_Management.GetEarliestDateFromDatabase(agregatorsComboBox.SelectedValue.ToString());
+
+				while (minDate.Date <= DateTime.Now.Date)
+				{
+					dates.Add(minDate.Date);
+					minDate = minDate.Date.AddDays(1);
+				}
+
+				agregatorDatesComboBox.ItemsSource = dates;
+				agregatorDatesComboBox.SelectedIndex = 0;
+			}
+		}
+
+		private void typemeasurmentComboBox_Loaded(object sender, RoutedEventArgs e)
+		{
+			List<string> measurments = new List<string>() { "SELECT TYPE", "CurrentP", "Voltage", "ActivePower", "ReactivePower" };
+			((ComboBox)sender).ItemsSource = measurments;
+			((ComboBox)sender).SelectedIndex = 0;
+		}
+
+		private void plotDeviceGraph_Click(object sender, RoutedEventArgs e)
+		{
+			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
+			{
+				errorLabel.Content = "YOU MUST SELECT DEVICE";
+				errorLabel.FontSize = 20;
+				errorLabel.Foreground = Brushes.Red;
+				return;
+			}
+
+			errorLabel.Content = "";
+
+			string device_code = deviceComboBox.SelectedValue.ToString();
+			string typeMeasurment = typemeasurmentComboBox.SelectedItem.ToString();
+			DateTime selectedDate = Convert.ToDateTime(deviceDatesComboBox.SelectedItem).Date;
+
+			if (typemeasurmentComboBox.SelectedItem.ToString() == "SELECT TYPE")
+			{
+				//vrsi se Iscrtavanje prosečnog merenja za izabrani uređaj za izabrani datum 
+
+
+			}
+			else
+			{
+				
+				//vrsi se Izcrtavanje izabranog merenja za izabrani uređaj za izabrani datum
+				Dictionary<DateTime, double> DatesAndValues = new Dictionary<DateTime, double>();
+				DatesAndValues = AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
+
+			}
+
+
+		}
+
+		private void plotAgregatorGraph_Click(object sender, RoutedEventArgs e)
+		{
+			//TODO implementirati da se iscrta graph za agregator
 
 		}
 	}
