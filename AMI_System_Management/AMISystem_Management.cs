@@ -152,7 +152,7 @@ namespace AMI_System_Management
 		//zbog biranja datuma, ova metoda vraca najraniji / najstariji datum moguci
 		public static DateTime GetEarliesOrLatesttDateFromDatabase(string DeviceCodeOrEARLIESTorLATEST)
 		{
-			DateTime retVal;
+			DateTime retVal = DateTime.Now;
 
 			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
@@ -175,7 +175,11 @@ namespace AMI_System_Management
 
 				SqlCommand cmd = new SqlCommand(query, con);
 
-				retVal = Convert.ToDateTime(cmd.ExecuteScalar());
+				if (!(cmd.ExecuteScalar() is DBNull))
+				{
+					retVal = Convert.ToDateTime(cmd.ExecuteScalar());
+				}
+				
 
 			}
 

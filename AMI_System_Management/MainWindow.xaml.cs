@@ -100,6 +100,7 @@ namespace AMI_System_Management
 			allDevices.Insert(0, "ALL DEVICES");
 			deviceComboBox.ItemsSource = allDevices;
 			deviceComboBox.SelectedIndex = 0;
+			deviceComboBox.Items.Refresh();
 		}
 
 		private void agregatorsLoadedComboBox_Loaded(object sender, RoutedEventArgs e)
@@ -108,6 +109,7 @@ namespace AMI_System_Management
 			allAgregators.Insert(0, "SELECT AGREGATOR");
 			agregatorsComboBox.ItemsSource = allAgregators;
 			agregatorsComboBox.SelectedIndex = 0;
+			agregatorsComboBox.Items.Refresh();
 		}
 
 		private void deviceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

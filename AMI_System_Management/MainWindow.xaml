@@ -8,7 +8,7 @@
 		mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="827.5">
 	<Window.Resources>
-		<!--<local:VisibilityToCheckedConverter x:Key="VisibilityToCheckedConverter"/>-->
+		<local:VisibilityToCheckedConverter x:Key="VisibilityToCheckedConverter"/>
 	</Window.Resources>
 
 	<Grid Margin="0,0,-8,0">
@@ -43,7 +43,7 @@
 			<Grid Name="lines"/>
 		</d3:Chart>
 
-		<DataGrid x:Name="alarmStateDataGrid" Visibility="Visible" Margin="10,432,18,0" Height="327" VerticalAlignment="Top"/>
+		<DataGrid x:Name="alarmStateDataGrid" Visibility="Hidden" Margin="10,432,18,0" Height="327" VerticalAlignment="Top"/>
 		
 		<Button x:Name="clearButton" Content="CLEAR ALL" FontSize="24" Margin="641,325,44,0" VerticalAlignment="Top" Height="46" Click="clearButton_Click"/>
 		<ComboBox x:Name="typemeasurmentAlarmComboBox" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="36,209,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
