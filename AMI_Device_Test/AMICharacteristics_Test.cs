@@ -50,6 +50,29 @@ namespace AMI_Device_Test
             //Assert.IsInstanceOf(typeof(AMICharacteristics), ami);
         }
 
+        [Test]
+        [TestCase("aksk4k5jDD", "agregator1")]
+        public void AMICharacteristics_ParameterizedConstructorHaveValues_Instantiated(string device_code, string agregator_code)
+        {
+            AMICharacteristics ami = new AMICharacteristics(device_code, agregator_code);
+
+            Assert.AreEqual(ami.Device_code, device_code);
+            Assert.AreEqual(ami.AgregatorID, agregator_code);
+        }
+
+        [Test]
+        [TestCase("aksk4k5jD", "agregator1")]
+        [TestCase("", "agregator1")]
+        [TestCase("aksk4k5jDD", "agregator")]
+        [TestCase("aksk4k5jDD", "")]
+        public void AMICharacteristics_ParameterizedConstructorHaveValues_NotInstantiated(string device_code, string agregator_code)
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                AMICharacteristics ami = new AMICharacteristics(device_code,agregator_code);
+            });
+        }
+
         static object[] MySourceProperty
         {
             get
@@ -65,8 +88,8 @@ namespace AMI_Device_Test
 
                 // The order of element in the object must be the same expected by your test method
                 //yield return new object[] { "agr1", "askdwskdls", measurement }; ne moze yield iz nekog razloga
-                return new[] { new object[] { "agr1", "askdwskdls", measurement },
-                               new object[] { "agr2", "trl4k556s3", measurement }};
+                return new[] { new object[] { "agregator1", "SJkaleKlsk", measurement },
+                               new object[] { "agregator2", "trl4k556s3", measurement }};
 
             }
         }
@@ -74,20 +97,80 @@ namespace AMI_Device_Test
 
         [Test]
         [TestCaseSource("MySourceProperty")]
-        public void SendDataToAgregator_GoodVariables_ReturnsOff(string agrID,string devID, Dictionary<TypeMeasurement, double> measurement)
+        public void SendDataToAgregator_ProxyReturnsAdd_DifferentMeasurements(string agrID,string devID, Dictionary<TypeMeasurement, double> measurement)
         {
             AMICharacteristics ami = new AMICharacteristics();
-            ami.Status = State.ON;
-            Mock<IAMI_Agregator> moq = new Mock<IAMI_Agregator>();
+            Mock<IAMI_Agregator> moq1 = new Mock<IAMI_Agregator>();
+            //Mock<IAMI_Agregator> moq2 = new Mock<IAMI_Agregator>();
             //mock.Setup(x => x.DoSomething(It.IsAny<string>(), It.IsAny<int>())).Returns((string x, int y) => x);
-            //moq.Setup(x => x.ReceiveDataFromDevice(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<Dictionary<TypeMeasurement, double>>())).Returns("OFF");
-            IAMI_Agregator agr1 = moq.Object;
+            moq1.Setup(x => x.AddDevice(It.IsAny<string>(), It.IsAny<string>())).Returns("ADDED");
+            moq1.Setup(x => x.ReceiveDataFromDevice(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<Dictionary<TypeMeasurement, double>>()));
+            IAMI_Agregator agr1 = moq1.Object;
+           // IAMI_Agregator agr2 = moq2.Object;
+
             MainWindow.AvailableAMIDevices.Add(devID, ami);
             ami.Proxy = agr1;
 
             ami.SendDataToAgregator(agrID, devID, measurement);
 
-            Assert.AreEqual(State.OFF, ami.Status);
+            Assert.AreNotEqual(ami.Measurements, measurement);
+        }
+
+        static IEnumerable<object[]> DuplicateMethod()
+        {
+            var measurement = new Dictionary<TypeMeasurement, double>()
+                {
+                    {TypeMeasurement.ActivePower,222 },
+                    {TypeMeasurement.CurrentP,0.1 },
+                    {TypeMeasurement.ReactivePower,69.49 },
+                    {TypeMeasurement.Voltage,1000 }
+                };
+
+            // The order of element in the object my be the same expected by your test method
+            return new[] { new object[] { "agregator2", "askdwskdls", measurement }, };
+        }
+
+        [Test]
+        [TestCaseSource(nameof(DuplicateMethod))]
+        public void SendDataToAgregator_ProxyReturnsDuplicate_DifferentDeviceCode(string agrID, string devID, Dictionary<TypeMeasurement, double> measurement)
+        {
+            AMICharacteristics ami = new AMICharacteristics();
+            Mock<IAMI_Agregator> moq1 = new Mock<IAMI_Agregator>();
+            //Mock<IAMI_Agregator> moq2 = new Mock<IAMI_Agregator>();
+            //mock.Setup(x => x.DoSomething(It.IsAny<string>(), It.IsAny<int>())).Returns((string x, int y) => x);
+            moq1.Setup(x => x.AddDevice(It.IsAny<string>(), It.IsAny<string>())).Returns("DUPLICATE");
+            moq1.Setup(x => x.ReceiveDataFromDevice(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<Dictionary<TypeMeasurement, double>>()));
+            IAMI_Agregator agr1 = moq1.Object;
+            // IAMI_Agregator agr2 = moq2.Object;
+
+            MainWindow.AvailableAMIDevices.Add(devID, ami);
+            ami.Proxy = agr1;
+
+            ami.SendDataToAgregator(agrID, devID, measurement);
+
+            Assert.AreNotEqual(ami.Device_code, devID);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(DuplicateMethod))]
+        public void SendDataToAgregator_DeviceAdded_DifferentDeviceCode(string agrID, string devID, Dictionary<TypeMeasurement, double> measurement)
+        {
+            AMICharacteristics ami = new AMICharacteristics();
+            Mock<IAMI_Agregator> moq1 = new Mock<IAMI_Agregator>();
+            //Mock<IAMI_Agregator> moq2 = new Mock<IAMI_Agregator>();
+            //mock.Setup(x => x.DoSomething(It.IsAny<string>(), It.IsAny<int>())).Returns((string x, int y) => x);
+            //moq1.Setup(x => x.AddDevice(It.IsAny<string>(), It.IsAny<string>())).Returns("DUPLICATE");
+            moq1.Setup(x => x.ReceiveDataFromDevice(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<Dictionary<TypeMeasurement, double>>()));
+            IAMI_Agregator agr1 = moq1.Object;
+            // IAMI_Agregator agr2 = moq2.Object;
+
+            MainWindow.AvailableAMIDevices.Add(devID, ami);
+            ami.Added = true;
+            ami.Proxy = agr1;
+
+            ami.SendDataToAgregator(agrID, devID, measurement);
+
+            Assert.AreNotEqual(ami.Measurements, measurement);
         }
     }
 }

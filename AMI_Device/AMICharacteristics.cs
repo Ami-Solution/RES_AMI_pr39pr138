@@ -42,6 +42,11 @@ namespace AMI_Device
 
 		public AMICharacteristics(string device_code, string agregator_code)
 		{
+            if(device_code.Length < 10 || agregator_code.Length < 10)
+            {
+                throw new ArgumentException("Length of parameters can't be lower than 10!");
+            }
+
 			this.Added = true;
 			this.Device_code = device_code;
 			this.AgregatorID = agregator_code;
