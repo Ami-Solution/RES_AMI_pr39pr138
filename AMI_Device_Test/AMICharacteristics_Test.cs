@@ -107,7 +107,7 @@ namespace AMI_Device_Test
             moq1.Setup(x => x.ReceiveDataFromDevice(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<Dictionary<TypeMeasurement, double>>()));
             IAMI_Agregator agr1 = moq1.Object;
            // IAMI_Agregator agr2 = moq2.Object;
-
+           //samo da nes commit
             MainWindow.AvailableAMIDevices.Add(devID, ami);
             ami.Proxy = agr1;
 
