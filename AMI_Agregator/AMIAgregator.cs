@@ -22,7 +22,8 @@ namespace AMI_Agregator
 		//device_code, <TipVrednost, lista vrednosti>
 		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> Buffer { get; set; }
 
-		public List<DateTime> Dates { get; set; }
+		//svaki agregator ima uredjaje, koji imaju svoje datume
+		public Dictionary<string, List<DateTime>> Dates { get; set; }
 
 		public string Agregator_code { get; set; }
 
@@ -57,7 +58,7 @@ namespace AMI_Agregator
             }
 
 			this.Agregator_code = name;
-			Dates = new List<DateTime>();
+			Dates = new Dictionary<string, List<DateTime>>();
 			listOfDevices = new List<string>();
 
 			var binding = new NetTcpBinding();
@@ -120,6 +121,7 @@ namespace AMI_Agregator
 						});
 
 					MainWindow.agregators[agregator_code].listOfDevices.Add(device_code);
+					MainWindow.agregators[agregator_code].Dates.Add(device_code, new List<DateTime>());
 				}
 			}
 			else //ako je iskljucen agregat
@@ -146,7 +148,7 @@ namespace AMI_Agregator
 					}
 
 					//dodavanja datuma u listu, tek nakon sto se upisu sva 4 merenja
-					MainWindow.agregators[agregator_code].Dates.Add(dateTime);
+					MainWindow.agregators[agregator_code].Dates[device_code].Add(dateTime);
 
 					//saljemo podatke u lokalnu bazu podataka
 					//SendToLocalDatabase(agregator_code, dateTime, device_code, values);
@@ -166,7 +168,7 @@ namespace AMI_Agregator
 				{
 					if (ag.Proxy.SendDataToSystemDataBase(ag.Agregator_code, ag.Dates, ag.Buffer))
 					{
-						//DeleteFromLocalDatabase(ag.Agregator_code);
+						DeleteFromLocalDatabase(ag.Agregator_code);
 
 						foreach (var keyValue in ag.Buffer)
 						{
@@ -175,7 +177,7 @@ namespace AMI_Agregator
 							ag.Buffer[keyValue.Key][TypeMeasurement.ReactivePower] = new List<double>();
 							ag.Buffer[keyValue.Key][TypeMeasurement.Voltage] = new List<double>();
 							ag.Buffer[keyValue.Key][TypeMeasurement.CurrentP] = new List<double>();
-							ag.Dates = new List<DateTime>();
+							ag.Dates[keyValue.Key] = new List<DateTime>();
 						}
 					}
 
