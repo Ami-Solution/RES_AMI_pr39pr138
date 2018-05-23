@@ -51,6 +51,11 @@ namespace AMI_Agregator
 
 		public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
 		{
+            if(name.Length < 10)
+            {
+                throw new ArgumentException("Parameter must be of length 10");
+            }
+
 			this.Agregator_code = name;
 			Dates = new List<DateTime>();
 			listOfDevices = new List<string>();
@@ -144,7 +149,7 @@ namespace AMI_Agregator
 					MainWindow.agregators[agregator_code].Dates.Add(dateTime);
 
 					//saljemo podatke u lokalnu bazu podataka
-					SendToLocalDatabase(agregator_code, dateTime, device_code, values);
+					//SendToLocalDatabase(agregator_code, dateTime, device_code, values);
 				}
 			}
 		}
@@ -179,61 +184,61 @@ namespace AMI_Agregator
 			}
 		}
 
-		private void DeleteFromLocalDatabase(string agregator_code)
-		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
-			using (SqlConnection con = new SqlConnection(CS))
-			{
-				con.Open();
-				SqlCommand cmd;
+		//private void DeleteFromLocalDatabase(string agregator_code)
+		//{
+		//	string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+		//	using (SqlConnection con = new SqlConnection(CS))
+		//	{
+		//		con.Open();
+		//		SqlCommand cmd;
 
-				string query = $"DELETE FROM AMI_Agregators_Table WHERE Agregator_Code like '{agregator_code}'";
+		//		string query = $"DELETE FROM AMI_Agregators_Table WHERE Agregator_Code like '{agregator_code}'";
 
-				cmd = new SqlCommand(query, con);
-				cmd.ExecuteReader();
+		//		cmd = new SqlCommand(query, con);
+		//		cmd.ExecuteReader();
 
-			}
-		}
+		//	}
+		//}
 
-		private void SendToLocalDatabase(string agregator_code, DateTime dateTime, string device_code, Dictionary<TypeMeasurement, double> values)
-		{
-			double Voltage = 0; 
-			double CurrentP = 0;
-			double ActivePower = 0;
-			double ReactivePower = 0;
+		//private void SendToLocalDatabase(string agregator_code, DateTime dateTime, string device_code, Dictionary<TypeMeasurement, double> values)
+		//{
+		//	double Voltage = 0; 
+		//	double CurrentP = 0;
+		//	double ActivePower = 0;
+		//	double ReactivePower = 0;
 
-			//vadimo rednosti iz recninka
-			foreach (var keyValue in values)
-			{
+		//	//vadimo rednosti iz recninka
+		//	foreach (var keyValue in values)
+		//	{
 
-				if (keyValue.Key == TypeMeasurement.CurrentP)
-					CurrentP = keyValue.Value;
+		//		if (keyValue.Key == TypeMeasurement.CurrentP)
+		//			CurrentP = keyValue.Value;
 
-				if (keyValue.Key == TypeMeasurement.ActivePower)
-					ActivePower = keyValue.Value;
+		//		if (keyValue.Key == TypeMeasurement.ActivePower)
+		//			ActivePower = keyValue.Value;
 
-				if (keyValue.Key == TypeMeasurement.Voltage)
-					Voltage = keyValue.Value;
+		//		if (keyValue.Key == TypeMeasurement.Voltage)
+		//			Voltage = keyValue.Value;
 
-				if (keyValue.Key == TypeMeasurement.ReactivePower)
-					ReactivePower = keyValue.Value;
+		//		if (keyValue.Key == TypeMeasurement.ReactivePower)
+		//			ReactivePower = keyValue.Value;
 
-			}
+		//	}
 
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
-			using (SqlConnection con = new SqlConnection(CS))
-			{
-				con.Open();
-				SqlCommand cmd;
+		//	string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+		//	using (SqlConnection con = new SqlConnection(CS))
+		//	{
+		//		con.Open();
+		//		SqlCommand cmd;
 				
-				string query = $"INSERT INTO AMI_Agregators_Table(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
-				$"VALUES(TRIM('{agregator_code}'), '{device_code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')";
+		//		string query = $"INSERT INTO AMI_Agregators_Table(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
+		//		$"VALUES(TRIM('{agregator_code}'), '{device_code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')";
 
-				cmd = new SqlCommand(query, con);
-				cmd.ExecuteNonQuery();
+		//		cmd = new SqlCommand(query, con);
+		//		cmd.ExecuteNonQuery();
 
-			}
-		}
+		//	}
+		//}
 
 		public Dictionary<string, List<string>> AgregatorsAndTheirDevices()
 		{
