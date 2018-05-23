@@ -124,7 +124,7 @@ namespace AMI_System_Management
 			List<string> selectDate = new List<string>() { "SELECT DATE" };
 			List<DateTime> dates = new List<DateTime>();
 
-			if (agregatorsComboBox.SelectedValue.ToString() == "SELECT AGREGATOR")
+			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
 			{
 				agregatorDatesComboBox.ItemsSource = selectDate;
 				agregatorDatesComboBox.SelectedIndex = 0;
@@ -170,16 +170,15 @@ namespace AMI_System_Management
 			if (typemeasurmentComboBox.SelectedItem.ToString() == "SELECT TYPE")
 			{
 				//vrsi se Iscrtavanje prosečnog merenja za izabrani uređaj za izabrani datum 
-				//dobavljeni podaci za odredjeni uredjaj, sva njegova merenja, i vremena tih merenja
-				Dictionary<DateTime, List<double>> DatesAndValues = AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, selectedDate); 
+
 
 			}
 			else
 			{
 				
 				//vrsi se Izcrtavanje izabranog merenja za izabrani uređaj za izabrani datum
-				//dobavljeni odredjeni podaci(tipovi-struja ili napon ili snaga) za odredjeni uredjaj
-				Dictionary<DateTime, double> DatesAndValues = AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
+				Dictionary<DateTime, double> DatesAndValues = new Dictionary<DateTime, double>();
+				DatesAndValues = AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
 
 			}
 
@@ -188,20 +187,8 @@ namespace AMI_System_Management
 
 		private void plotAgregatorGraph_Click(object sender, RoutedEventArgs e)
 		{
-			//vrstaMerenja je suma ili prosek
-			string vrstaMerenja = ((Button)sender).Content.ToString();
-
 			//TODO implementirati da se iscrta graph za agregator
-			if (vrstaMerenja == "PLOT SUM")
-			{
 
-			}
-			else
-			{
-
-			}
-
-			
 		}
 	}
 }

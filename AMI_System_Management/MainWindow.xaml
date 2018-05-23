@@ -13,9 +13,8 @@
 		<ComboBox x:Name="agregatorDatesComboBox" FontSize="12" HorizontalAlignment="Left" Margin="237,123,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
 		<ComboBox x:Name="typemeasurmentComboBox" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="438,36,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
 		<ComboBox x:Name="typemeasurmentComboBox_Copy" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="438,123,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
-		<Button x:Name="plotDeviceGraph" Click="plotDeviceGraph_Click" Content="PLOT" Margin="641,36,30,0" Height="48" VerticalAlignment="Top"/>
-		<Button x:Name="plotAgregatorSumGraph" FontSize="10" Click="plotAgregatorGraph_Click" Content="PLOT SUM" Margin="641,123,93,0" Height="48" VerticalAlignment="Top"/>
-		<Button x:Name="plotAgregatorAvgGraph" FontSize="10" Click="plotAgregatorGraph_Click" Content="PLOT AVG" Margin="704,123,30,0" Height="48" VerticalAlignment="Top"/>
+		<Button x:Name="plotDeviceGraph" Click="plotDeviceGraph_Click" Content="Plot" Margin="641,36,36,0" Height="48" VerticalAlignment="Top"/>
+		<Button x:Name="plotAgregatorGraph" Click="plotAgregatorGraph_Click" Content="Plot" Margin="641,123,36,0" Height="48" VerticalAlignment="Top"/>
 		<Label x:Name="errorLabel" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="51" Margin="36,176,0,0" VerticalAlignment="Top" Width="720"/>
 		
 	</Grid>
