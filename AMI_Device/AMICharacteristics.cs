@@ -42,11 +42,6 @@ namespace AMI_Device
 
 		public AMICharacteristics(string device_code, string agregator_code)
 		{
-            if(device_code.Length < 10 || agregator_code.Length < 10)
-            {
-                throw new ArgumentException("Length of parameters can't be lower than 10!");
-            }
-
 			this.Added = true;
 			this.Device_code = device_code;
 			this.AgregatorID = agregator_code;
@@ -74,14 +69,14 @@ namespace AMI_Device
 			if (!ami.Added)
 			{
 				retVal = ami.Proxy.AddDevice(agrID, devID);
-				
+
 				if (retVal == "ADDED") //ako je uspesno dodat
 				{
 					ami.Added = true;
 					ami.Proxy.ReceiveDataFromDevice(agrID, DateTime.Now, devID, measurement);
 					ami.GenerateRandomValues();
 				}
-				else if(retVal == "DUPLICATE") // ako je duplikat, dodaje se uredjaju nova vrednost imena
+				else if (retVal == "DUPLICATE") // ako je duplikat, dodaje se uredjaju nova vrednost imena
 				{
 					ami.Device_code = PasswordGenerator.Generate(length: 10, allowed: Sets.Alphanumerics);
 				}
