@@ -14,40 +14,40 @@ using System.Windows.Shapes;
 
 namespace AMI_Device
 {
-    /// <summary>
-    /// Interaction logic for AgregatorChoosing.xaml
-    /// </summary>
-    public partial class AgregatorChoosing : Window
-    {
+	/// <summary>
+	/// Interaction logic for AgregatorChoosing.xaml
+	/// </summary>
+	public partial class AgregatorChoosing : Window
+	{
 		static Dictionary<string, List<string>> existingAgregators = new Dictionary<string, List<string>>();
-        public static string agregatorName;
-        public AgregatorChoosing()
-        {
-            InitializeComponent();
-        }
+		public static string agregatorName;
+		public AgregatorChoosing()
+		{
+			InitializeComponent();
+		}
 
-        private void comboBox_Loaded(object sender, RoutedEventArgs e)
-        {
-            //ovde smestim agregate koji treba da se izlistaju
-            existingAgregators = MainWindow.defaultProxy.AgregatorsAndTheirDevices();
-            IDcmbBox.ItemsSource = existingAgregators.Keys;
-            IDcmbBox.SelectedIndex = 0;
-        }
+		private void comboBox_Loaded(object sender, RoutedEventArgs e)
+		{
+			//ovde smestim agregate koji treba da se izlistaju
+			existingAgregators = MainWindow.defaultProxy.AgregatorsAndTheirDevices();
+			IDcmbBox.ItemsSource = existingAgregators.Keys;
+			IDcmbBox.SelectedIndex = 0;
+		}
 
-        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //treba da se storuje izabrani agregat iz liste
-            string selected = IDcmbBox.SelectedItem.ToString();
+		private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			//treba da se storuje izabrani agregat iz liste
+			string selected = IDcmbBox.SelectedItem.ToString();
 			if (selected != "")
 			{
 				agregatorName = selected;
 			}
-        }
+		}
 
-        private void okBtn_Click(object sender, RoutedEventArgs e)
-        {
-            
-            this.Close();
-        }
-    }
+		private void okBtn_Click(object sender, RoutedEventArgs e)
+		{
+
+			this.Close();
+		}
+	}
 }

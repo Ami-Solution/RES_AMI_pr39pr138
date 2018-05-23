@@ -21,31 +21,31 @@ using System.Windows.Threading;
 
 namespace AMI_Device
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-        private static Dictionary<string, AMICharacteristics> availableAMIDevices = new Dictionary<string, AMICharacteristics>();
+	/// <summary>
+	/// Interaction logic for MainWindow.xaml
+	/// </summary>
+	public partial class MainWindow : Window
+	{
+		private static Dictionary<string, AMICharacteristics> availableAMIDevices = new Dictionary<string, AMICharacteristics>();
 
-        public static Dictionary<string, AMICharacteristics> AvailableAMIDevices { get => availableAMIDevices; set => availableAMIDevices = value; }
+		public static Dictionary<string, AMICharacteristics> AvailableAMIDevices { get => availableAMIDevices; set => availableAMIDevices = value; }
 
-        private static Random rand = new Random();
+		private static Random rand = new Random();
 
-        public static IAMI_Agregator defaultProxy; //za pocetku konekciju koja uvek traje
+		public static IAMI_Agregator defaultProxy; //za pocetku konekciju koja uvek traje
 
 
-        public MainWindow()
-        {
-            InitializeComponent();
-            AMICharacteristics ami = new AMICharacteristics();
+		public MainWindow()
+		{
+			InitializeComponent();
+			AMICharacteristics ami = new AMICharacteristics();
 
-            Connect(); //defaultni se poziva sa ovom
+			Connect(); //defaultni se poziva sa ovom
 
 			LoadDevicesFromLocalDatabase();
 
-            this.DataContext = this;
-        }
+			this.DataContext = this;
+		}
 
 		private void LoadDevicesFromLocalDatabase()
 		{
@@ -66,12 +66,12 @@ namespace AMI_Device
 		}
 
 		private void AddBtn_Click(object sender, RoutedEventArgs e)
-        {
-            AMICharacteristics ami = new AMICharacteristics();
-            ami.GenerateRandomValues();
+		{
+			AMICharacteristics ami = new AMICharacteristics();
+			ami.GenerateRandomValues();
 
-            AgregatorChoosing choosingWindow = new AgregatorChoosing(); // za biranje Agregata
-            choosingWindow.ShowDialog();
+			AgregatorChoosing choosingWindow = new AgregatorChoosing(); // za biranje Agregata
+			choosingWindow.ShowDialog();
 
 			if (AgregatorChoosing.agregatorName != null)
 			{
@@ -81,48 +81,49 @@ namespace AMI_Device
 				int ID = Int32.Parse(substraction);
 				ami.Connect(ID);
 
-                if(AvailableAMIDevices.ContainsKey(ami.Device_code))
-                {
-                    if(AvailableAMIDevices[ami.Device_code].AgregatorID != ami.AgregatorID)
-                    {
-                        ami.Device_code += 'P';
-                        AvailableAMIDevices.Add(ami.Device_code, ami); //ako je name isti, ali razl agr, dodaj
-                    }
-                }else
-                {
-                    AvailableAMIDevices.Add(ami.Device_code, ami); //ako nema, dodaj ga
-                }
-				
+				if (AvailableAMIDevices.ContainsKey(ami.Device_code))
+				{
+					if (AvailableAMIDevices[ami.Device_code].AgregatorID != ami.AgregatorID)
+					{
+						ami.Device_code += 'P';
+						AvailableAMIDevices.Add(ami.Device_code, ami); //ako je name isti, ali razl agr, dodaj
+					}
+				}
+				else
+				{
+					AvailableAMIDevices.Add(ami.Device_code, ami); //ako nema, dodaj ga
+				}
+
 				dataGrid.Items.Refresh();
 			}
-        }
+		}
 
-        private void RmvBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (dataGrid.SelectedItem != null)
-            {
-                KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
-                AvailableAMIDevices.Remove(obj.Key);
+		private void RmvBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (dataGrid.SelectedItem != null)
+			{
+				KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
+				AvailableAMIDevices.Remove(obj.Key);
 				dataGrid.Items.Refresh();
-            }
-        }
+			}
+		}
 
-        private static void Connect()
-        {
-            var binding = new NetTcpBinding();
-            string address = $"net.tcp://localhost:8003/IAMI_Agregator";
-            ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
-            defaultProxy = factory.CreateChannel();
+		private static void Connect()
+		{
+			var binding = new NetTcpBinding();
+			string address = $"net.tcp://localhost:8003/IAMI_Agregator";
+			ChannelFactory<IAMI_Agregator> factory = new ChannelFactory<IAMI_Agregator>(binding, new EndpointAddress(address));
+			defaultProxy = factory.CreateChannel();
 
-			
-        }
 
-        private void turnOnBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (dataGrid.SelectedItem != null)
-            {
-                KeyValuePair<string, AMICharacteristics> keyValue = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
-				
+		}
+
+		private void turnOnBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (dataGrid.SelectedItem != null)
+			{
+				KeyValuePair<string, AMICharacteristics> keyValue = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
+
 				if (AvailableAMIDevices[keyValue.Key].Status == State.OFF) // ukoliko spamujemo turn on, a vec je ukljucen, da ne pravi vise taskova
 				{
 					AvailableAMIDevices[keyValue.Key].Status = State.ON;
@@ -144,14 +145,14 @@ namespace AMI_Device
 
 				};
 
-                dataGrid.Items.Refresh();
-            }
-        }
+				dataGrid.Items.Refresh();
+			}
+		}
 
-        private void turnOffBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (dataGrid.SelectedItem != null)
-            {
+		private void turnOffBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (dataGrid.SelectedItem != null)
+			{
 				KeyValuePair<string, AMICharacteristics> keyValue = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
 
 				if (AvailableAMIDevices[keyValue.Key].Status == State.ON) // spam za turn off
@@ -159,12 +160,12 @@ namespace AMI_Device
 					AvailableAMIDevices[keyValue.Key].Status = State.OFF;
 				};
 
-                dataGrid.Items.Refresh();
+				dataGrid.Items.Refresh();
 
-            }
-            
-        }
+			}
 
-    }
+		}
+
+	}
 }
 

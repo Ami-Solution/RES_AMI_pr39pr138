@@ -21,8 +21,8 @@ namespace AMI_System_Management
 		public bool SendDataToSystemDataBase(string agregator_code, Dictionary<string, List<DateTime>> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
 		{
 			bool retVal = false;
-			
-			Trace.WriteLine($"Agregat: {agregator_code}, broj redova: {dateTimeList.Count()}, pocetak: {DateTime.Now} !");
+
+			Trace.WriteLine($"Agregat: {agregator_code}, broj uredjaja u agregatu: {dateTimeList.Count()}!");
 			if (buffer.Count != 0)
 			{
 				string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
@@ -39,6 +39,8 @@ namespace AMI_System_Management
 
 					foreach (var keyValue in buffer)
 					{
+						Trace.WriteLine($"Agregat: {agregator_code}, broj merenja uredjaja {Device_Code}: {dateTimeList[keyValue.Key].Count()}, pocetak: {DateTime.Now} !");
+
 						string query = $"INSERT INTO AMI_Tables(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
 						$"VALUES";
 
@@ -47,7 +49,7 @@ namespace AMI_System_Management
 						foreach (var pair in keyValue.Value)
 						{
 
-							if(pair.Key == TypeMeasurement.CurrentP)
+							if (pair.Key == TypeMeasurement.CurrentP)
 								CurrentP = pair.Value;
 
 							if (pair.Key == TypeMeasurement.ActivePower)
@@ -87,7 +89,7 @@ namespace AMI_System_Management
 					}
 
 					//brisanje vremena
-					
+
 				}
 			}
 
