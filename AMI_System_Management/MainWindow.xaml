@@ -4,18 +4,61 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AMI_System_Management"
+		xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
 		mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
-	<Grid Margin="0,0,0,0">
+        Title="MainWindow" Height="800" Width="827.5">
+	<Window.Resources>
+		<local:VisibilityToCheckedConverter x:Key="VisibilityToCheckedConverter"/>
+	</Window.Resources>
+
+	<Grid Margin="0,0,-8,0">
 		<ComboBox x:Name="deviceComboBox" SelectionChanged="deviceComboBox_SelectionChanged" FontSize="12" Loaded="devicesLoadedComboBox_Loaded" HorizontalAlignment="Left" Margin="36,36,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
 		<ComboBox x:Name="agregatorsComboBox" SelectionChanged="agregatorsComboBox_SelectionChanged" FontSize="12" Loaded="agregatorsLoadedComboBox_Loaded"  HorizontalAlignment="Left" Margin="36,123,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
 		<ComboBox x:Name="deviceDatesComboBox" FontSize="12" HorizontalAlignment="Left" Margin="237,36,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
 		<ComboBox x:Name="agregatorDatesComboBox" FontSize="12" HorizontalAlignment="Left" Margin="237,123,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
-		<ComboBox x:Name="typemeasurmentComboBox" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="438,36,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
-		<ComboBox x:Name="typemeasurmentComboBox_Copy" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="438,123,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
-		<Button x:Name="plotDeviceGraph" Click="plotDeviceGraph_Click" Content="Plot" Margin="641,36,36,0" Height="48" VerticalAlignment="Top"/>
-		<Button x:Name="plotAgregatorGraph" Click="plotAgregatorGraph_Click" Content="Plot" Margin="641,123,36,0" Height="48" VerticalAlignment="Top"/>
-		<Label x:Name="errorLabel" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="51" Margin="36,176,0,0" VerticalAlignment="Top" Width="720"/>
+		<ComboBox x:Name="typemeasurmentDeviceComboBox" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="438,36,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
+		<ComboBox x:Name="typemeasurmentAgregatorComboBox" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="438,123,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
+		<Button x:Name="plotDeviceGraph" Click="plotDeviceGraph_Click" Content="PLOT" Margin="641,36,36,0" Height="48" VerticalAlignment="Top"/>
+		<Button x:Name="plotAgregatorSumGraph" Click="plotAgregatorGraph_Click" Content="PLOT SUM" Margin="641,146,36,0" Height="24" VerticalAlignment="Top"/>
+		<Button x:Name="plotAgregatorAvgGraph" Click="plotAgregatorGraph_Click" Content="PLOT AVG" Margin="641,123,36,0" Height="24" VerticalAlignment="Top"/>
+		<Label x:Name="errorLabel" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="51" Margin="36,371,44,0" VerticalAlignment="Top"/>
+
+		<d3:Chart Name="plotter" Margin="10,422,10,10" Visibility="Hidden">
+			<d3:Chart.Title>
+				<TextBlock HorizontalAlignment="Center" FontSize="18" Margin="0,5,0,5">Line graph legend sample</TextBlock>
+			</d3:Chart.Title>
+			<d3:Chart.LegendContent>
+				<d3:LegendItemsPanel>
+					<d3:LegendItemsPanel.Resources>
+						<DataTemplate x:Key="InteractiveDataDisplay.WPF.LineGraph">
+							<StackPanel Orientation="Horizontal">
+								<CheckBox IsChecked="{Binding Path=Visibility, Converter={StaticResource VisibilityToCheckedConverter}, Mode=TwoWay}"/>
+								<Line Width="15" Height="15" X1="0" Y1="0" X2="15" Y2="15" Stroke="{Binding Path=Stroke}" StrokeThickness="2"/>
+								<TextBlock Margin="5,0,0,0" Text="{Binding Path=Description}"/>
+							</StackPanel>
+						</DataTemplate>
+					</d3:LegendItemsPanel.Resources>
+				</d3:LegendItemsPanel>
+			</d3:Chart.LegendContent>
+			<Grid Name="lines"/>
+		</d3:Chart>
+
+		<DataGrid x:Name="alarmStateDataGrid" Visibility="Hidden" Margin="10,432,18,0" Height="327" VerticalAlignment="Top"/>
 		
+		<Button x:Name="clearButton" Content="CLEAR ALL" FontSize="24" Margin="641,325,44,0" VerticalAlignment="Top" Height="46" Click="clearButton_Click"/>
+		<ComboBox x:Name="typemeasurmentAlarmComboBox" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="36,209,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
+		<ComboBox x:Name="greaterOrLowerComboBox" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" Loaded="alarmComboBox_Loaded" HorizontalAlignment="Left" Margin="342,209,0,0" VerticalAlignment="Top" Width="45" Height="48"/>
+		<TextBox x:Name="alarmTextBox" FontSize="20" HorizontalAlignment="Left" Height="48" Margin="237,209,0,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="center" VerticalAlignment="Top" Width="76"/>
+		<ComboBox x:Name="deviceStartDatesAlarmComboBox" Loaded="deviceStartDatesAlarmComboBox_Loaded" FontSize="12" HorizontalAlignment="Left" Margin="438,209,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
+		<ComboBox x:Name="deviceEndDatesAlarmComboBox" Loaded="deviceEndDatesAlarmComboBox_Loaded" FontSize="12" HorizontalAlignment="Left" Margin="641,209,0,0" VerticalAlignment="Top" Width="151" Height="48"/>
+		<Button x:Name="alarmButton" Click="alarmButton_Click" Content="GENERATE ALARM LIST" FontSize="20" HorizontalAlignment="Left" Margin="237,276,0,0" VerticalAlignment="Top" Width="351" Height="32"/>
+		<Separator HorizontalAlignment="Left" Height="114" Margin="0,36,0,0" VerticalAlignment="Top" Width="818"/>
+		<Separator HorizontalAlignment="Left" Height="114" Margin="0,123,0,0" VerticalAlignment="Top" Width="818"/>
+		<Separator HorizontalAlignment="Left" Height="114" Margin="0,262,0,0" VerticalAlignment="Top" Width="818"/>
+		<Label x:Name="labelStart" Content="Start date" HorizontalAlignment="Left" Margin="438,178,0,0" VerticalAlignment="Top" Width="150"/>
+		<Label x:Name="labelEnd" Content="End date" HorizontalAlignment="Left" Margin="642,178,0,0" VerticalAlignment="Top" Width="150"/>
+
+
+
 	</Grid>
 </Window>

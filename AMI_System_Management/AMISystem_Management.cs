@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace AMI_System_Management
 {
@@ -39,12 +40,12 @@ namespace AMI_System_Management
 
 					foreach (var keyValue in buffer)
 					{
-                        Device_Code = keyValue.Key;
-                        Trace.WriteLine($"Agregat: {agregator_code}, broj merenja uredjaja {Device_Code}: {dateTimeList[keyValue.Key].Count()}, pocetak: {DateTime.Now} !");
+						Device_Code = keyValue.Key;
+
+						Trace.WriteLine($"Agregat: {agregator_code}, broj merenja uredjaja {Device_Code}: {dateTimeList[keyValue.Key].Count()}, pocetak: {DateTime.Now} !");
 
 						string query = $"INSERT INTO AMI_Tables(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
 						$"VALUES";
-				
 
 						foreach (var pair in keyValue.Value)
 						{
@@ -92,6 +93,9 @@ namespace AMI_System_Management
 
 				}
 			}
+
+			MainWindow m = new MainWindow();
+			m.RefreshAgregatorsAndDevices();
 
 			Trace.WriteLine($"Agregat: {agregator_code}, ispraznjen buffer, kraj: {DateTime.Now} !");
 			return retVal;
@@ -145,20 +149,37 @@ namespace AMI_System_Management
 			return retVal;
 		}
 
-		//zbog biranja datuma, ova metoda vraca najraniji datum moguci
-		public static DateTime GetEarliestDateFromDatabase(string name)
+		//zbog biranja datuma, ova metoda vraca najraniji / najstariji datum moguci
+		public static DateTime GetEarliesOrLatesttDateFromDatabase(string DeviceCodeOrEARLIESTorLATEST)
 		{
-			DateTime retVal;
+			DateTime retVal = DateTime.Now;
 
 			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();
-				string query = $"SELECT MIN(DateAndTime) FROM AMI_Tables WHERE Device_Code like '{name}' or Agregator_Code like '{name}'";
+				string query = "";
+
+				if (DeviceCodeOrEARLIESTorLATEST == "EARLIEST")
+				{
+					query = $"SELECT MIN(DateAndTime) FROM AMI_Tables";
+				}
+				else if (DeviceCodeOrEARLIESTorLATEST == "LATEST")
+				{
+					query = $"SELECT MAX(DateAndTime) FROM AMI_Tables";
+				}
+				else
+				{
+					query = $"SELECT MIN(DateAndTime) FROM AMI_Tables WHERE Device_Code like '{DeviceCodeOrEARLIESTorLATEST}' or Agregator_Code like '{DeviceCodeOrEARLIESTorLATEST}'";
+				}
 
 				SqlCommand cmd = new SqlCommand(query, con);
 
-				retVal = Convert.ToDateTime(cmd.ExecuteScalar());
+				if (!(cmd.ExecuteScalar() is DBNull))
+				{
+					retVal = Convert.ToDateTime(cmd.ExecuteScalar());
+				}
+				
 
 			}
 
@@ -182,6 +203,70 @@ namespace AMI_System_Management
 					while (rdr.Read())
 					{
 						retVal.Add(Convert.ToDateTime(rdr["DateAndTime"]), Convert.ToDouble(rdr[typeMeasurment]));
+					}
+				}
+			}
+
+
+			return retVal;
+		}
+
+		//koristi se za iscrtavanje prosecnog/sumarnog grafa agregata
+		public static List<double> GetValuesFromDatabase(string code, string typeMeasurment, DateTime selectedDate)
+		{
+			List<double> retVal = new List<double>();
+
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				con.Open();
+				string query = $"SELECT {typeMeasurment} FROM AMI_Tables WHERE Agregator_Code like '{code}' AND DateAndTime >= '{selectedDate}' AND DateAndTime < '{selectedDate.Date.AddDays(1)}'";
+
+				SqlCommand cmd = new SqlCommand(query, con);
+
+				using (SqlDataReader rdr = cmd.ExecuteReader())
+				{
+					while (rdr.Read())
+					{
+						retVal.Add(Convert.ToDouble(rdr[typeMeasurment]));
+					}
+				}
+			}
+
+			return retVal;
+		}
+
+		public static void GetAlarmingValuesFromDatabase(string typeMeasurment, double value, string greatrOrLower, DateTime startDate, DateTime endTime)
+		{
+			//TODO IMPLEMENT da vrati sva merenja koja su u nekom opsegu od nekog datuma do nekog datuma
+		}
+
+		public static Dictionary<DateTime, List<double>> GetDatesAndValuesFromDataBase(string device_code, DateTime selectedDate)
+		{
+			Dictionary<DateTime, List<double>> retVal = new Dictionary<DateTime, List<double>>();
+
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				con.Open();
+				string query = $"SELECT CurrentP, Voltage, ActivePower, Reactivepower, DateAndTime FROM AMI_Tables WHERE Device_Code like '{device_code}' AND DateAndTime >= '{selectedDate}' AND DateAndTime < '{selectedDate.Date.AddDays(1)}'";
+
+				SqlCommand cmd = new SqlCommand(query, con);
+
+				//redom ce ici vrednosti -> struja, napon, aktivna snaga, reaktivna snaga
+
+				using (SqlDataReader rdr = cmd.ExecuteReader())
+				{
+					while (rdr.Read())
+					{
+						List<double> Values = new List<double>();
+
+						Values.Add(Convert.ToDouble(rdr["CurrentP"]));
+						Values.Add(Convert.ToDouble(rdr["Voltage"]));
+						Values.Add(Convert.ToDouble(rdr["ActivePower"]));
+						Values.Add(Convert.ToDouble(rdr["ReactivePower"]));
+						retVal.Add(Convert.ToDateTime(rdr["DateAndTime"]), Values);
+
 					}
 				}
 			}
