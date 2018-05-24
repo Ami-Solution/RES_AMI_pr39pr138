@@ -39,12 +39,12 @@ namespace AMI_System_Management
 
 					foreach (var keyValue in buffer)
 					{
-						Trace.WriteLine($"Agregat: {agregator_code}, broj merenja uredjaja {Device_Code}: {dateTimeList[keyValue.Key].Count()}, pocetak: {DateTime.Now} !");
+                        Device_Code = keyValue.Key;
+                        Trace.WriteLine($"Agregat: {agregator_code}, broj merenja uredjaja {Device_Code}: {dateTimeList[keyValue.Key].Count()}, pocetak: {DateTime.Now} !");
 
 						string query = $"INSERT INTO AMI_Tables(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
 						$"VALUES";
-
-						Device_Code = keyValue.Key;
+				
 
 						foreach (var pair in keyValue.Value)
 						{
