@@ -21,7 +21,7 @@ namespace AMI_Agregator
 		//buffer je dictionari i cine ga: device_id i novi dictionari: typeMeasurment i lista vrednost
 		public static Dictionary<string, AMIAgregator> agregators { get; set; }
 
-		public static int agregatorNumber = 1;
+		public static int agregatorNumber = 0;
 
 		private static ServiceHost host;
 		public MainWindow()
