@@ -71,15 +71,7 @@ namespace AMI_Agregator
 		{
 			host = new ServiceHost(typeof(AMIAgregator));
 			NetTcpBinding binding = new NetTcpBinding();
-			string address = "";
-			if (MainWindow.agregators == null) // zbog prvog statickog agregata
-			{
-				address = $"net.tcp://localhost:{9001}/IAMI_Agregator";
-			}
-			else
-			{
-				address = $"net.tcp://localhost:{9000 + MainWindow.agregatorNumber}/IAMI_Agregator";
-			}
+			string address = $"net.tcp://localhost:{9000 + MainWindow.agregatorNumber}/IAMI_Agregator";
 
 			host.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
 			host.Description.Behaviors.Add(new ServiceDebugBehavior { IncludeExceptionDetailInFaults = true });
