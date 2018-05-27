@@ -52,6 +52,8 @@ namespace AMI_Device_Test
 
         [Test]
         [TestCase("aksk4k5jDD", "agregator1")]
+        [TestCase("1111111111", "agregator12")]
+        [TestCase("wwwwwwwwww", "agregator122")]
         public void AMICharacteristics_ParameterizedConstructorHaveValues_Instantiated(string device_code, string agregator_code)
         {
             AMICharacteristics ami = new AMICharacteristics(device_code, agregator_code);
@@ -60,18 +62,6 @@ namespace AMI_Device_Test
             Assert.AreEqual(ami.AgregatorID, agregator_code);
         }
 
-        [Test]
-        [TestCase("aksk4k5jD", "agregator1")]
-        [TestCase("", "agregator1")]
-        [TestCase("aksk4k5jDD", "agregator")]
-        [TestCase("aksk4k5jDD", "")]
-        public void AMICharacteristics_ParameterizedConstructorHaveValues_NotInstantiated(string device_code, string agregator_code)
-        {
-            Assert.Throws<ArgumentException>(() =>
-            {
-                AMICharacteristics ami = new AMICharacteristics(device_code,agregator_code);
-            });
-        }
 
         static object[] MySourceProperty
         {
@@ -127,7 +117,7 @@ namespace AMI_Device_Test
                 };
 
             // The order of element in the object my be the same expected by your test method
-            return new[] { new object[] { "agregator2", "askdwskdls", measurement }, };
+            return new[] { new object[] { "agregator22", "askdwskdls", measurement }, };
         }
 
         [Test]
@@ -151,8 +141,22 @@ namespace AMI_Device_Test
             Assert.AreNotEqual(ami.Device_code, devID);
         }
 
+        static IEnumerable<object[]> DuplicateMethod2()
+        {
+            var measurement = new Dictionary<TypeMeasurement, double>()
+                {
+                    {TypeMeasurement.ActivePower,222 },
+                    {TypeMeasurement.CurrentP,0.1 },
+                    {TypeMeasurement.ReactivePower,69.49 },
+                    {TypeMeasurement.Voltage,1000 }
+                };
+
+            // The order of element in the object my be the same expected by your test method
+            return new[] { new object[] { "agregator21", "asasdwasdw", measurement }, };
+        }
+
         [Test]
-        [TestCaseSource(nameof(DuplicateMethod))]
+        [TestCaseSource(nameof(DuplicateMethod2))]
         public void SendDataToAgregator_DeviceAdded_DifferentDeviceCode(string agrID, string devID, Dictionary<TypeMeasurement, double> measurement)
         {
             AMICharacteristics ami = new AMICharacteristics();

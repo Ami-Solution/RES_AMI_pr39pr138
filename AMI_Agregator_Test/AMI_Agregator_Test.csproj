@@ -50,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AMIAgregator_Test.cs" />
@@ -62,6 +63,10 @@
     <ProjectReference Include="..\AMI_Agregator\AMI_Agregator.csproj">
       <Project>{6EF7FEEF-FE60-40D9-B497-79561E7BDE60}</Project>
       <Name>AMI_Agregator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Enums\Storage.csproj">
+      <Project>{DEA77FEC-8A00-449E-AB2E-B6AAD165AD01}</Project>
+      <Name>Storage</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
