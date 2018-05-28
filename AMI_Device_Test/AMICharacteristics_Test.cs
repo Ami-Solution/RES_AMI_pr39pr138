@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Storage;
 using Moq;
 using Common;
+using System.Diagnostics;
 
 namespace AMI_Device_Test
 {

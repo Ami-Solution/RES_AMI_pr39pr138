@@ -6,6 +6,8 @@ using Storage;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AMI_Agregator_Test
 {
@@ -172,7 +174,7 @@ namespace AMI_Agregator_Test
         }
 
         [Test]
-        public void AMIAgregator_SendToSystemMenagementDatesOver0_ReturnsTrue()
+        public void AMIAgregator_SendToSystemMenagementDatesOver0_EmptyAtEnd()
         { //string agregator_code, Dictionary<string, List<DateTime>> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer
             AMIAgregator agr = new AMIAgregator("agregator3434");
             MainWindow.agregators.Add(agr.Agregator_code, agr);
@@ -202,12 +204,130 @@ namespace AMI_Agregator_Test
                         { TypeMeasurement.CurrentP, new List<double>() },
                         { TypeMeasurement.Voltage, new List<double>() },
                         });
-            //MainWindow.agregators["agregator3434"].Buffer["skgjtifodls"].Add(TypeMeasurement.ActivePower,)
+            MainWindow.agregators["agregator3434"].Buffer["skgjtifodls"][TypeMeasurement.ActivePower].Add(233);
+            MainWindow.agregators["agregator3434"].Buffer["skgjtifodls"][TypeMeasurement.CurrentP].Add(123);
+            MainWindow.agregators["agregator3434"].Buffer["skgjtifodls"][TypeMeasurement.ReactivePower].Add(56);
+            MainWindow.agregators["agregator3434"].Buffer["skgjtifodls"][TypeMeasurement.Voltage].Add(12.12);
 
             agr.Proxy = sys;
-            agr.SendToSystemMenagement(agr);
 
-            //Assert.AreNotEqual()
+            Task t = Task.Factory.StartNew(() =>
+            {
+                agr.SendToSystemMenagement(agr);
+
+            });
+            Thread.Sleep(8000);
+            
+            Assert.AreEqual(oldBuffer, agr.Buffer);
+        }
+
+        [Test]
+        public void AMIAgregator_SendToSystemMenagementDatesNotOver0_SameAsOnStart()
+        { //string agregator_code, Dictionary<string, List<DateTime>> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer
+            AMIAgregator agr = new AMIAgregator("agregator334");
+            MainWindow.agregators.Add(agr.Agregator_code, agr);
+            MainWindow.agregatorNumber++;
+            agr.State = State.ON;
+           // agr.Dates.Add("skgjtifodls", new List<DateTime>());
+            Mock<IAMI_System_Management> moq1 = new Mock<IAMI_System_Management>();
+            moq1.Setup(x => x.SendDataToSystemDataBase(It.IsAny<string>(), It.IsAny<Dictionary<string, List<DateTime>>>(), It.IsAny<Dictionary<string, Dictionary<TypeMeasurement, List<double>>>>())).Returns(true);
+            IAMI_System_Management sys = moq1.Object;
+
+            MainWindow.agregators["agregator334"].Buffer.Add(
+                        "skgjtifodls",
+                        new Dictionary<TypeMeasurement, List<double>>()
+                        {
+                        { TypeMeasurement.ActivePower, new List<double>() },
+                        { TypeMeasurement.ReactivePower, new List<double>() },
+                        { TypeMeasurement.CurrentP, new List<double>() },
+                        { TypeMeasurement.Voltage, new List<double>() },
+                        });
+            Dictionary<string, Dictionary<TypeMeasurement, List<double>>> oldBuffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>();
+            oldBuffer.Add(
+                        "skgjtifodls",
+                        new Dictionary<TypeMeasurement, List<double>>()
+                        {
+                        { TypeMeasurement.ActivePower, new List<double>() },
+                        { TypeMeasurement.ReactivePower, new List<double>() },
+                        { TypeMeasurement.CurrentP, new List<double>() },
+                        { TypeMeasurement.Voltage, new List<double>() },
+                        });
+            MainWindow.agregators["agregator334"].Buffer["skgjtifodls"][TypeMeasurement.ActivePower].Add(233);
+            MainWindow.agregators["agregator334"].Buffer["skgjtifodls"][TypeMeasurement.CurrentP].Add(123);
+            MainWindow.agregators["agregator334"].Buffer["skgjtifodls"][TypeMeasurement.ReactivePower].Add(56);
+            MainWindow.agregators["agregator334"].Buffer["skgjtifodls"][TypeMeasurement.Voltage].Add(12.12);
+
+            agr.Proxy = sys;
+
+            Task t = Task.Factory.StartNew(() =>
+            {
+                agr.SendToSystemMenagement(agr);
+
+            });
+            Thread.Sleep(8000);
+
+            Assert.AreNotEqual(oldBuffer, agr.Buffer);
+        }
+
+        [Test]
+        public void AMIAgregator_SendToSystemMenagementOffState_SameAsOnStart()
+        { //string agregator_code, Dictionary<string, List<DateTime>> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer
+            AMIAgregator agr = new AMIAgregator("agregator88");
+            MainWindow.agregators.Add(agr.Agregator_code, agr);
+            MainWindow.agregatorNumber++;
+            agr.State = State.OFF;
+
+            MainWindow.agregators["agregator88"].Buffer.Add(
+                        "skgjtifodls",
+                        new Dictionary<TypeMeasurement, List<double>>()
+                        {
+                        { TypeMeasurement.ActivePower, new List<double>() },
+                        { TypeMeasurement.ReactivePower, new List<double>() },
+                        { TypeMeasurement.CurrentP, new List<double>() },
+                        { TypeMeasurement.Voltage, new List<double>() },
+                        });
+            Dictionary<string, Dictionary<TypeMeasurement, List<double>>> oldBuffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>();
+            oldBuffer.Add(
+                        "skgjtifodls",
+                        new Dictionary<TypeMeasurement, List<double>>()
+                        {
+                        { TypeMeasurement.ActivePower, new List<double>() },
+                        { TypeMeasurement.ReactivePower, new List<double>() },
+                        { TypeMeasurement.CurrentP, new List<double>() },
+                        { TypeMeasurement.Voltage, new List<double>() },
+                        });
+            MainWindow.agregators["agregator88"].Buffer["skgjtifodls"][TypeMeasurement.ActivePower].Add(233);
+            MainWindow.agregators["agregator88"].Buffer["skgjtifodls"][TypeMeasurement.CurrentP].Add(123);
+            MainWindow.agregators["agregator88"].Buffer["skgjtifodls"][TypeMeasurement.ReactivePower].Add(56);
+            MainWindow.agregators["agregator88"].Buffer["skgjtifodls"][TypeMeasurement.Voltage].Add(12.12);
+
+            Assert.AreNotEqual(oldBuffer, agr.Buffer);
+        }
+
+        [Test]
+        public void AMIAgregator_AgregatorsAndTheirDevicesPossessAgregatpr_ReturnsFullDict()
+        {
+            AMIAgregator agr = new AMIAgregator("agregator69");
+            MainWindow.agregators.Add(agr.Agregator_code, agr);
+            MainWindow.agregatorNumber++;
+            Dictionary<string, List<string>> emptyDic = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> fullDic = new Dictionary<string, List<string>>();
+
+            fullDic= agr.AgregatorsAndTheirDevices();
+
+            Assert.AreNotEqual(emptyDic, fullDic);
+        }
+
+        [Test]
+        public void AMIAgregator_AgregatorsAndTheirDevicesDoesntPossessAgregatpr_ReturnsEmptyDict()
+        {
+            AMIAgregator agr = new AMIAgregator("agregator69");
+            Dictionary<string, List<string>> emptyDic = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> fullDic = new Dictionary<string, List<string>>();
+
+            fullDic = agr.AgregatorsAndTheirDevices();
+
+            Assert.AreEqual(emptyDic, fullDic);
         }
     }
 }
