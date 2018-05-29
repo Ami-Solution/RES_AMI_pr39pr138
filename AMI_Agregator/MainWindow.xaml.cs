@@ -31,11 +31,65 @@ namespace AMI_Agregator
 
 			LoadFromLocalDataBase();
 
+			LoadAgregatorsDevicesFromLocalDataBase();
+
 			OpenServices();
 
 			this.DataContext = this;
 		}
 
+		//sluzi za ucitavanje agregatora i njegovih uredjaja(ako ih ima) koji nemaju podatke u lokalnoj bazi podataka
+		private void LoadAgregatorsDevicesFromLocalDataBase()
+		{
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				SqlCommand cmd = new SqlCommand();
+				con.Open();
+				cmd.Connection = con;
+				cmd.CommandText = "SELECT DISTINCT(Agregator_Code) FROM Agregators_Table";
+
+				//izaberemo sve agregate koji postoje, i proveravamo da li smo ih vec dodali u funkciji koja ucitava agregate
+				//iz lokalne baze podataka gde se nalaze neposlati podaci
+				using (SqlDataReader rdr = cmd.ExecuteReader())
+				{
+					while (rdr.Read())
+					{
+						string agregator_code = rdr["Agregator_Code"].ToString();
+
+						if (!agregators.ContainsKey(agregator_code))
+						{
+							MainWindow.agregatorNumber++;
+							agregators.Add(agregator_code, new AMIAgregator(agregator_code));
+						}
+					}
+				}
+
+				cmd.CommandText = "SELECT Agregator_Code, Device_Code FROM Devices_Table";
+
+				//sada izaberemo sve uredjaje koji pripadaju odredjenim agregatima, i gledamo da li smo ih vec dodali u funkciji
+				//koja ucitava uredjaje iz lokalne baze gde se nalaze neposlati podaci
+				using (SqlDataReader rdr = cmd.ExecuteReader())
+				{
+					while (rdr.Read())
+					{
+						string agregator_code = rdr["Agregator_Code"].ToString();
+						string device_code = rdr["Device_Code"].ToString();
+
+						if (!agregators[agregator_code].Buffer.ContainsKey(device_code)) //ako agregat ne sadrzi uredjaj
+						{
+							//dodajemo mu uredjaj koji nema podataka
+							agregators[agregator_code].Buffer.Add(device_code, new Dictionary<TypeMeasurement, List<double>>());
+							agregators[agregator_code].listOfDevices.Add(device_code);
+						}
+					}
+				}
+
+			}
+
+		}
+
+		//sluzi za ucitavanje agregatora i njegovih uredjaja koji nisu poslati u globanu bazu podataka
 		private void LoadFromLocalDataBase()
 		{
 			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
@@ -44,7 +98,7 @@ namespace AMI_Agregator
 				SqlCommand cmd = new SqlCommand();
 				con.Open();
 				cmd.Connection = con;
-				cmd.CommandText = "SELECT DISTINCT(Agregator_Code) FROM AMI_Agregators_Table";
+				cmd.CommandText = "SELECT DISTINCT(Agregator_Code) FROM AMI_LocalData_Table";
 
 				Dictionary<string, Dictionary<TypeMeasurement, List<double>>> loadedBuffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>();
 
@@ -66,7 +120,7 @@ namespace AMI_Agregator
 				//treba mi Device_Code, Dictionary<TypeMeasurement, List<double>>>()
 				for (int i = 0; i < agregator_codes.Count; i++)
 				{
-					cmd.CommandText = $"SELECT DISTINCT(Device_Code) FROM AMI_Agregators_Table where Agregator_Code like '{agregator_codes[i]}'";
+					cmd.CommandText = $"SELECT DISTINCT(Device_Code) FROM AMI_LocalData_Table where Agregator_Code like '{agregator_codes[i]}'";
 
 					using (SqlDataReader rdr = cmd.ExecuteReader())
 					{
@@ -94,7 +148,7 @@ namespace AMI_Agregator
 							List<double> ActivePower = new List<double>();
 							List<double> ReactivePower = new List<double>();
 
-							cmd.CommandText = $"SELECT * FROM AMI_Agregators_Table where Agregator_Code like '{keyValue2.Agregator_code}' and Device_Code like '{keyValue3.Key}'";
+							cmd.CommandText = $"SELECT * FROM AMI_LocalData_Table where Agregator_Code like '{keyValue2.Agregator_code}' and Device_Code like '{keyValue3.Key}'";
 
 							using (SqlDataReader rdr = cmd.ExecuteReader())
 							{
@@ -162,10 +216,43 @@ namespace AMI_Agregator
 
 		}
 
+		private void SaveAgragatorToDataBase(string agregator_code)
+		{
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				con.Open();
+				SqlCommand cmd;
+
+				string query = $"INSERT INTO Agregators_Table(Agregator_Code) VALUES('{agregator_code}')";
+
+				cmd = new SqlCommand(query, con);
+				cmd.ExecuteNonQuery();
+
+			}
+		}
+
+		private void RemoveAgregatorFromDataBase(string agregator_code)
+		{
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				con.Open();
+				SqlCommand cmd;
+
+				string query = $"DELETE FROM Agregators_Table WHERE Agregator_Code like '{agregator_code}'";
+
+				cmd = new SqlCommand(query, con);
+				cmd.ExecuteReader();
+
+			}
+		}
+
 		private void AddBtn_Click(object sender, RoutedEventArgs e)
 		{
 			AMIAgregator agregator = new AMIAgregator("agregator" + (++agregatorNumber));
 			agregators.Add(agregator.Agregator_code, agregator);
+			SaveAgragatorToDataBase(agregator.Agregator_code);
 
 			dataGrid.Items.Refresh();
 		}
@@ -176,6 +263,7 @@ namespace AMI_Agregator
 			{
 				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
 				agregators.Remove(keyValue.Key);
+				RemoveAgregatorFromDataBase(keyValue.Key);
 
 			}
 
@@ -220,5 +308,6 @@ namespace AMI_Agregator
 
 			dataGrid.Items.Refresh();
 		}
+
 	}
 }

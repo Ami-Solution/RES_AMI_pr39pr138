@@ -13,8 +13,13 @@ namespace Common
 	{
         [OperationContract]
 		string AddDevice(string agregator_code, string device_code);
+
+		[OperationContract]
+		string RemoveDevice(string agregator_code, string device_code);
+
         [OperationContract]
         void ReceiveDataFromDevice(string agregator_code, DateTime datetime, string device_code, Dictionary<TypeMeasurement, double> values);
+
         [OperationContract]
         Dictionary<string, List<string>> AgregatorsAndTheirDevices();
 	}

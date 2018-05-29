@@ -3,6 +3,8 @@ using Storage;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
@@ -38,6 +40,7 @@ namespace AMI_Device
 		public MainWindow()
 		{
 			InitializeComponent();
+
 			AMICharacteristics ami = new AMICharacteristics();
 
 			Connect(); //defaultni se poziva sa ovom
@@ -92,6 +95,7 @@ namespace AMI_Device
 				else
 				{
 					AvailableAMIDevices.Add(ami.Device_code, ami); //ako nema, dodaj ga
+					SaveDeviceToDataBase(ami.AgregatorID, ami.Device_code);
 				}
 
 				dataGrid.Items.Refresh();
@@ -105,6 +109,8 @@ namespace AMI_Device
 				KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
 				AvailableAMIDevices.Remove(obj.Key);
 				dataGrid.Items.Refresh();
+				RemoveDeviceFromDataBase(obj.Key);
+				defaultProxy.RemoveDevice(obj.Value.AgregatorID, obj.Key);
 			}
 		}
 
@@ -127,12 +133,14 @@ namespace AMI_Device
 				if (AvailableAMIDevices[keyValue.Key].Status == State.OFF) // ukoliko spamujemo turn on, a vec je ukljucen, da ne pravi vise taskova
 				{
 					AvailableAMIDevices[keyValue.Key].Status = State.ON;
+
 					Task t = Task.Factory.StartNew(() =>
 					{
-						//svaki sekund ce slati podatke, bez obzira da li je upaljen ili ugasen agregat
-						//provera ce se vrsiti u metodi SendDataToAgregator
-						while (AvailableAMIDevices[keyValue.Key].Status == State.ON)
+						while (AvailableAMIDevices.ContainsKey(keyValue.Key))  //dok imamo uredjaj u listi, slace podatke, ali samo -->
 						{
+							if (AvailableAMIDevices[keyValue.Key].Status == State.OFF) // --> ako je ukljucen. Zato sto ako obrisemo, treba da izadje iz petlje
+								break;
+
 							AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key].AgregatorID, keyValue.Key, AvailableAMIDevices[keyValue.Key].Measurements);
 							this.Dispatcher.Invoke(() =>
 							{
@@ -164,6 +172,38 @@ namespace AMI_Device
 
 			}
 
+		}
+
+		private void SaveDeviceToDataBase(string agregator_code, string device_code)
+		{
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				con.Open();
+				SqlCommand cmd;
+
+				string query = $"INSERT INTO Devices_Table(Agregator_Code, Device_Code) VALUES('{agregator_code}', '{device_code}')";
+
+				cmd = new SqlCommand(query, con);
+				cmd.ExecuteNonQuery();
+
+			}
+		}
+
+		private void RemoveDeviceFromDataBase(string device_code)
+		{
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				con.Open();
+				SqlCommand cmd;
+
+				string query = $"DELETE FROM Devices_Table WHERE Device_Code like '{device_code}'";
+
+				cmd = new SqlCommand(query, con);
+				cmd.ExecuteReader();
+
+			}
 		}
 
 	}

@@ -75,6 +75,7 @@ namespace AMI_Device
 					ami.Added = true;
 					ami.Proxy.ReceiveDataFromDevice(agrID, DateTime.Now, devID, measurement);
 					ami.GenerateRandomValues();
+					
 				}
 				else if (retVal == "DUPLICATE") // ako je duplikat, dodaje se uredjaju nova vrednost imena
 				{

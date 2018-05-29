@@ -39,7 +39,6 @@ namespace AMI_Agregator
 
 		#region constructors
 
-
 		static AMIAgregator()
 		{
 			MainWindow.agregators = new Dictionary<string, AMIAgregator>();
@@ -50,7 +49,7 @@ namespace AMI_Agregator
 
 		}
 
-		public AMIAgregator(string name) //mora parametrizovani konstr jer onako udje u loop petlju u defaultnom jer poziva uvek sam sebe
+		public AMIAgregator(string name) 
 		{
 			this.Agregator_code = name;
 			Dates = new Dictionary<string, List<DateTime>>();
@@ -109,6 +108,7 @@ namespace AMI_Agregator
 
 					MainWindow.agregators[agregator_code].listOfDevices.Add(device_code);
 					MainWindow.agregators[agregator_code].Dates.Add(device_code, new List<DateTime>());
+
 				}
 			}
 			else //ako je iskljucen agregat
@@ -117,6 +117,21 @@ namespace AMI_Agregator
 			}
 
 			return retVal;
+		}
+
+		
+
+		public string RemoveDevice(string agregator_code, string device_code)
+		{
+			AMIAgregator ag = MainWindow.agregators[agregator_code];
+			ag.Proxy.SendDataToSystemDataBase(ag.Agregator_code, ag.Dates, ag.Buffer); //prinudno slanje podataka u bazu, kada se brise uredjaj
+
+			DeleteFromLocalDatabase(agregator_code, device_code);
+			ag.Buffer.Remove(device_code);
+			ag.listOfDevices.Remove(device_code);
+			ag.Dates.Remove(device_code);
+
+			return "DELETED";
 		}
 
 		//prihvatimo koji device salje vrednosti. Vrednosti su tipa Struja-100, Napon-200, Snaga-300
@@ -180,7 +195,23 @@ namespace AMI_Agregator
 				con.Open();
 				SqlCommand cmd;
 
-				string query = $"DELETE FROM AMI_Agregators_Table WHERE Agregator_Code like '{agregator_code}'";
+				string query = $"DELETE FROM AMI_LocalData_Table WHERE Agregator_Code like '{agregator_code}'";
+
+				cmd = new SqlCommand(query, con);
+				cmd.ExecuteReader();
+
+			}
+		}
+
+		private void DeleteFromLocalDatabase(string agregator_code, string device_code)
+		{
+			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS))
+			{
+				con.Open();
+				SqlCommand cmd;
+
+				string query = $"DELETE FROM AMI_LocalData_Table WHERE Agregator_Code like '{agregator_code}' and Device_Code like '{device_code}'";
 
 				cmd = new SqlCommand(query, con);
 				cmd.ExecuteReader();
@@ -219,8 +250,8 @@ namespace AMI_Agregator
 				con.Open();
 				SqlCommand cmd;
 
-				string query = $"INSERT INTO AMI_Agregators_Table(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
-				$"VALUES(TRIM('{agregator_code}'), '{device_code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')";
+				string query = $"INSERT INTO AMI_LocalData_Table(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
+				$"VALUES('{agregator_code}', '{device_code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')";
 
 				cmd = new SqlCommand(query, con);
 				cmd.ExecuteNonQuery();
@@ -239,7 +270,6 @@ namespace AMI_Agregator
 
 			return retList;
 		}
-
 		#endregion methods
 
 	}
