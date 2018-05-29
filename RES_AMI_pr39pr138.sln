@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMI_Agregator_Test", "AMI_A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveDataDisplay.WPF", "DynamicLineChart\InteractiveDataDisplay.WPF.csproj", "{2D34544C-2DF2-4B20-A43A-6C8D2DF3DD82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMI_System_Management_Test", "AMI_System_Management_Test\AMI_System_Management_Test.csproj", "{28ACA960-7CF9-4B76-8D9B-86B78BF974E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{2D34544C-2DF2-4B20-A43A-6C8D2DF3DD82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D34544C-2DF2-4B20-A43A-6C8D2DF3DD82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D34544C-2DF2-4B20-A43A-6C8D2DF3DD82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28ACA960-7CF9-4B76-8D9B-86B78BF974E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28ACA960-7CF9-4B76-8D9B-86B78BF974E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28ACA960-7CF9-4B76-8D9B-86B78BF974E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28ACA960-7CF9-4B76-8D9B-86B78BF974E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
