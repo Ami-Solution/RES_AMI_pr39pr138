@@ -52,13 +52,14 @@ namespace AMI_Device_Test
         }
 
         [Test]
-        [TestCase("aksk4k5jDD", "agregator1")]
-        [TestCase("1111111111", "agregator12")]
-        [TestCase("wwwwwwwwww", "agregator122")]
-        public void AMICharacteristics_ParameterizedConstructorHaveValues_Instantiated(string device_code, string agregator_code)
+        [TestCase("aksk4k5jDD", "agregator1",false)]
+        [TestCase("1111111111", "agregator12", false)]
+        [TestCase("wwwwwwwwww", "agregator122", false)]
+        public void AMICharacteristics_ParameterizedConstructorHaveValues_Instantiated(string device_code, string agregator_code,bool added)
         {
-            AMICharacteristics ami = new AMICharacteristics(device_code, agregator_code);
+            AMICharacteristics ami = new AMICharacteristics(device_code, agregator_code,added);
 
+            Assert.AreEqual(ami.Added, added);
             Assert.AreEqual(ami.Device_code, device_code);
             Assert.AreEqual(ami.AgregatorID, agregator_code);
         }

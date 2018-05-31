@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html data-ng-app="coverageApp">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE,chrome=1" />
+<title>Moq.Mock - Coverage Report</title>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="report.css" />
+</head><body data-ng-controller="DetailViewCtrl"><div class="container"><div class="containerleft">
+<h1>Summary</h1>
+<table class="overview table-fixed">
+<colgroup>
+<col class="column135" />
+<col />
+</colgroup>
+<tbody>
+<tr><th>Class:</th><td>Moq.Mock</td></tr>
+<tr><th>Assembly:</th><td>Moq</td></tr>
+<tr><th>File(s):</th><td><a href="#Cprojectsmoq4SourceInterceptionMockcs" data-ng-click="navigateToHash('#Cprojectsmoq4SourceInterceptionMockcs')">C:\projects\moq4\Source\Interception\Mock.cs</a><br /><a href="#Cprojectsmoq4SourceLinqMockcs" data-ng-click="navigateToHash('#Cprojectsmoq4SourceLinqMockcs')">C:\projects\moq4\Source\Linq\Mock.cs</a><br /><a href="#Cprojectsmoq4SourceMockcs" data-ng-click="navigateToHash('#Cprojectsmoq4SourceMockcs')">C:\projects\moq4\Source\Mock.cs</a><br /><a href="#Cprojectsmoq4SourceObsoleteMockLegacycs" data-ng-click="navigateToHash('#Cprojectsmoq4SourceObsoleteMockLegacycs')">C:\projects\moq4\Source\Obsolete\Mock.Legacy.cs</a></td></tr>
+<tr><th>Covered lines:</th><td>38</td></tr>
+<tr><th>Uncovered lines:</th><td>481</td></tr>
+<tr><th>Coverable lines:</th><td>519</td></tr>
+<tr><th>Total lines:</th><td>0</td></tr>
+<tr><th>Line coverage:</th><td>7.3%</td></tr>
+<tr><th>Branch coverage:</th><td>5%</td></tr>
+</tbody>
+</table>
+<h1>Metrics</h1>
+<table class="overview table-fixed">
+<thead><tr><th>Method</th><th>Cyclomatic complexity <a href="https://en.wikipedia.org/wiki/Cyclomatic_complexity" class="info">&nbsp;</a></th><th>NPath complexity <a href="https://modess.io/npath-complexity-cyclomatic-complexity-explained" class="info">&nbsp;</a></th><th>Sequence coverage <a href="https://en.wikipedia.org/wiki/Code_coverage" class="info">&nbsp;</a></th><th>Branch coverage <a href="https://en.wikipedia.org/wiki/Code_coverage" class="info">&nbsp;</a></th></tr></thead>
+<tbody>
+<tr><td title="System.Void Moq.Mock::Moq.IInterceptor.Intercept(Moq.Invocation)">Moq.IInterceptor.Intercept(...)</td><td>3</td><td>2</td><td>100</td><td>100</td></tr>
+<tr><td title="System.Void Moq.Mock::.cctor()">.cctor()</td><td>1</td><td>0</td><td>100</td><td>100</td></tr>
+<tr><td title="T Moq.Mock::Of()">Of()</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="T Moq.Mock::Of(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,System.Boolean&gt;&gt;)">Of(...)</td><td>3</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::.ctor()">.ctor()</td><td>1</td><td>0</td><td>100</td><td>100</td></tr>
+<tr><td title="Moq.Mock`1&lt;T&gt; Moq.Mock::Get(T)">Get(...)</td><td>8</td><td>32</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::Verify(Moq.Mock[])">Verify(...)</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::VerifyAll(Moq.Mock[])">VerifyAll(...)</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::Verify()">Verify()</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Boolean Moq.Mock::TryVerify(Moq.Diagnostics.Errors.UnmatchedSetups&amp;)">TryVerify(...)</td><td>6</td><td>4</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::VerifyAll()">VerifyAll()</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Boolean Moq.Mock::TryVerifyAll(Moq.Diagnostics.Errors.UnmatchedSetups&amp;)">TryVerifyAll(...)</td><td>6</td><td>4</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::Verify(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Action`1&lt;T&gt;&gt;,Moq.Times,System.String)">Verify(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::Verify(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TResult&gt;&gt;,Moq.Times,System.String)">Verify(...)</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::VerifyGet(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Times,System.String)">VerifyGet(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::VerifySet(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Times,System.String)">VerifySet(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Boolean Moq.Mock::AreSameMethod(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)">AreSameMethod(...)</td><td>5</td><td>16</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::VerifyNoOtherCalls(Moq.Mock)">VerifyNoOtherCalls(...)</td><td>11</td><td>32</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::VerifyCalls(Moq.Mock,Moq.MethodCall,System.Linq.Expressions.Expression,Moq.Times)">VerifyCalls(...)</td><td>3</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::ThrowVerifyException(Moq.MethodCall,System.Collections.Generic.IEnumerable`1&lt;Moq.MethodCall&gt;,System.Collections.Generic.IEnumerable`1&lt;Moq.Invocation&gt;,System.Linq.Expressions.Expression,Moq.Times,System.Int32)">ThrowVerifyException(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.String Moq.Mock::FormatSetupsInfo(System.Collections.Generic.IEnumerable`1&lt;Moq.MethodCall&gt;)">FormatSetupsInfo(...)</td><td>3</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.String Moq.Mock::FormatInvocations(System.Collections.Generic.IEnumerable`1&lt;Moq.Invocation&gt;)">FormatInvocations(...)</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.MethodCall`1&lt;T&gt; Moq.Mock::Setup(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Action`1&lt;T&gt;&gt;,Moq.Condition)">Setup(...)</td><td>1</td><td>0</td><td>100</td><td>100</td></tr>
+<tr><td title="Moq.MethodCall`1&lt;T&gt; Moq.Mock::SetupPexProtected(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Action`1&lt;T&gt;&gt;,Moq.Condition)">SetupPexProtected(...)</td><td>1</td><td>0</td><td>100</td><td>100</td></tr>
+<tr><td title="Moq.MethodCallReturn`2&lt;T,TResult&gt; Moq.Mock::Setup(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TResult&gt;&gt;,Moq.Condition)">Setup(...)</td><td>1</td><td>0</td><td>100</td><td>100</td></tr>
+<tr><td title="Moq.MethodCallReturn`2&lt;T,TResult&gt; Moq.Mock::SetupPexProtected(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TResult&gt;&gt;,Moq.Condition)">SetupPexProtected(...)</td><td>2</td><td>2</td><td>88.89</td><td>66.67</td></tr>
+<tr><td title="Moq.MethodCallReturn`2&lt;T,TProperty&gt; Moq.Mock::SetupGet(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Condition)">SetupGet(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.MethodCallReturn`2&lt;T,TProperty&gt; Moq.Mock::SetupGetPexProtected(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Condition)">SetupGetPexProtected(...)</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.SetterMethodCall`2&lt;T,TProperty&gt; Moq.Mock::SetupSet(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)">SetupSet(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.SetterMethodCall`2&lt;T,TProperty&gt; Moq.Mock::SetupSetPexProtected(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)">SetupSetPexProtected(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.MethodCall`1&lt;T&gt; Moq.Mock::SetupSet(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)">SetupSet(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.MethodCall`1&lt;T&gt; Moq.Mock::SetupSetPexProtected(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)">SetupSetPexProtected(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.SetterMethodCall`2&lt;T,TProperty&gt; Moq.Mock::SetupSet(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;)">SetupSet(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="TCall Moq.Mock::SetupSetImpl(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,System.Func`5&lt;Moq.Mock,System.Linq.Expressions.Expression,System.Reflection.MethodInfo,System.Linq.Expressions.Expression[],TCall&gt;)">SetupSetImpl(...)</td><td>8</td><td>64</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Linq.Expressions.Expression Moq.Mock::GetValueExpression(System.Object,System.Type)">GetValueExpression(...)</td><td>3</td><td>4</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.Language.Flow.SetupSequencePhrase`1&lt;TResult&gt; Moq.Mock::SetupSequence(Moq.Mock,System.Linq.Expressions.LambdaExpression)">SetupSequence(...)</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.Language.Flow.SetupSequencePhrase Moq.Mock::SetupSequence(Moq.Mock,System.Linq.Expressions.LambdaExpression)">SetupSequence(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::SetupAllProperties(Moq.Mock)">SetupAllProperties(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::SetupAllPropertiesPexProtected(Moq.Mock,Moq.DefaultValueProvider)">SetupAllPropertiesPexProtected(...)</td><td>5</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Linq.Expressions.Expression Moq.Mock::GetPropertyExpression(System.Type,System.Reflection.PropertyInfo)">GetPropertyExpression(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.Mock Moq.Mock::GetTargetMock(System.Linq.Expressions.Expression,Moq.Mock)">GetTargetMock(...)</td><td>2</td><td>2</td><td>33.33</td><td>66.67</td></tr>
+<tr><td title="System.Void Moq.Mock::ThrowIfPropertyNotWritable(System.Reflection.PropertyInfo)">ThrowIfPropertyNotWritable(...)</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::ThrowIfPropertyNotReadable(System.Reflection.PropertyInfo)">ThrowIfPropertyNotReadable(...)</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::ThrowIfSetupMethodNotVisibleToProxyFactory(System.Reflection.MethodInfo)">ThrowIfSetupMethodNotVisibleToProxyFactory(...)</td><td>2</td><td>2</td><td>66.67</td><td>66.67</td></tr>
+<tr><td title="System.Void Moq.Mock::ThrowIfSetupExpressionInvolvesUnsupportedMember(System.Linq.Expressions.Expression,System.Reflection.MethodInfo)">ThrowIfSetupExpressionInvolvesUnsupportedMember(...)</td><td>4</td><td>8</td><td>60</td><td>42.86</td></tr>
+<tr><td title="System.Void Moq.Mock::ThrowIfVerifyExpressionInvolvesUnsupportedMember(System.Linq.Expressions.Expression,System.Reflection.MethodInfo)">ThrowIfVerifyExpressionInvolvesUnsupportedMember(...)</td><td>4</td><td>8</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::DoRaise(System.Reflection.EventInfo,System.EventArgs)">DoRaise(...)</td><td>3</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::DoRaise(System.Reflection.EventInfo,System.Object[])">DoRaise(...)</td><td>3</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.Mock`1&lt;TInterface&gt; Moq.Mock::As()">As()</td><td>5</td><td>16</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Boolean Moq.Mock::ImplementsInterface(System.Type)">ImplementsInterface(...)</td><td>2</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::SetReturnsDefault(TReturn)">SetReturnsDefault(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Object Moq.Mock::GetDefaultValue(System.Reflection.MethodInfo,Moq.DefaultValueProvider)">GetDefaultValue(...)</td><td>4</td><td>8</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Object Moq.Mock::TryUnwrapResultFromCompletedTaskRecursively(System.Object)">TryUnwrapResultFromCompletedTaskRecursively(...)</td><td>6</td><td>32</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock/FluentMockVisitor::.ctor(System.Linq.Expressions.Expression,Moq.Mock)">.ctor(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Linq.Expressions.Expression Moq.Mock/FluentMockVisitor::Accept(System.Linq.Expressions.Expression,Moq.Mock)">Accept(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Linq.Expressions.Expression Moq.Mock/FluentMockVisitor::Accept()">Accept()</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Linq.Expressions.Expression Moq.Mock/FluentMockVisitor::VisitParameter(System.Linq.Expressions.ParameterExpression)">VisitParameter(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Linq.Expressions.Expression Moq.Mock/FluentMockVisitor::VisitMethodCall(System.Linq.Expressions.MethodCallExpression)">VisitMethodCall(...)</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Linq.Expressions.Expression Moq.Mock/FluentMockVisitor::VisitMember(System.Linq.Expressions.MemberExpression)">VisitMember(...)</td><td>6</td><td>16</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Linq.Expressions.Expression Moq.Mock/FluentMockVisitor::TranslateFluent(System.Type,System.Type,System.Reflection.MethodInfo,System.Linq.Expressions.Expression,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.Expression)">TranslateFluent(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Reflection.MethodInfo Moq.Mock/FluentMockVisitor::GetTargetMethod(System.Type,System.Type)">GetTargetMethod(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock/FluentMockVisitor::.cctor()">.cctor()</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="Moq.SetterMethodCall`2&lt;T,TProperty&gt; Moq.Mock::SetupSet(Moq.Mock,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,TProperty)">SetupSet(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::VerifySet(Moq.Mock,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Times,System.String)">VerifySet(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td title="System.Void Moq.Mock::VerifySet(Moq.Mock,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,TProperty,Moq.Times,System.String)">VerifySet(...)</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+</tbody>
+</table>
+<h1>File(s)</h1>
+<h2 id="Cprojectsmoq4SourceInterceptionMockcs">C:\projects\moq4\Source\Interception\Mock.cs</h2>
+<p> File &#39;C:\projects\moq4\Source\Interception\Mock.cs&#39; does not exist (any more).</p>
+<h2 id="Cprojectsmoq4SourceLinqMockcs">C:\projects\moq4\Source\Linq\Mock.cs</h2>
+<p> File &#39;C:\projects\moq4\Source\Linq\Mock.cs&#39; does not exist (any more).</p>
+<h2 id="Cprojectsmoq4SourceMockcs">C:\projects\moq4\Source\Mock.cs</h2>
+<p> File &#39;C:\projects\moq4\Source\Mock.cs&#39; does not exist (any more).</p>
+<h2 id="Cprojectsmoq4SourceObsoleteMockLegacycs">C:\projects\moq4\Source\Obsolete\Mock.Legacy.cs</h2>
+<p> File &#39;C:\projects\moq4\Source\Obsolete\Mock.Legacy.cs&#39; does not exist (any more).</p>
+<div class="footer">Generated by: ReportGenerator 2.5.1.0<br />31-May-18 - 6:58:32 PM<br /><a href="https://github.com/danielpalme/ReportGenerator">GitHub</a> | <a href="http://www.palmmedia.de">www.palmmedia.de</a></div></div>
+<div class="containerright">
+<div class="containerrightfixed">
+<h1>Methods/Properties</h1>
+<a class="method" href="#file0_line45" data-ng-click="navigateToHash('#file0_line45')" title=".cctor()">.cctor()</a><br />
+<a class="method" href="#file0_line56" data-ng-click="navigateToHash('#file0_line56')" title="Moq.IInterceptor.Intercept(Moq.Invocation)">Moq.IInterceptor.Intercept(Moq.Invocation)</a><br />
+<a class="method" href="#file1_line60" data-ng-click="navigateToHash('#file1_line60')" title="Of()">Of()</a><br />
+<a class="method" href="#file1_line72" data-ng-click="navigateToHash('#file1_line72')" title="Of(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,System.Boolean&gt;&gt;)">Of(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,System.Boolean&gt;&gt;)</a><br />
+<a class="method" href="#file2_line63" data-ng-click="navigateToHash('#file2_line63')" title=".ctor()">.ctor()</a><br />
+<a class="method" href="#file2_line70" data-ng-click="navigateToHash('#file2_line70')" title="Get(T)">Get(T)</a><br />
+<a class="method" href="#file2_line126" data-ng-click="navigateToHash('#file2_line126')" title="Verify(Moq.Mock[])">Verify(Moq.Mock[])</a><br />
+<a class="method" href="#file2_line135" data-ng-click="navigateToHash('#file2_line135')" title="VerifyAll(Moq.Mock[])">VerifyAll(Moq.Mock[])</a><br />
+<a class="property" href="#file2_line160" data-ng-click="navigateToHash('#file2_line160')" title="DefaultValue()">DefaultValue()</a><br />
+<a class="property" href="#file2_line164" data-ng-click="navigateToHash('#file2_line164')" title="DefaultValue(Moq.DefaultValue)">DefaultValue(Moq.DefaultValue)</a><br />
+<a class="property" href="#file2_line185" data-ng-click="navigateToHash('#file2_line185')" title="Object()">Object()</a><br />
+<a class="method" href="#file2_line243" data-ng-click="navigateToHash('#file2_line243')" title="Verify()">Verify()</a><br />
+<a class="method" href="#file2_line251" data-ng-click="navigateToHash('#file2_line251')" title="TryVerify(Moq.Diagnostics.Errors.UnmatchedSetups&amp;)">TryVerify(Moq.Diagnostics.Errors.UnmatchedSetups&amp;)</a><br />
+<a class="method" href="#file2_line273" data-ng-click="navigateToHash('#file2_line273')" title="VerifyAll()">VerifyAll()</a><br />
+<a class="method" href="#file2_line281" data-ng-click="navigateToHash('#file2_line281')" title="TryVerifyAll(Moq.Diagnostics.Errors.UnmatchedSetups&amp;)">TryVerifyAll(Moq.Diagnostics.Errors.UnmatchedSetups&amp;)</a><br />
+<a class="method" href="#file2_line307" data-ng-click="navigateToHash('#file2_line307')" title="Verify(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Action`1&lt;T&gt;&gt;,Moq.Times,System.String)">Verify(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Action`1&lt;T&gt;&gt;,Moq.Times,System.String)</a><br />
+<a class="method" href="#file2_line323" data-ng-click="navigateToHash('#file2_line323')" title="Verify(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TResult&gt;&gt;,Moq.Times,System.String)">Verify(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TResult&gt;&gt;,Moq.Times,System.String)</a><br />
+<a class="method" href="#file2_line349" data-ng-click="navigateToHash('#file2_line349')" title="VerifyGet(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Times,System.String)">VerifyGet(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Times,System.String)</a><br />
+<a class="method" href="#file2_line366" data-ng-click="navigateToHash('#file2_line366')" title="VerifySet(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Times,System.String)">VerifySet(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Times,System.String)</a><br />
+<a class="method" href="#file2_line380" data-ng-click="navigateToHash('#file2_line380')" title="AreSameMethod(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)">AreSameMethod(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)</a><br />
+<a class="method" href="#file2_line393" data-ng-click="navigateToHash('#file2_line393')" title="VerifyNoOtherCalls(Moq.Mock)">VerifyNoOtherCalls(Moq.Mock)</a><br />
+<a class="method" href="#file2_line445" data-ng-click="navigateToHash('#file2_line445')" title="VerifyCalls(Moq.Mock,Moq.MethodCall,System.Linq.Expressions.Expression,Moq.Times)">VerifyCalls(Moq.Mock,Moq.MethodCall,System.Linq.Expressions.Expression,Moq.Times)</a><br />
+<a class="method" href="#file2_line470" data-ng-click="navigateToHash('#file2_line470')" title="ThrowVerifyException(Moq.MethodCall,System.Collections.Generic.IEnumerable`1&lt;Moq.MethodCall&gt;,System.Collections.Generic.IEnumerable`1&lt;Moq.Invocation&gt;,System.Linq.Expressions.Expression,Moq.Times,System.Int32)">ThrowVerifyException(Moq.MethodCall,System.Collections.Generic.IEnumerable`1&lt;Moq.MethodCall&gt;,System.Collections.Generic.IEnumerable`1&lt;Moq.Invocation&gt;,System.Linq.Expressions.Expression,Moq.Times,System.Int32)</a><br />
+<a class="method" href="#file2_line478" data-ng-click="navigateToHash('#file2_line478')" title="FormatSetupsInfo(System.Collections.Generic.IEnumerable`1&lt;Moq.MethodCall&gt;)">FormatSetupsInfo(System.Collections.Generic.IEnumerable`1&lt;Moq.MethodCall&gt;)</a><br />
+<a class="method" href="#file2_line489" data-ng-click="navigateToHash('#file2_line489')" title="FormatInvocations(System.Collections.Generic.IEnumerable`1&lt;Moq.Invocation&gt;)">FormatInvocations(System.Collections.Generic.IEnumerable`1&lt;Moq.Invocation&gt;)</a><br />
+<a class="method" href="#file2_line501" data-ng-click="navigateToHash('#file2_line501')" title="Setup(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Action`1&lt;T&gt;&gt;,Moq.Condition)">Setup(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Action`1&lt;T&gt;&gt;,Moq.Condition)</a><br />
+<a class="method" href="#file2_line507" data-ng-click="navigateToHash('#file2_line507')" title="SetupPexProtected(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Action`1&lt;T&gt;&gt;,Moq.Condition)">SetupPexProtected(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Action`1&lt;T&gt;&gt;,Moq.Condition)</a><br />
+<a class="method" href="#file2_line526" data-ng-click="navigateToHash('#file2_line526')" title="Setup(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TResult&gt;&gt;,Moq.Condition)">Setup(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TResult&gt;&gt;,Moq.Condition)</a><br />
+<a class="method" href="#file2_line535" data-ng-click="navigateToHash('#file2_line535')" title="SetupPexProtected(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TResult&gt;&gt;,Moq.Condition)">SetupPexProtected(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TResult&gt;&gt;,Moq.Condition)</a><br />
+<a class="method" href="#file2_line559" data-ng-click="navigateToHash('#file2_line559')" title="SetupGet(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Condition)">SetupGet(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Condition)</a><br />
+<a class="method" href="#file2_line568" data-ng-click="navigateToHash('#file2_line568')" title="SetupGetPexProtected(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Condition)">SetupGetPexProtected(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Condition)</a><br />
+<a class="method" href="#file2_line596" data-ng-click="navigateToHash('#file2_line596')" title="SetupSet(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)">SetupSet(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)</a><br />
+<a class="method" href="#file2_line605" data-ng-click="navigateToHash('#file2_line605')" title="SetupSetPexProtected(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)">SetupSetPexProtected(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)</a><br />
+<a class="method" href="#file2_line620" data-ng-click="navigateToHash('#file2_line620')" title="SetupSet(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)">SetupSet(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)</a><br />
+<a class="method" href="#file2_line626" data-ng-click="navigateToHash('#file2_line626')" title="SetupSetPexProtected(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)">SetupSetPexProtected(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,Moq.Condition)</a><br />
+<a class="method" href="#file2_line642" data-ng-click="navigateToHash('#file2_line642')" title="SetupSet(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;)">SetupSet(Moq.Mock`1&lt;T&gt;,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;)</a><br />
+<a class="method" href="#file2_line664" data-ng-click="navigateToHash('#file2_line664')" title="SetupSetImpl(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,System.Func`5&lt;Moq.Mock,System.Linq.Expressions.Expression,System.Reflection.MethodInfo,System.Linq.Expressions.Expression[],TCall&gt;)">SetupSetImpl(Moq.Mock`1&lt;T&gt;,System.Action`1&lt;T&gt;,System.Func`5&lt;Moq.Mock,System.Linq.Expressions.Expression,System.Reflection.MethodInfo,System.Linq.Expressions.Expression[],TCall&gt;)</a><br />
+<a class="method" href="#file2_line751" data-ng-click="navigateToHash('#file2_line751')" title="GetValueExpression(System.Object,System.Type)">GetValueExpression(System.Object,System.Type)</a><br />
+<a class="method" href="#file2_line762" data-ng-click="navigateToHash('#file2_line762')" title="SetupSequence(Moq.Mock,System.Linq.Expressions.LambdaExpression)">SetupSequence(Moq.Mock,System.Linq.Expressions.LambdaExpression)</a><br />
+<a class="method" href="#file2_line788" data-ng-click="navigateToHash('#file2_line788')" title="SetupSequence(Moq.Mock,System.Linq.Expressions.LambdaExpression)">SetupSequence(Moq.Mock,System.Linq.Expressions.LambdaExpression)</a><br />
+<a class="method" href="#file2_line798" data-ng-click="navigateToHash('#file2_line798')" title="SetupAllProperties(Moq.Mock)">SetupAllProperties(Moq.Mock)</a><br />
+<a class="method" href="#file2_line809" data-ng-click="navigateToHash('#file2_line809')" title="SetupAllPropertiesPexProtected(Moq.Mock,Moq.DefaultValueProvider)">SetupAllPropertiesPexProtected(Moq.Mock,Moq.DefaultValueProvider)</a><br />
+<a class="method" href="#file2_line877" data-ng-click="navigateToHash('#file2_line877')" title="GetPropertyExpression(System.Type,System.Reflection.PropertyInfo)">GetPropertyExpression(System.Type,System.Reflection.PropertyInfo)</a><br />
+<a class="method" href="#file2_line887" data-ng-click="navigateToHash('#file2_line887')" title="GetTargetMock(System.Linq.Expressions.Expression,Moq.Mock)">GetTargetMock(System.Linq.Expressions.Expression,Moq.Mock)</a><br />
+<a class="method" href="#file2_line904" data-ng-click="navigateToHash('#file2_line904')" title="ThrowIfPropertyNotWritable(System.Reflection.PropertyInfo)">ThrowIfPropertyNotWritable(System.Reflection.PropertyInfo)</a><br />
+<a class="method" href="#file2_line920" data-ng-click="navigateToHash('#file2_line920')" title="ThrowIfPropertyNotReadable(System.Reflection.PropertyInfo)">ThrowIfPropertyNotReadable(System.Reflection.PropertyInfo)</a><br />
+<a class="method" href="#file2_line932" data-ng-click="navigateToHash('#file2_line932')" title="ThrowIfSetupMethodNotVisibleToProxyFactory(System.Reflection.MethodInfo)">ThrowIfSetupMethodNotVisibleToProxyFactory(System.Reflection.MethodInfo)</a><br />
+<a class="method" href="#file2_line945" data-ng-click="navigateToHash('#file2_line945')" title="ThrowIfSetupExpressionInvolvesUnsupportedMember(System.Linq.Expressions.Expression,System.Reflection.MethodInfo)">ThrowIfSetupExpressionInvolvesUnsupportedMember(System.Linq.Expressions.Expression,System.Reflection.MethodInfo)</a><br />
+<a class="method" href="#file2_line963" data-ng-click="navigateToHash('#file2_line963')" title="ThrowIfVerifyExpressionInvolvesUnsupportedMember(System.Linq.Expressions.Expression,System.Reflection.MethodInfo)">ThrowIfVerifyExpressionInvolvesUnsupportedMember(System.Linq.Expressions.Expression,System.Reflection.MethodInfo)</a><br />
+<a class="method" href="#file2_line981" data-ng-click="navigateToHash('#file2_line981')" title=".cctor()">.cctor()</a><br />
+<a class="method" href="#file2_line989" data-ng-click="navigateToHash('#file2_line989')" title=".ctor(System.Linq.Expressions.Expression,Moq.Mock)">.ctor(System.Linq.Expressions.Expression,Moq.Mock)</a><br />
+<a class="method" href="#file2_line997" data-ng-click="navigateToHash('#file2_line997')" title="Accept(System.Linq.Expressions.Expression,Moq.Mock)">Accept(System.Linq.Expressions.Expression,Moq.Mock)</a><br />
+<a class="method" href="#file2_line1002" data-ng-click="navigateToHash('#file2_line1002')" title="Accept()">Accept()</a><br />
+<a class="method" href="#file2_line1010" data-ng-click="navigateToHash('#file2_line1010')" title="VisitParameter(System.Linq.Expressions.ParameterExpression)">VisitParameter(System.Linq.Expressions.ParameterExpression)</a><br />
+<a class="method" href="#file2_line1015" data-ng-click="navigateToHash('#file2_line1015')" title="VisitMethodCall(System.Linq.Expressions.MethodCallExpression)">VisitMethodCall(System.Linq.Expressions.MethodCallExpression)</a><br />
+<a class="method" href="#file2_line1035" data-ng-click="navigateToHash('#file2_line1035')" title="VisitMember(System.Linq.Expressions.MemberExpression)">VisitMember(System.Linq.Expressions.MemberExpression)</a><br />
+<a class="method" href="#file2_line1075" data-ng-click="navigateToHash('#file2_line1075')" title="TranslateFluent(System.Type,System.Type,System.Reflection.MethodInfo,System.Linq.Expressions.Expression,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.Expression)">TranslateFluent(System.Type,System.Type,System.Reflection.MethodInfo,System.Linq.Expressions.Expression,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.Expression)</a><br />
+<a class="method" href="#file2_line1091" data-ng-click="navigateToHash('#file2_line1091')" title="GetTargetMethod(System.Type,System.Type)">GetTargetMethod(System.Type,System.Type)</a><br />
+<a class="method" href="#file2_line1106" data-ng-click="navigateToHash('#file2_line1106')" title="DoRaise(System.Reflection.EventInfo,System.EventArgs)">DoRaise(System.Reflection.EventInfo,System.EventArgs)</a><br />
+<a class="method" href="#file2_line1123" data-ng-click="navigateToHash('#file2_line1123')" title="DoRaise(System.Reflection.EventInfo,System.Object[])">DoRaise(System.Reflection.EventInfo,System.Object[])</a><br />
+<a class="method" href="#file2_line1145" data-ng-click="navigateToHash('#file2_line1145')" title="As()">As()</a><br />
+<a class="method" href="#file2_line1177" data-ng-click="navigateToHash('#file2_line1177')" title="ImplementsInterface(System.Type)">ImplementsInterface(System.Type)</a><br />
+<a class="method" href="#file2_line1194" data-ng-click="navigateToHash('#file2_line1194')" title="SetReturnsDefault(TReturn)">SetReturnsDefault(TReturn)</a><br />
+<a class="method" href="#file2_line1203" data-ng-click="navigateToHash('#file2_line1203')" title="GetDefaultValue(System.Reflection.MethodInfo,Moq.DefaultValueProvider)">GetDefaultValue(System.Reflection.MethodInfo,Moq.DefaultValueProvider)</a><br />
+<a class="method" href="#file2_line1234" data-ng-click="navigateToHash('#file2_line1234')" title="TryUnwrapResultFromCompletedTaskRecursively(System.Object)">TryUnwrapResultFromCompletedTaskRecursively(System.Object)</a><br />
+<a class="method" href="#file3_line55" data-ng-click="navigateToHash('#file3_line55')" title="SetupSet(Moq.Mock,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,TProperty)">SetupSet(Moq.Mock,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,TProperty)</a><br />
+<a class="method" href="#file3_line76" data-ng-click="navigateToHash('#file3_line76')" title="VerifySet(Moq.Mock,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Times,System.String)">VerifySet(Moq.Mock,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,Moq.Times,System.String)</a><br />
+<a class="method" href="#file3_line95" data-ng-click="navigateToHash('#file3_line95')" title="VerifySet(Moq.Mock,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,TProperty,Moq.Times,System.String)">VerifySet(Moq.Mock,System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;T,TProperty&gt;&gt;,TProperty,Moq.Times,System.String)</a><br />
+<br/></div>
+</div></div>
+<script type="text/javascript" src="combined.js"></script>
+</body></html>
