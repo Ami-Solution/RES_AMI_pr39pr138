@@ -40,9 +40,9 @@ namespace AMI_Device
 			CreationTime = DateTime.Now;
 		}
 
-		public AMICharacteristics(string device_code, string agregator_code)
+		public AMICharacteristics(string device_code, string agregator_code,bool added = false)
 		{
-			this.Added = true;
+			this.Added = added;
 			this.Device_code = device_code;
 			this.AgregatorID = agregator_code;
 			string id = agregator_code.Substring(9);

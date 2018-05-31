@@ -119,8 +119,6 @@ namespace AMI_Agregator
 			return retVal;
 		}
 
-		
-
 		public string RemoveDevice(string agregator_code, string device_code)
 		{
 			AMIAgregator ag = MainWindow.agregators[agregator_code];
@@ -187,7 +185,7 @@ namespace AMI_Agregator
 			}
 		}
 
-		private void DeleteFromLocalDatabase(string agregator_code)
+		public void DeleteFromLocalDatabase(string agregator_code)
 		{
 			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))

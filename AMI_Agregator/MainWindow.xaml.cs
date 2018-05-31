@@ -65,28 +65,7 @@ namespace AMI_Agregator
 					}
 				}
 
-				cmd.CommandText = "SELECT Agregator_Code, Device_Code FROM Devices_Table";
-
-				//sada izaberemo sve uredjaje koji pripadaju odredjenim agregatima, i gledamo da li smo ih vec dodali u funkciji
-				//koja ucitava uredjaje iz lokalne baze gde se nalaze neposlati podaci
-				using (SqlDataReader rdr = cmd.ExecuteReader())
-				{
-					while (rdr.Read())
-					{
-						string agregator_code = rdr["Agregator_Code"].ToString();
-						string device_code = rdr["Device_Code"].ToString();
-
-						if (!agregators[agregator_code].Buffer.ContainsKey(device_code)) //ako agregat ne sadrzi uredjaj
-						{
-							//dodajemo mu uredjaj koji nema podataka
-							agregators[agregator_code].Buffer.Add(device_code, new Dictionary<TypeMeasurement, List<double>>());
-							agregators[agregator_code].listOfDevices.Add(device_code);
-						}
-					}
-				}
-
 			}
-
 		}
 
 		//sluzi za ucitavanje agregatora i njegovih uredjaja koji nisu poslati u globanu bazu podataka
@@ -262,6 +241,8 @@ namespace AMI_Agregator
 			if (dataGrid.SelectedItem != null)
 			{
 				KeyValuePair<string, AMIAgregator> keyValue = (KeyValuePair<string, AMIAgregator>)dataGrid.SelectedItem;
+				agregators[keyValue.Key].Proxy.SendDataToSystemDataBase(keyValue.Key, agregators[keyValue.Key].Dates, agregators[keyValue.Key].Buffer);
+				agregators[keyValue.Key].DeleteFromLocalDatabase(keyValue.Key);
 				agregators.Remove(keyValue.Key);
 				RemoveAgregatorFromDataBase(keyValue.Key);
 
