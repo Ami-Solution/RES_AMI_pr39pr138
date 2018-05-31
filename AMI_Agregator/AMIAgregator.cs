@@ -100,10 +100,10 @@ namespace AMI_Agregator
 						device_code,
 						new Dictionary<TypeMeasurement, List<double>>()
 						{
-						{ TypeMeasurement.ActivePower, new List<double>() },
-						{ TypeMeasurement.ReactivePower, new List<double>() },
-						{ TypeMeasurement.CurrentP, new List<double>() },
-						{ TypeMeasurement.Voltage, new List<double>() },
+							{ TypeMeasurement.ActivePower, new List<double>() },
+							{ TypeMeasurement.ReactivePower, new List<double>() },
+							{ TypeMeasurement.CurrentP, new List<double>() },
+							{ TypeMeasurement.Voltage, new List<double>() },
 						});
 
 					MainWindow.agregators[agregator_code].listOfDevices.Add(device_code);
@@ -185,6 +185,7 @@ namespace AMI_Agregator
 			}
 		}
 
+		//koristi se kada se brise agregat
 		public void DeleteFromLocalDatabase(string agregator_code)
 		{
 			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
@@ -201,6 +202,7 @@ namespace AMI_Agregator
 			}
 		}
 
+		//koristi se kada se brise uredjaj iz agregata
 		private void DeleteFromLocalDatabase(string agregator_code, string device_code)
 		{
 			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
@@ -257,6 +259,7 @@ namespace AMI_Agregator
 			}
 		}
 
+		//sluzi da bi ami_device mogao da pokupi podatke
 		public Dictionary<string, List<string>> AgregatorsAndTheirDevices()
 		{
 			Dictionary<string, List<string>> retList = new Dictionary<string, List<string>>();

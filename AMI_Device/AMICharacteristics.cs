@@ -40,7 +40,9 @@ namespace AMI_Device
 			CreationTime = DateTime.Now;
 		}
 
-		public AMICharacteristics(string device_code, string agregator_code,bool added = false)
+		//added = true -> sluzi ukoliko se neki uredjaj nalazio u lokalnoj bazi podataka (podaci nisi bili poslati),
+		//taj uredjaj je vec spojen sa agregatorom
+		public AMICharacteristics(string device_code, string agregator_code, bool added = false) 
 		{
 			this.Added = added;
 			this.Device_code = device_code;

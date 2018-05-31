@@ -36,7 +36,6 @@ namespace AMI_Device
 
 		public static IAMI_Agregator defaultProxy; //za pocetku konekciju koja uvek traje
 
-
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -45,9 +44,9 @@ namespace AMI_Device
 
 			Connect(); //defaultni se poziva sa ovom
 
-			LoadDevicesFromLocalDatabase();
+			LoadDevicesFromLocalDatabase(); //isto kao i kod agregatora, ucitavaju se uredjaji za koje vrednosti nisu poslate
 
-			LoadNotAddeDevices();
+			LoadNotAddeDevices(); //ucitavaju se uredjaji koji nemaju nijednu vrednost, a dodati su bili
 
 			this.DataContext = this;
 		}
@@ -146,7 +145,7 @@ namespace AMI_Device
 				AvailableAMIDevices.Remove(obj.Key);
 				dataGrid.Items.Refresh();
 				RemoveDeviceFromDataBase(obj.Key);
-				defaultProxy.RemoveDevice(obj.Value.AgregatorID, obj.Key);
+				defaultProxy.RemoveDevice(obj.Value.AgregatorID, obj.Key); //mora i agregat da obrise uredjaj iz svog bafera
 			}
 		}
 
@@ -210,6 +209,7 @@ namespace AMI_Device
 
 		}
 
+		//prilikom dodavanja uredjaja, cuva se uredjaj u posebnoj tabeli koja ima device_code - agregator_code
 		private void SaveDeviceToDataBase(string agregator_code, string device_code)
 		{
 			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
@@ -226,6 +226,7 @@ namespace AMI_Device
 			}
 		}
 
+		//prilikom brisanja uredjaja, brise se iz te tabele
 		private void RemoveDeviceFromDataBase(string device_code)
 		{
 			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
