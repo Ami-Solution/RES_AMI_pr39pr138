@@ -16,6 +16,8 @@ namespace AMI_System_Management
 {
     public class AMISystem_Management : IAMI_System_Management
     {
+		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True";
+
         public AMISystem_Management()
         {
 
@@ -28,8 +30,9 @@ namespace AMI_System_Management
             Trace.WriteLine($"Agregat: {agregator_code}, broj uredjaja u agregatu: {dateTimeList.Count()}!");
             if (buffer.Count != 0)
             {
-                string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
-                using (SqlConnection con = new SqlConnection(CS))
+				//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+				
+				using (SqlConnection con = new SqlConnection(CS))
                 {
                     con.Open();
                     SqlCommand cmd;
@@ -46,7 +49,7 @@ namespace AMI_System_Management
 
                         Trace.WriteLine($"Agregat: {agregator_code}, broj merenja uredjaja {Device_Code}: {dateTimeList[keyValue.Key].Count()}, pocetak: {DateTime.Now} !");
 
-                        string query = $"INSERT INTO AMI_Tables(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
+                        string query = $"INSERT INTO [AMI_Tables](Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
                         $"VALUES";
 
                         foreach (var pair in keyValue.Value)
@@ -107,8 +110,9 @@ namespace AMI_System_Management
         {
             List<string> retVal = new List<string>();
 
-            string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(CS))
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+
+			using (SqlConnection con = new SqlConnection(CS))
             {
                 con.Open();
                 string query = "SELECT DISTINCT(Agregator_Code) FROM AMI_Tables";
@@ -131,7 +135,7 @@ namespace AMI_System_Management
         {
             List<string> retVal = new List<string>();
 
-            string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+            //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
             using (SqlConnection con = new SqlConnection(CS))
             {
                 con.Open();
@@ -156,7 +160,7 @@ namespace AMI_System_Management
         {
             DateTime retVal = DateTime.Now;
 
-            string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+            //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
             using (SqlConnection con = new SqlConnection(CS))
             {
                 con.Open();
@@ -192,7 +196,7 @@ namespace AMI_System_Management
         {
             Dictionary<DateTime, double> retVal = new Dictionary<DateTime, double>();
 
-            string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+            //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
             using (SqlConnection con = new SqlConnection(CS))
             {
                 con.Open();
@@ -218,7 +222,7 @@ namespace AMI_System_Management
         {
             List<double> retVal = new List<double>();
 
-            string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+            //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
             using (SqlConnection con = new SqlConnection(CS))
             {
                 con.Open();
@@ -247,7 +251,7 @@ namespace AMI_System_Management
         {
             Dictionary<DateTime, List<double>> retVal = new Dictionary<DateTime, List<double>>();
 
-            string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+            //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
             using (SqlConnection con = new SqlConnection(CS))
             {
                 con.Open();

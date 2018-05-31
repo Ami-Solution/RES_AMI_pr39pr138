@@ -17,7 +17,7 @@ namespace AMI_Agregator
 
 	public class AMIAgregator : IAMI_Agregator
 	{
-
+		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
 		#region properties
 		//device_code, <TipVrednost, lista vrednosti>
 		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> Buffer { get; set; }
@@ -188,7 +188,8 @@ namespace AMI_Agregator
 		//koristi se kada se brise agregat
 		public void DeleteFromLocalDatabase(string agregator_code)
 		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();
@@ -205,7 +206,7 @@ namespace AMI_Agregator
 		//koristi se kada se brise uredjaj iz agregata
 		private void DeleteFromLocalDatabase(string agregator_code, string device_code)
 		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();
@@ -244,7 +245,7 @@ namespace AMI_Agregator
 
 			}
 
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();

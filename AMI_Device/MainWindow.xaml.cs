@@ -28,6 +28,8 @@ namespace AMI_Device
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
+
 		private static Dictionary<string, AMICharacteristics> availableAMIDevices = new Dictionary<string, AMICharacteristics>();
 
 		public static Dictionary<string, AMICharacteristics> AvailableAMIDevices { get => availableAMIDevices; set => availableAMIDevices = value; }
@@ -53,7 +55,7 @@ namespace AMI_Device
 
 		private void LoadNotAddeDevices()
 		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				SqlCommand cmd = new SqlCommand();
@@ -212,7 +214,7 @@ namespace AMI_Device
 		//prilikom dodavanja uredjaja, cuva se uredjaj u posebnoj tabeli koja ima device_code - agregator_code
 		private void SaveDeviceToDataBase(string agregator_code, string device_code)
 		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();
@@ -229,7 +231,7 @@ namespace AMI_Device
 		//prilikom brisanja uredjaja, brise se iz te tabele
 		private void RemoveDeviceFromDataBase(string device_code)
 		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();

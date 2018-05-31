@@ -16,6 +16,7 @@ namespace AMI_Agregator
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
 		//predefinisan dictionari koji sadrzi: agregator_id i sam agregator.
 		//sam agregator sadrzi svoj id, i buffer
 		//buffer je dictionari i cine ga: device_id i novi dictionari: typeMeasurment i lista vrednost
@@ -41,7 +42,7 @@ namespace AMI_Agregator
 		//sluzi za ucitavanje agregatora i njegovih uredjaja(ako ih ima) koji nemaju podatke u lokalnoj bazi podataka
 		private void LoadAgregatorsFromLocalDataBase()
 		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				SqlCommand cmd = new SqlCommand();
@@ -71,7 +72,7 @@ namespace AMI_Agregator
 		//sluzi za ucitavanje agregatora i njegovih uredjaja koji nisu poslati u globanu bazu podataka
 		private void LoadFromLocalDataBase()
 		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				SqlCommand cmd = new SqlCommand();
@@ -198,7 +199,7 @@ namespace AMI_Agregator
 		//prilikom dodavanja novo agregatora, doda se i u bazu koja sadrzi sve agregatore
 		private void SaveAgragatorToDataBase(string agregator_code)
 		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();
@@ -215,7 +216,7 @@ namespace AMI_Agregator
 		//prilikom brisanja agregatora
 		private void RemoveAgregatorFromDataBase(string agregator_code)
 		{
-			string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();
