@@ -15,9 +15,17 @@ namespace AMI_Device
 
 	public class AMICharacteristics : IAMI_Device
 	{
+		#region fields
+
 		private State status = State.OFF;
+
 		private IAMI_Agregator proxy;
+
 		private static System.Random rand = new System.Random();
+
+		#endregion fields
+
+		#region properties
 
 		public bool Added { get; set; } = false;
 
@@ -32,6 +40,10 @@ namespace AMI_Device
 		public State Status { get => status; set => status = value; }
 
 		public IAMI_Agregator Proxy { get => proxy; set => proxy = value; }
+
+		#endregion properties
+
+		#region constructors
 
 		public AMICharacteristics()
 		{
@@ -52,6 +64,10 @@ namespace AMI_Device
 
 			Measurements = new Dictionary<Storage.TypeMeasurement, double>();
 		}
+
+		#endregion constructors
+
+		#region methods
 
 		public void Connect(int id)
 		{
@@ -107,6 +123,8 @@ namespace AMI_Device
 			Measurements.Add(TypeMeasurement.ActivePower, P);
 			Measurements.Add(TypeMeasurement.ReactivePower, S);
 		}
+
+		#endregion methods
 
 	}
 }

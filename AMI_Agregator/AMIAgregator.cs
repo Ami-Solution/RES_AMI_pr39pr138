@@ -17,7 +17,8 @@ namespace AMI_Agregator
 
 	public class AMIAgregator : IAMI_Agregator
 	{
-		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
+		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
+		
 		#region properties
 		//device_code, <TipVrednost, lista vrednosti>
 		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> Buffer { get; set; }
@@ -33,7 +34,7 @@ namespace AMI_Agregator
 
 		public IAMI_System_Management Proxy { get; set; }
 
-		public List<string> listOfDevices { get; set; }
+		public List<string> ListOfDevices { get; set; }
 
 		#endregion properties
 
@@ -51,9 +52,9 @@ namespace AMI_Agregator
 
 		public AMIAgregator(string name) 
 		{
-			this.Agregator_code = name;
+			Agregator_code = name;
 			Dates = new Dictionary<string, List<DateTime>>();
-			listOfDevices = new List<string>();
+			ListOfDevices = new List<string>();
 
 			var binding = new NetTcpBinding();
 			string address = $"net.tcp://localhost:8004/IAMI_System_Management";
@@ -63,9 +64,11 @@ namespace AMI_Agregator
 			InitialiseBuffer(Buffer);
 			CreateHost(this.Host);
 		}
+
 		#endregion constructors
 
 		#region methods
+
 		private void CreateHost(ServiceHost host)
 		{
 			host = new ServiceHost(typeof(AMIAgregator));
@@ -88,32 +91,40 @@ namespace AMI_Agregator
 		{
 			string retVal = "ADDED";
 
-			if (MainWindow.agregators[agregator_code].State == State.ON)
+			if (MainWindow.agregators.ContainsKey(agregator_code))
 			{
-				if (MainWindow.agregators[agregator_code].Buffer.ContainsKey(device_code))
+
+				if (MainWindow.agregators[agregator_code].State == State.ON)
 				{
-					retVal = "DUPLICATE"; //ako postoji vec devajs sa istim kodom u agregatoru
-				}
-				else
-				{
-					MainWindow.agregators[agregator_code].Buffer.Add(
-						device_code,
-						new Dictionary<TypeMeasurement, List<double>>()
-						{
+					if (MainWindow.agregators[agregator_code].Buffer.ContainsKey(device_code))
+					{
+						retVal = "DUPLICATE"; //ako postoji vec devajs sa istim kodom u agregatoru
+					}
+					else
+					{
+						MainWindow.agregators[agregator_code].Buffer.Add(
+							device_code,
+							new Dictionary<TypeMeasurement, List<double>>()
+							{
 							{ TypeMeasurement.ActivePower, new List<double>() },
 							{ TypeMeasurement.ReactivePower, new List<double>() },
 							{ TypeMeasurement.CurrentP, new List<double>() },
 							{ TypeMeasurement.Voltage, new List<double>() },
-						});
+							});
 
-					MainWindow.agregators[agregator_code].listOfDevices.Add(device_code);
-					MainWindow.agregators[agregator_code].Dates.Add(device_code, new List<DateTime>());
+						MainWindow.agregators[agregator_code].ListOfDevices.Add(device_code);
+						MainWindow.agregators[agregator_code].Dates.Add(device_code, new List<DateTime>());
 
+					}
+				}
+				else //ako je iskljucen agregat
+				{
+					retVal = "OFF";
 				}
 			}
-			else //ako je iskljucen agregat
+			else
 			{
-				retVal = "OFF";
+				retVal = "DELETED";
 			}
 
 			return retVal;
@@ -121,14 +132,19 @@ namespace AMI_Agregator
 
 		public string RemoveDevice(string agregator_code, string device_code)
 		{
-			AMIAgregator ag = MainWindow.agregators[agregator_code];
-			ag.Proxy.SendDataToSystemDataBase(ag.Agregator_code, ag.Dates, ag.Buffer); //prinudno slanje podataka u bazu, kada se brise uredjaj
+			if (MainWindow.agregators.ContainsKey(agregator_code)) //ako obrisemo agregator, ne mozemo obrisati uredjaj iz obrisanog agregatora
+			{
+				AMIAgregator ag = MainWindow.agregators[agregator_code];
+				ag.Proxy.SendDataToSystemDataBase(ag.Agregator_code, ag.Dates, ag.Buffer); //prinudno slanje podataka u bazu, kada se brise uredjaj
 
-			DeleteFromLocalDatabase(agregator_code, device_code);
-			ag.Buffer.Remove(device_code);
-			ag.listOfDevices.Remove(device_code);
-			ag.Dates.Remove(device_code);
+				DeleteFromLocalDatabase(agregator_code, device_code);
+				//ag.Buffer.Remove(device_code);
+				ag.ListOfDevices.Remove(device_code);
+				//ag.Dates.Remove(device_code);
 
+				MainWindow.agregators.Remove(agregator_code);
+
+			}
 			return "DELETED";
 		}
 
@@ -158,8 +174,11 @@ namespace AMI_Agregator
 
 		public void SendToSystemMenagement(AMIAgregator ag)
 		{
-			while (ag.State == State.ON)
+			while (MainWindow.agregators.ContainsKey(ag.Agregator_code)) 
 			{
+				if (ag.State == State.OFF)
+					break;
+
 				Thread.Sleep(5000);
 
 				//ako postoji agregat koji ima uredjaj u sebi, salje podatke
@@ -251,7 +270,7 @@ namespace AMI_Agregator
 				con.Open();
 				SqlCommand cmd;
 
-				string query = $"INSERT INTO AMI_LocalData_Table(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
+				string query = $"INSERT INTO [AMI_LocalData_Table](Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
 				$"VALUES('{agregator_code}', '{device_code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')";
 
 				cmd = new SqlCommand(query, con);
@@ -267,7 +286,7 @@ namespace AMI_Agregator
 
 			foreach (var ID in MainWindow.agregators)
 			{
-				retList.Add(ID.Key, MainWindow.agregators[ID.Key].listOfDevices);
+				retList.Add(ID.Key, MainWindow.agregators[ID.Key].ListOfDevices);
 			}
 
 			return retList;

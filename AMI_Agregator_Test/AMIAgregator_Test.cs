@@ -102,7 +102,7 @@ namespace AMI_Agregator_Test
                         { TypeMeasurement.CurrentP, new List<double>() },
                         { TypeMeasurement.Voltage, new List<double>() },
                         });
-            MainWindow.agregators[agregator_code].listOfDevices.Add(device_code);
+            MainWindow.agregators[agregator_code].ListOfDevices.Add(device_code);
             MainWindow.agregators[agregator_code].Dates.Add(device_code, new List<DateTime>());
             Dictionary<string, Dictionary<TypeMeasurement, List<double>>> oldBuffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>();
             oldBuffer.Add(

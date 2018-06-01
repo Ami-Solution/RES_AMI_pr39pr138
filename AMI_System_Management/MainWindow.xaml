@@ -4,12 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AMI_System_Management"
-		xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
 		mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="827.5">
-	<Window.Resources>
-		<local:VisibilityToCheckedConverter x:Key="VisibilityToCheckedConverter"/>
-	</Window.Resources>
+        Title="MainWindow" Height="852.5" Width="830.5">
 
 	<Grid Margin="0,0,-8,0">
 		<ComboBox x:Name="deviceComboBox" SelectionChanged="deviceComboBox_SelectionChanged" FontSize="12" Loaded="devicesLoadedComboBox_Loaded" HorizontalAlignment="Left" Margin="36,36,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
@@ -18,47 +14,176 @@
 		<ComboBox x:Name="agregatorDatesComboBox" FontSize="12" HorizontalAlignment="Left" Margin="237,123,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
 		<ComboBox x:Name="typemeasurmentDeviceComboBox" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="438,36,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
 		<ComboBox x:Name="typemeasurmentAgregatorComboBox" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="438,123,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
-		<Button x:Name="plotDeviceGraph" Click="plotDeviceGraph_Click" Content="PLOT" Margin="641,36,36,0" Height="48" VerticalAlignment="Top"/>
-		<Button x:Name="plotAgregatorSumGraph" Click="plotAgregatorGraph_Click" Content="PLOT SUM" Margin="641,146,36,0" Height="24" VerticalAlignment="Top"/>
-		<Button x:Name="plotAgregatorAvgGraph" Click="plotAgregatorGraph_Click" Content="PLOT AVG" Margin="641,123,36,0" Height="24" VerticalAlignment="Top"/>
+		<Button x:Name="plotDeviceGraph" Click="plotDeviceGraph_Click" Content="PLOT" Margin="641,36,0,0" Height="48" VerticalAlignment="Top" HorizontalAlignment="Left" Width="151"/>
+		<Button x:Name="plotAgregatorSumGraph" Click="plotAgregatorGraph_Click" Content="PLOT SUM" Margin="641,146,0,0" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="151"/>
+		<Button x:Name="plotAgregatorAvgGraph" Click="plotAgregatorGraph_Click" Content="PLOT AVG" Margin="641,123,0,0" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="151"/>
 		<Label x:Name="errorLabel" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="51" Margin="36,371,44,0" VerticalAlignment="Top"/>
 
-		<d3:Chart Name="plotter" Margin="10,422,10,10" Visibility="Hidden">
-			<d3:Chart.Title>
-				<TextBlock HorizontalAlignment="Center" FontSize="18" Margin="0,5,0,5">Line graph legend sample</TextBlock>
-			</d3:Chart.Title>
-			<d3:Chart.LegendContent>
-				<d3:LegendItemsPanel>
-					<d3:LegendItemsPanel.Resources>
-						<DataTemplate x:Key="InteractiveDataDisplay.WPF.LineGraph">
-							<StackPanel Orientation="Horizontal">
-								<CheckBox IsChecked="{Binding Path=Visibility, Converter={StaticResource VisibilityToCheckedConverter}, Mode=TwoWay}"/>
-								<Line Width="15" Height="15" X1="0" Y1="0" X2="15" Y2="15" Stroke="{Binding Path=Stroke}" StrokeThickness="2"/>
-								<TextBlock Margin="5,0,0,0" Text="{Binding Path=Description}"/>
-							</StackPanel>
-						</DataTemplate>
-					</d3:LegendItemsPanel.Resources>
-				</d3:LegendItemsPanel>
-			</d3:Chart.LegendContent>
-			<Grid Name="lines"/>
-		</d3:Chart>
-
 		<DataGrid x:Name="alarmStateDataGrid" Visibility="Hidden" Margin="10,432,18,0" Height="327" VerticalAlignment="Top"/>
-		
-		<Button x:Name="clearButton" Content="CLEAR ALL" FontSize="24" Margin="641,325,44,0" VerticalAlignment="Top" Height="46" Click="clearButton_Click"/>
+
+		<Button x:Name="clearButton" Content="CLEAR ALL" FontSize="24" Margin="641,325,0,0" VerticalAlignment="Top" Height="46" Click="clearButton_Click" HorizontalAlignment="Left" Width="143"/>
 		<ComboBox x:Name="typemeasurmentAlarmComboBox" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="36,209,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
 		<ComboBox x:Name="greaterOrLowerComboBox" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" Loaded="alarmComboBox_Loaded" HorizontalAlignment="Left" Margin="342,209,0,0" VerticalAlignment="Top" Width="45" Height="48"/>
 		<TextBox x:Name="alarmTextBox" FontSize="20" HorizontalAlignment="Left" Height="48" Margin="237,209,0,0" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="center" VerticalAlignment="Top" Width="76"/>
 		<ComboBox x:Name="deviceStartDatesAlarmComboBox" Loaded="deviceStartDatesAlarmComboBox_Loaded" FontSize="12" HorizontalAlignment="Left" Margin="438,209,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
-		<ComboBox x:Name="deviceEndDatesAlarmComboBox" Loaded="deviceEndDatesAlarmComboBox_Loaded" FontSize="12" HorizontalAlignment="Left" Margin="641,209,0,0" VerticalAlignment="Top" Width="151" Height="48"/>
+		<ComboBox x:Name="deviceEndDatesAlarmComboBox" Loaded="deviceEndDatesAlarmComboBox_Loaded" FontSize="12" Margin="641,209,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="151"/>
 		<Button x:Name="alarmButton" Click="alarmButton_Click" Content="GENERATE ALARM LIST" FontSize="20" HorizontalAlignment="Left" Margin="237,276,0,0" VerticalAlignment="Top" Width="351" Height="32"/>
-		<Separator HorizontalAlignment="Left" Height="114" Margin="0,36,0,0" VerticalAlignment="Top" Width="818"/>
+		<Separator Height="114" Margin="0,36,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="818"/>
 		<Separator HorizontalAlignment="Left" Height="114" Margin="0,123,0,0" VerticalAlignment="Top" Width="818"/>
 		<Separator HorizontalAlignment="Left" Height="114" Margin="0,262,0,0" VerticalAlignment="Top" Width="818"/>
 		<Label x:Name="labelStart" Content="Start date" HorizontalAlignment="Left" Margin="438,178,0,0" VerticalAlignment="Top" Width="150"/>
 		<Label x:Name="labelEnd" Content="End date" HorizontalAlignment="Left" Margin="642,178,0,0" VerticalAlignment="Top" Width="150"/>
 
+		<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" Margin="0,381,30,0">
+			<Canvas HorizontalAlignment="Left" Background="PapayaWhip" Height="370" Margin="20,45,0,0" VerticalAlignment="Top" Width="1600">
+				<Canvas x:Name="CGraph" Height="330" Canvas.Left="30" Width="1570">
+					
+				</Canvas>
 
+				<!--velika gore-->
+				<Line 
+					X1="30" Y1="330"
+					X2="30" Y2="5" 
+					Stroke="Black"/>
+				<!--velika desno-->
+				<Line
+					X1="30" Y1="330"
+					X2="1500" Y2="330" 
+					Stroke="Black"/>
+				<!--male gore-->
+				<Line
+					X1="20" Y1="25"
+					X2="30" Y2="5"
+					Stroke="Black"/>
+				<Line
+					X1="40" Y1="25"
+					X2="30" Y2="5"
+					Stroke="Black"/>
+				<!--male desno vrh-->
+				<Line
+					X1="1490" Y1="320"
+					X2="1505" Y2="330"
+					Stroke="Black"/>
+				<Line
+					X1="1490" Y1="340"
+					X2="1505" Y2="330"
+					Stroke="Black"/>
+				<!--male desno vrednost-->
+				<Line
+					X1="90" Y1="320"
+					X2="90" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="150" Y1="320"
+					X2="150" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="210" Y1="320"
+					X2="210" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="270" Y1="320"
+					X2="270" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="330" Y1="320"
+					X2="330" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="390" Y1="320"
+					X2="390" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="450" Y1="320"
+					X2="450" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="510" Y1="320"
+					X2="510" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="570" Y1="320"
+					X2="570" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="630" Y1="320"
+					X2="630" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="690" Y1="320"
+					X2="690" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="750" Y1="320"
+					X2="750" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="810" Y1="320"
+					X2="810" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="870" Y1="320"
+					X2="870" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="930" Y1="320"
+					X2="930" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="990" Y1="320"
+					X2="990" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="1050" Y1="320"
+					X2="1050" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="1110" Y1="320"
+					X2="1110" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="1170" Y1="320"
+					X2="1170" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="1230" Y1="320"
+					X2="1230" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="1290" Y1="320"
+					X2="1290" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="1350" Y1="320"
+					X2="1350" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="1410" Y1="320"
+					X2="1410" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="1470" Y1="320"
+					X2="1470" Y2="340" 
+					Stroke="Black"/>
+				<Line
+					X1="25" Y1="230"
+					X2="35" Y2="230" 
+					Stroke="Black"/>
+				<Line
+					X1="25" Y1="130"
+					X2="35" Y2="130" 
+					Stroke="Black"/>
+				<Line
+					X1="25" Y1="30"
+					X2="35" Y2="30" 
+					Stroke="Black"/>
+				<Label x:Name="label" Content="300 &#10;&#10;&#10;&#10;&#10; 200 &#10;&#10;&#10;&#10;&#10; 100" FontSize="15" Canvas.Left="-22" Canvas.Top="10" Height="320"/>
+				<Label x:Name="label1" Content="            1            2             3             4             5             6             7
+				      8             9            10           11           12           13          14          15          16
+					     17           18          19           20           21           22           23           24" FontSize="15" Canvas.Left="32" Canvas.Top="345" Width="1568"/>
+				
+			</Canvas>
+		</ScrollViewer>
 
 	</Grid>
 </Window>
