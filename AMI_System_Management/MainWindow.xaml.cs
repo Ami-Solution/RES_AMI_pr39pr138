@@ -264,18 +264,40 @@ namespace AMI_System_Management
 				Dictionary<DateTime, double> DatesAndValues = 
 					AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
 
-				List<double> vrednosti = new List<double>();
+				Dictionary<int, double> secondsValues = new Dictionary<int, double>(); //svaki sekund u danu ima vrednost svoju
 
-				int i = 0;
 				foreach (var keyValue in DatesAndValues)
 				{
-					vrednosti.Add(keyValue.Value);
-					i++;
+					int seconds = keyValue.Key.Hour * 60 * 60 + keyValue.Key.Minute * 60 + keyValue.Key.Second;
+					secondsValues.Add(seconds, keyValue.Value);
+
 				}
 
-				
-				
+				for (int i = 0; i < 86400; i++)
+				{
+					if (!secondsValues.ContainsKey(i))//ako ne postoji merenje za dati sekund, vrednost je 0
+					{
+						secondsValues.Add(i, 0);
+					}
+				}
+		
+				for(int i = 0; i < secondsValues.Count - 1; i++)
+				{
+					Line line = new Line
+					{
+						X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
+						X2 = 0.552 + i * 0.552,
 
+						Y1 = 330 - secondsValues[i], //330 je 0, (0,330) --> koordinatni pocetak
+						Y2 = 330 - secondsValues[i + 1],
+
+						Stroke = new SolidColorBrush(Colors.Black)
+					};
+
+					CGraph.Children.Add(line);
+
+				}
+				
 
 			}
 		}
@@ -356,10 +378,43 @@ namespace AMI_System_Management
 
 		}
 
+		/* za testiranje grafa
+		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
+		private static System.Random rand = new System.Random();
+		*/
+
 		private void clearButton_Click(object sender, RoutedEventArgs e)
 		{
-			//lines.Children.RemoveRange(0, lines.Children.Count);
-			//plotter.Visibility = Visibility.Hidden;
+			/* ubacivanje u bazu podataka, radi testiranja grafa
+			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
+			{
+				con.Open();
+				SqlCommand cmd;
+
+				TimeSpan time;
+				StringBuilder s;
+
+				for (int i = 0; i < 2000; i++)
+				{
+					s = new StringBuilder((DateTime.Now.Date).ToShortDateString());
+					time = TimeSpan.FromSeconds(i);
+
+					StringBuilder answer = new StringBuilder(string.Format("{0:D2}:{1:D2}:{2:D2}",
+						time.Hours,
+						time.Minutes,
+						time.Seconds));
+
+					s.Append(" " + answer);
+
+					string query = $"INSERT INTO [AMI_Tables](Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
+					$"VALUES('agregator10', 'deviceqwer', {rand.Next(300)}, {rand.Next(300)}, {rand.Next(300)}, {rand.Next(300)}, '{s.ToString()}')";
+
+					cmd = new SqlCommand(query, con);
+					cmd.ExecuteNonQuery();
+
+				}
+
+			}*/
 
 			alarmStateDataGrid.Items.Clear();
 			alarmStateDataGrid.Visibility = Visibility.Hidden;

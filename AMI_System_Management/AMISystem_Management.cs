@@ -20,7 +20,6 @@ namespace AMI_System_Management
 		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
 		private static string CS_AMI_AGREGATOR = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
 
-
 		public AMISystem_Management()
         {
 
