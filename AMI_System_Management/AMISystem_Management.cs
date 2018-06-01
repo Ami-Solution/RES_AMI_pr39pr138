@@ -16,9 +16,11 @@ namespace AMI_System_Management
 {
     public class AMISystem_Management : IAMI_System_Management
     {
-		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
+		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
+		private static string CS_AMI_AGREGATOR = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
 
-        public AMISystem_Management()
+
+		public AMISystem_Management()
         {
 
         }
@@ -34,7 +36,7 @@ namespace AMI_System_Management
             {
 				//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
 				
-				using (SqlConnection con = new SqlConnection(CS))
+				using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
                 {
                     con.Open();
                     SqlCommand cmd;
@@ -112,12 +114,10 @@ namespace AMI_System_Management
         {
             List<string> retVal = new List<string>();
 
-			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
-
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
             {
                 con.Open();
-                string query = "SELECT DISTINCT(Agregator_Code) FROM AMI_Tables";
+                string query = "SELECT DISTINCT(Agregator_Code) FROM [Agregators_Table]";
 
                 SqlCommand cmd = new SqlCommand(query, con);
 
@@ -137,11 +137,10 @@ namespace AMI_System_Management
         {
             List<string> retVal = new List<string>();
 
-            //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(CS))
+            using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
             {
                 con.Open();
-                string query = "SELECT DISTINCT(Device_Code) FROM [AMI_Tables]";
+                string query = "SELECT DISTINCT(Device_Code) FROM [Devices_Table]";
 
                 SqlCommand cmd = new SqlCommand(query, con);
 
@@ -163,7 +162,7 @@ namespace AMI_System_Management
             DateTime retVal = DateTime.Now;
 
             //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(CS))
+            using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
             {
                 con.Open();
                 string query = "";
@@ -199,7 +198,7 @@ namespace AMI_System_Management
             Dictionary<DateTime, double> retVal = new Dictionary<DateTime, double>();
 
             //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(CS))
+            using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
             {
                 con.Open();
                 string query = $"SELECT {typeMeasurment}, DateAndTime FROM AMI_Tables WHERE Device_Code like '{device_code}' AND DateAndTime >= '{selectedDate}' AND DateAndTime < '{selectedDate.Date.AddDays(1)}'";
@@ -225,7 +224,7 @@ namespace AMI_System_Management
             List<double> retVal = new List<double>();
 
             //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(CS))
+            using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
             {
                 con.Open();
                 string query = $"SELECT {typeMeasurment} FROM AMI_Tables WHERE Agregator_Code like '{code}' AND DateAndTime >= '{selectedDate}' AND DateAndTime < '{selectedDate.Date.AddDays(1)}'";
@@ -254,7 +253,7 @@ namespace AMI_System_Management
             Dictionary<DateTime, List<double>> retVal = new Dictionary<DateTime, List<double>>();
 
             //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(CS))
+            using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
             {
                 con.Open();
                 string query = $"SELECT CurrentP, Voltage, ActivePower, Reactivepower, DateAndTime FROM AMI_Tables WHERE Device_Code like '{device_code}' AND DateAndTime >= '{selectedDate}' AND DateAndTime < '{selectedDate.Date.AddDays(1)}'";
