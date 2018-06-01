@@ -177,7 +177,6 @@ namespace AMI_System_Management
 
 		private void plotDeviceGraph_Click(object sender, RoutedEventArgs e)
 		{
-			//lines.Children.RemoveRange(0, lines.Children.Count);
 
 			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
 			{
@@ -188,7 +187,6 @@ namespace AMI_System_Management
 			}
 
 			errorLabel.Content = "";
-			//plotter.Visibility = Visibility.Visible;
 
 			string device_code = deviceComboBox.SelectedValue.ToString();
 			string typeMeasurment = typemeasurmentDeviceComboBox.SelectedItem.ToString();
@@ -263,8 +261,8 @@ namespace AMI_System_Management
 			{
 
 				//vrsi se Izcrtavanje izabranog merenja za izabrani uređaj za izabrani datum
-				Dictionary<DateTime, double> DatesAndValues = new Dictionary<DateTime, double>();
-				DatesAndValues = AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
+				Dictionary<DateTime, double> DatesAndValues = 
+					AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
 
 				List<double> vrednosti = new List<double>();
 
@@ -275,9 +273,7 @@ namespace AMI_System_Management
 					i++;
 				}
 
-				IEnumerable<double> vrednostiEnumerable = vrednosti.Cast<double>();
-				var x = Enumerable.Range(0, vrednosti.Count());
-
+				
 				
 
 
