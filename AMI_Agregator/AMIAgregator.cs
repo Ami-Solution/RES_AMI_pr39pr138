@@ -17,7 +17,7 @@ namespace AMI_Agregator
 
 	public class AMIAgregator : IAMI_Agregator
 	{
-		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
+		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
 		#region properties
 		//device_code, <TipVrednost, lista vrednosti>
 		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> Buffer { get; set; }
@@ -251,7 +251,7 @@ namespace AMI_Agregator
 				con.Open();
 				SqlCommand cmd;
 
-				string query = $"INSERT INTO AMI_LocalData_Table(Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
+				string query = $"INSERT INTO [AMI_LocalData_Table](Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
 				$"VALUES('{agregator_code}', '{device_code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')";
 
 				cmd = new SqlCommand(query, con);

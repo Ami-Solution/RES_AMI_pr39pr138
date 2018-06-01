@@ -16,7 +16,7 @@ namespace AMI_System_Management
 {
     public class AMISystem_Management : IAMI_System_Management
     {
-		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True";
+		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
 
         public AMISystem_Management()
         {
@@ -139,7 +139,7 @@ namespace AMI_System_Management
             using (SqlConnection con = new SqlConnection(CS))
             {
                 con.Open();
-                string query = "SELECT DISTINCT(Device_Code) FROM AMI_Tables";
+                string query = "SELECT DISTINCT(Device_Code) FROM [AMI_Tables]";
 
                 SqlCommand cmd = new SqlCommand(query, con);
 

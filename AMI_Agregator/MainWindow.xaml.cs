@@ -16,7 +16,7 @@ namespace AMI_Agregator
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
+		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
 		//predefinisan dictionari koji sadrzi: agregator_id i sam agregator.
 		//sam agregator sadrzi svoj id, i buffer
 		//buffer je dictionari i cine ga: device_id i novi dictionari: typeMeasurment i lista vrednost
@@ -205,7 +205,7 @@ namespace AMI_Agregator
 				con.Open();
 				SqlCommand cmd;
 
-				string query = $"INSERT INTO Agregators_Table(Agregator_Code) VALUES('{agregator_code}')";
+				string query = $"INSERT INTO [Agregators_Table](Agregator_Code) VALUES('{agregator_code}')";
 
 				cmd = new SqlCommand(query, con);
 				cmd.ExecuteNonQuery();
