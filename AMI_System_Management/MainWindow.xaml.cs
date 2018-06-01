@@ -1,5 +1,4 @@
 ﻿using Common;
-using InteractiveDataDisplay.WPF;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,12 +25,16 @@ namespace AMI_System_Management
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		#region static fields
+
 		private static ServiceHost host;
 
 		public static IAMI_Agregator defaultProxy;
 
 		//u amisystem managment nam treba instanca mainwindowa (kako bi osvezili listu agregata i uredjaja u comboboxu kada se upisu novi);
 		private static bool servicesOpened = false;
+
+		#endregion static fields
 
 		public MainWindow()
 		{
@@ -46,6 +49,8 @@ namespace AMI_System_Management
 			}
 
 		}
+
+		#region methods
 
 		private static void OpenServices()
 		{
@@ -172,7 +177,7 @@ namespace AMI_System_Management
 
 		private void plotDeviceGraph_Click(object sender, RoutedEventArgs e)
 		{
-			lines.Children.RemoveRange(0, lines.Children.Count);
+			//lines.Children.RemoveRange(0, lines.Children.Count);
 
 			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
 			{
@@ -183,7 +188,7 @@ namespace AMI_System_Management
 			}
 
 			errorLabel.Content = "";
-			plotter.Visibility = Visibility.Visible;
+			//plotter.Visibility = Visibility.Visible;
 
 			string device_code = deviceComboBox.SelectedValue.ToString();
 			string typeMeasurment = typemeasurmentDeviceComboBox.SelectedItem.ToString();
@@ -252,17 +257,6 @@ namespace AMI_System_Management
 				List<Color> colors = new List<Color>() { Colors.Yellow, Colors.Red, Colors.Orange, Colors.Purple };
 				var x = Enumerable.Range(0, dates.Count());
 
-				for (int i = 0; i < 4; i++)
-				{
-					var lg = new LineGraph();
-					lines.Children.Add(lg);
-					lg.Stroke = new SolidColorBrush(colors[i]);
-					lg.Description = String.Format(measurmentsNames[i]);
-					lg.StrokeThickness = 3;
-					lg.Plot(x, vrednostiEnumerable[i]);
-
-				}
-
 
 			}
 			else
@@ -284,16 +278,7 @@ namespace AMI_System_Management
 				IEnumerable<double> vrednostiEnumerable = vrednosti.Cast<double>();
 				var x = Enumerable.Range(0, vrednosti.Count());
 
-				for (i = 0; i < 1; i++)
-				{
-					var lg = new LineGraph();
-					lines.Children.Add(lg);
-					lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
-					lg.Description = String.Format(typeMeasurment);
-					lg.StrokeThickness = 1;
-					lg.Plot(x, vrednostiEnumerable);
-
-				}
+				
 
 
 			}
@@ -302,7 +287,7 @@ namespace AMI_System_Management
 		private void plotAgregatorGraph_Click(object sender, RoutedEventArgs e)
 		{
 			//TODO implementirati da se iscrta graph za agregator
-			lines.Children.RemoveRange(0, lines.Children.Count);
+			//lines.Children.RemoveRange(0, lines.Children.Count);
 
 			if (agregatorsComboBox.SelectedValue.ToString() == "SELECT AGREGATOR")
 			{
@@ -323,7 +308,7 @@ namespace AMI_System_Management
 			}
 
 			errorLabel.Content = "";
-			plotter.Visibility = Visibility.Visible;
+			//plotter.Visibility = Visibility.Visible;
 
 			string agregator_code = agregatorsComboBox.SelectedValue.ToString();
 			string typeMeasurment = typemeasurmentAgregatorComboBox.SelectedItem.ToString();
@@ -348,16 +333,7 @@ namespace AMI_System_Management
 				IEnumerable<double> vrednostiEnumerable = valueSumRepeated.Cast<double>();
 				var x = Enumerable.Range(0, retrievedValues.Count());
 
-				for (int i = 0; i < 1; i++)
-				{
-					var lg = new LineGraph();
-					lines.Children.Add(lg);
-					lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
-					lg.Description = String.Format(typeMeasurment);
-					lg.StrokeThickness = 1;
-					lg.Plot(x, vrednostiEnumerable);
-
-				}
+				
 
 			}
 			else
@@ -379,24 +355,15 @@ namespace AMI_System_Management
 				IEnumerable<double> vrednostiEnumerable = valueSumRepeated.Cast<double>();
 				var x = Enumerable.Range(0, retrievedValues.Count());
 
-				for (int i = 0; i < 1; i++)
-				{
-					var lg = new LineGraph();
-					lines.Children.Add(lg);
-					lg.Stroke = new SolidColorBrush(Color.FromArgb(255, 0, (byte)(i * 10), 0));
-					lg.Description = String.Format(typeMeasurment);
-					lg.StrokeThickness = 1;
-					lg.Plot(x, vrednostiEnumerable);
-
-				}
+				
 			}
 
 		}
 
 		private void clearButton_Click(object sender, RoutedEventArgs e)
 		{
-			lines.Children.RemoveRange(0, lines.Children.Count);
-			plotter.Visibility = Visibility.Hidden;
+			//lines.Children.RemoveRange(0, lines.Children.Count);
+			//plotter.Visibility = Visibility.Hidden;
 
 			alarmStateDataGrid.Items.Clear();
 			alarmStateDataGrid.Visibility = Visibility.Hidden;
@@ -479,7 +446,7 @@ namespace AMI_System_Management
 			}
 
 			errorLabel.Content = "";
-			plotter.Visibility = Visibility.Hidden;
+			//plotter.Visibility = Visibility.Hidden;
 
 			//TODO finish, zavrsiti izlistavanje dobijenih rezultata u datagrid
 			
@@ -492,19 +459,8 @@ namespace AMI_System_Management
 			greaterOrLowerComboBox.ItemsSource = GreaterOrLess;
 			greaterOrLowerComboBox.SelectedIndex = 0;
 		}
-	}
+		
+		#endregion methods
 
-	//deo za graph prikaz
-	public class VisibilityToCheckedConverter : IValueConverter
-	{
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-		{
-			return ((Visibility)value) == Visibility.Visible;
-		}
-
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-		{
-			return ((bool)value) ? Visibility.Visible : Visibility.Collapsed;
-		}
 	}
 }

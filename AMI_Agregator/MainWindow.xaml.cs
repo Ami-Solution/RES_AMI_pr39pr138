@@ -16,18 +16,24 @@ namespace AMI_Agregator
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		#region static fields/properities
+
 		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
-		//predefinisan dictionari koji sadrzi: agregator_id i sam agregator.
-		//sam agregator sadrzi svoj id, i buffer
-		//buffer je dictionari i cine ga: device_id i novi dictionari: typeMeasurment i lista vrednost
-		public static Dictionary<string, AMIAgregator> agregators { get; set; }
 
 		public static int agregatorNumber = 0;
 
+		public static Dictionary<string, AMIAgregator> agregators { get; set; }
+
 		private static ServiceHost host;
+
+		#endregion
+
+		#region constructors
+
 		public MainWindow()
 		{
 			InitializeComponent();
+
 			AMIAgregator initialise = new AMIAgregator();
 
 			LoadFromLocalDataBase(); //ucitavanje podataka iz lokalne baze
@@ -38,6 +44,10 @@ namespace AMI_Agregator
 
 			this.DataContext = this;
 		}
+
+		#endregion constructors
+
+		#region methods
 
 		//sluzi za ucitavanje agregatora i njegovih uredjaja(ako ih ima) koji nemaju podatke u lokalnoj bazi podataka
 		private void LoadAgregatorsFromLocalDataBase()
@@ -108,7 +118,7 @@ namespace AMI_Agregator
 						{
 							string device_code = rdr["Device_Code"].ToString();
 							agregators[agregator_codes[i]].Buffer.Add(device_code, new Dictionary<TypeMeasurement, List<double>>());
-							agregators[agregator_codes[i]].listOfDevices.Add(device_code);
+							agregators[agregator_codes[i]].ListOfDevices.Add(device_code);
 						}
 					}
 				}
@@ -297,5 +307,6 @@ namespace AMI_Agregator
 			dataGrid.Items.Refresh();
 		}
 
+		#endregion methods
 	}
 }

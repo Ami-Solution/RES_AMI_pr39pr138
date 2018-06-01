@@ -28,6 +28,8 @@ namespace AMI_Device
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		#region static fields
+
 		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
 
 		private static Dictionary<string, AMICharacteristics> availableAMIDevices = new Dictionary<string, AMICharacteristics>();
@@ -37,6 +39,10 @@ namespace AMI_Device
 		private static Random rand = new Random();
 
 		public static IAMI_Agregator defaultProxy; //za pocetku konekciju koja uvek traje
+
+		#endregion static fields
+
+		#region constructors
 
 		public MainWindow()
 		{
@@ -52,6 +58,10 @@ namespace AMI_Device
 
 			this.DataContext = this;
 		}
+
+		#endregion constructors
+
+		#region methods
 
 		private void LoadNotAddeDevices()
 		{
@@ -245,6 +255,8 @@ namespace AMI_Device
 			}
 		}
 
+
+		#endregion methods
 	}
 }
 

@@ -19,12 +19,24 @@ namespace AMI_Device
 	/// </summary>
 	public partial class AgregatorChoosing : Window
 	{
+		#region static fields
+
 		static Dictionary<string, List<string>> existingAgregators = new Dictionary<string, List<string>>();
+
 		public static string agregatorName;
+
+		#endregion static fields
+
+		#region constructors
+
 		public AgregatorChoosing()
 		{
 			InitializeComponent();
 		}
+
+		#endregion constructors
+
+		#region methods
 
 		private void comboBox_Loaded(object sender, RoutedEventArgs e)
 		{
@@ -49,5 +61,8 @@ namespace AMI_Device
 
 			this.Close();
 		}
+
+		#endregion methods
+
 	}
 }

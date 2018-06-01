@@ -18,6 +18,7 @@ namespace AMI_Agregator
 	public class AMIAgregator : IAMI_Agregator
 	{
 		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
+		
 		#region properties
 		//device_code, <TipVrednost, lista vrednosti>
 		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> Buffer { get; set; }
@@ -33,7 +34,7 @@ namespace AMI_Agregator
 
 		public IAMI_System_Management Proxy { get; set; }
 
-		public List<string> listOfDevices { get; set; }
+		public List<string> ListOfDevices { get; set; }
 
 		#endregion properties
 
@@ -51,9 +52,9 @@ namespace AMI_Agregator
 
 		public AMIAgregator(string name) 
 		{
-			this.Agregator_code = name;
+			Agregator_code = name;
 			Dates = new Dictionary<string, List<DateTime>>();
-			listOfDevices = new List<string>();
+			ListOfDevices = new List<string>();
 
 			var binding = new NetTcpBinding();
 			string address = $"net.tcp://localhost:8004/IAMI_System_Management";
@@ -63,9 +64,11 @@ namespace AMI_Agregator
 			InitialiseBuffer(Buffer);
 			CreateHost(this.Host);
 		}
+
 		#endregion constructors
 
 		#region methods
+
 		private void CreateHost(ServiceHost host)
 		{
 			host = new ServiceHost(typeof(AMIAgregator));
@@ -106,7 +109,7 @@ namespace AMI_Agregator
 							{ TypeMeasurement.Voltage, new List<double>() },
 						});
 
-					MainWindow.agregators[agregator_code].listOfDevices.Add(device_code);
+					MainWindow.agregators[agregator_code].ListOfDevices.Add(device_code);
 					MainWindow.agregators[agregator_code].Dates.Add(device_code, new List<DateTime>());
 
 				}
@@ -126,7 +129,7 @@ namespace AMI_Agregator
 
 			DeleteFromLocalDatabase(agregator_code, device_code);
 			ag.Buffer.Remove(device_code);
-			ag.listOfDevices.Remove(device_code);
+			ag.ListOfDevices.Remove(device_code);
 			ag.Dates.Remove(device_code);
 
 			return "DELETED";
@@ -267,7 +270,7 @@ namespace AMI_Agregator
 
 			foreach (var ID in MainWindow.agregators)
 			{
-				retList.Add(ID.Key, MainWindow.agregators[ID.Key].listOfDevices);
+				retList.Add(ID.Key, MainWindow.agregators[ID.Key].ListOfDevices);
 			}
 
 			return retList;

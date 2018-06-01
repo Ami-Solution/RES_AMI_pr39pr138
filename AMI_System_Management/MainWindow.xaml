@@ -4,12 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AMI_System_Management"
-		xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
 		mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="827.5">
-	<Window.Resources>
-		<local:VisibilityToCheckedConverter x:Key="VisibilityToCheckedConverter"/>
-	</Window.Resources>
 
 	<Grid Margin="0,0,-8,0">
 		<ComboBox x:Name="deviceComboBox" SelectionChanged="deviceComboBox_SelectionChanged" FontSize="12" Loaded="devicesLoadedComboBox_Loaded" HorizontalAlignment="Left" Margin="36,36,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
@@ -22,26 +18,6 @@
 		<Button x:Name="plotAgregatorSumGraph" Click="plotAgregatorGraph_Click" Content="PLOT SUM" Margin="641,146,36,0" Height="24" VerticalAlignment="Top"/>
 		<Button x:Name="plotAgregatorAvgGraph" Click="plotAgregatorGraph_Click" Content="PLOT AVG" Margin="641,123,36,0" Height="24" VerticalAlignment="Top"/>
 		<Label x:Name="errorLabel" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="51" Margin="36,371,44,0" VerticalAlignment="Top"/>
-
-		<d3:Chart Name="plotter" Margin="10,422,10,10" Visibility="Hidden">
-			<d3:Chart.Title>
-				<TextBlock HorizontalAlignment="Center" FontSize="18" Margin="0,5,0,5">Line graph legend sample</TextBlock>
-			</d3:Chart.Title>
-			<d3:Chart.LegendContent>
-				<d3:LegendItemsPanel>
-					<d3:LegendItemsPanel.Resources>
-						<DataTemplate x:Key="InteractiveDataDisplay.WPF.LineGraph">
-							<StackPanel Orientation="Horizontal">
-								<CheckBox IsChecked="{Binding Path=Visibility, Converter={StaticResource VisibilityToCheckedConverter}, Mode=TwoWay}"/>
-								<Line Width="15" Height="15" X1="0" Y1="0" X2="15" Y2="15" Stroke="{Binding Path=Stroke}" StrokeThickness="2"/>
-								<TextBlock Margin="5,0,0,0" Text="{Binding Path=Description}"/>
-							</StackPanel>
-						</DataTemplate>
-					</d3:LegendItemsPanel.Resources>
-				</d3:LegendItemsPanel>
-			</d3:Chart.LegendContent>
-			<Grid Name="lines"/>
-		</d3:Chart>
 
 		<DataGrid x:Name="alarmStateDataGrid" Visibility="Hidden" Margin="10,432,18,0" Height="327" VerticalAlignment="Top"/>
 		
@@ -57,8 +33,6 @@
 		<Separator HorizontalAlignment="Left" Height="114" Margin="0,262,0,0" VerticalAlignment="Top" Width="818"/>
 		<Label x:Name="labelStart" Content="Start date" HorizontalAlignment="Left" Margin="438,178,0,0" VerticalAlignment="Top" Width="150"/>
 		<Label x:Name="labelEnd" Content="End date" HorizontalAlignment="Left" Margin="642,178,0,0" VerticalAlignment="Top" Width="150"/>
-
-
 
 	</Grid>
 </Window>

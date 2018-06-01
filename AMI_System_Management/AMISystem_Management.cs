@@ -23,7 +23,9 @@ namespace AMI_System_Management
 
         }
 
-        public bool SendDataToSystemDataBase(string agregator_code, Dictionary<string, List<DateTime>> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
+		#region methods
+
+		public bool SendDataToSystemDataBase(string agregator_code, Dictionary<string, List<DateTime>> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer)
         {
             bool retVal = false;
 
@@ -281,5 +283,7 @@ namespace AMI_System_Management
             return retVal;
         }
 
-    }
+		#endregion methods
+
+	}
 }
