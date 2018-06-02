@@ -212,7 +212,7 @@
 			</Canvas>
 		</ScrollViewer>
 
-		<DataGrid x:Name="alarmDataGrid" HorizontalAlignment="Left" Height="384" Margin="10,427,0,0" VerticalAlignment="Top" Width="812">
+		<DataGrid x:Name="alarmDataGrid" Visibility="Hidden" HorizontalAlignment="Left" Height="384" Margin="10,427,0,0" VerticalAlignment="Top" Width="812">
 			<DataGrid.Columns>
 				
 				

@@ -179,7 +179,8 @@ namespace AMI_System_Management
 		private void plotDeviceGraph_Click(object sender, RoutedEventArgs e)
 		{
 			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
-			
+			GrafTab.Visibility = Visibility.Hidden;
+
 			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
 			{
 				errorLabel.Content = "YOU MUST SELECT DEVICE";
@@ -300,6 +301,7 @@ namespace AMI_System_Management
 			//TODO implementirati da se iscrta graph za agregator
 			//lines.Children.RemoveRange(0, lines.Children.Count);
 			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
+			GrafTab.Visibility = Visibility.Hidden;
 
 			if (agregatorsComboBox.SelectedValue.ToString() == "SELECT AGREGATOR")
 			{
@@ -496,10 +498,10 @@ namespace AMI_System_Management
 		}
 
 		 //za testiranje grafa
-		 /*
+		 
 		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
 		private static System.Random rand = new System.Random();
-		*/
+		
 
 		private void clearButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -507,11 +509,11 @@ namespace AMI_System_Management
 			LMaxValue.Content = "";
 			LAvgValue.Content = "";
 			LMinValue.Content = "";
-
-			
+			alarmDataGrid.Visibility = Visibility.Hidden;
+			GrafTab.Visibility = Visibility.Hidden;
 
 			//ubacivanje u bazu podataka, radi testiranja grafa 
-			/*
+
 			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
 			{
 				con.Open();
@@ -541,7 +543,7 @@ namespace AMI_System_Management
 				}
 
 			}
-			*/
+			
 
 			errorLabel.Content = "";
 			alarmTextBox.Text = "";
@@ -627,6 +629,7 @@ namespace AMI_System_Management
 			}
 
 			GrafTab.Visibility = Visibility.Hidden;
+			alarmDataGrid.Visibility = Visibility.Visible;
 			errorLabel.Content = "";
 
 			//TODO finish, zavrsiti izlistavanje dobijenih rezultata u datagrid
