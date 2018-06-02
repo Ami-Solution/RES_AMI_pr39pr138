@@ -179,7 +179,8 @@ namespace AMI_System_Management
 		private void plotDeviceGraph_Click(object sender, RoutedEventArgs e)
 		{
 			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
-			
+			GrafTab.Visibility = Visibility.Hidden;
+
 			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
 			{
 				errorLabel.Content = "YOU MUST SELECT DEVICE";
@@ -300,6 +301,7 @@ namespace AMI_System_Management
 			//TODO implementirati da se iscrta graph za agregator
 			//lines.Children.RemoveRange(0, lines.Children.Count);
 			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
+			GrafTab.Visibility = Visibility.Hidden;
 
 			if (agregatorsComboBox.SelectedValue.ToString() == "SELECT AGREGATOR")
 			{
@@ -496,10 +498,10 @@ namespace AMI_System_Management
 		}
 
 		 //za testiranje grafa
-		 /*
+		 
 		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
 		private static System.Random rand = new System.Random();
-		*/
+		
 
 		private void clearButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -507,9 +509,11 @@ namespace AMI_System_Management
 			LMaxValue.Content = "";
 			LAvgValue.Content = "";
 			LMinValue.Content = "";
+			alarmDataGrid.Visibility = Visibility.Hidden;
+			GrafTab.Visibility = Visibility.Hidden;
 
 			//ubacivanje u bazu podataka, radi testiranja grafa 
-			/*
+
 			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
 			{
 				con.Open();
@@ -518,7 +522,7 @@ namespace AMI_System_Management
 				TimeSpan time;
 				StringBuilder s;
 
-				for (int i = 0; i < 2000; i++)
+				for (int i = 0; i < 100; i++)
 				{
 					s = new StringBuilder((DateTime.Now.Date).ToShortDateString());
 					time = TimeSpan.FromSeconds(i);
@@ -539,7 +543,7 @@ namespace AMI_System_Management
 				}
 
 			}
-			*/
+			
 
 			errorLabel.Content = "";
 			alarmTextBox.Text = "";
@@ -583,7 +587,10 @@ namespace AMI_System_Management
 
 		private void alarmButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (typemeasurmentAlarmComboBox.SelectedValue.ToString() == "SELECT TYPE")
+			string typeMeasurment = (typemeasurmentAlarmComboBox.SelectedValue.ToString());
+			string greatOrLower = greaterOrLowerComboBox.SelectedValue.ToString();
+
+			if (typeMeasurment == "SELECT TYPE")
 			{
 				errorLabel.Content = "YOU MUST SELECT TYPE";
 				errorLabel.FontSize = 20;
@@ -591,8 +598,11 @@ namespace AMI_System_Management
 				return;
 			}
 
-			int greater = ((DateTime)deviceStartDatesAlarmComboBox.SelectedItem).CompareTo((DateTime)deviceEndDatesAlarmComboBox.SelectedItem);
+			DateTime startDate = (DateTime)deviceStartDatesAlarmComboBox.SelectedItem;
+			DateTime endDate = (DateTime)deviceEndDatesAlarmComboBox.SelectedItem;
 
+			int greater = (startDate.CompareTo(endDate));
+			
 			if (greater == 1)
 			{
 				errorLabel.Content = "START DATE CAN'T BE GREATER THAN END DATE";
@@ -618,11 +628,30 @@ namespace AMI_System_Management
 				return;
 			}
 
+			GrafTab.Visibility = Visibility.Hidden;
+			alarmDataGrid.Visibility = Visibility.Visible;
 			errorLabel.Content = "";
-			//plotter.Visibility = Visibility.Hidden;
 
 			//TODO finish, zavrsiti izlistavanje dobijenih rezultata u datagrid
+
+			string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
+
+			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
+			{
+				con.Open();
+				string query = $"SELECT * FROM [AMI_Tables] WHERE {typeMeasurment} {greatOrLower} {rez} AND DateAndTime >= '{startDate}' AND DateAndTime < '{endDate.AddDays(1)}'";
+
+				SqlCommand cmd = new SqlCommand(query, con);
+				SqlDataAdapter da = new SqlDataAdapter(cmd);
+				DataTable dt = new DataTable("Informatons");
+				da.Fill(dt);
+
+				alarmDataGrid.ItemsSource = dt.DefaultView;
+
+			}
+
 			
+
 
 		}
 
