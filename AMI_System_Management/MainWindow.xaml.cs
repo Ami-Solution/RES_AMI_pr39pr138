@@ -508,6 +508,8 @@ namespace AMI_System_Management
 			LAvgValue.Content = "";
 			LMinValue.Content = "";
 
+			
+
 			//ubacivanje u bazu podataka, radi testiranja grafa 
 			/*
 			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
@@ -518,7 +520,7 @@ namespace AMI_System_Management
 				TimeSpan time;
 				StringBuilder s;
 
-				for (int i = 0; i < 2000; i++)
+				for (int i = 0; i < 100; i++)
 				{
 					s = new StringBuilder((DateTime.Now.Date).ToShortDateString());
 					time = TimeSpan.FromSeconds(i);
@@ -583,7 +585,10 @@ namespace AMI_System_Management
 
 		private void alarmButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (typemeasurmentAlarmComboBox.SelectedValue.ToString() == "SELECT TYPE")
+			string typeMeasurment = (typemeasurmentAlarmComboBox.SelectedValue.ToString());
+			string greatOrLower = greaterOrLowerComboBox.SelectedValue.ToString();
+
+			if (typeMeasurment == "SELECT TYPE")
 			{
 				errorLabel.Content = "YOU MUST SELECT TYPE";
 				errorLabel.FontSize = 20;
@@ -591,8 +596,11 @@ namespace AMI_System_Management
 				return;
 			}
 
-			int greater = ((DateTime)deviceStartDatesAlarmComboBox.SelectedItem).CompareTo((DateTime)deviceEndDatesAlarmComboBox.SelectedItem);
+			DateTime startDate = (DateTime)deviceStartDatesAlarmComboBox.SelectedItem;
+			DateTime endDate = (DateTime)deviceEndDatesAlarmComboBox.SelectedItem;
 
+			int greater = (startDate.CompareTo(endDate));
+			
 			if (greater == 1)
 			{
 				errorLabel.Content = "START DATE CAN'T BE GREATER THAN END DATE";
@@ -618,11 +626,29 @@ namespace AMI_System_Management
 				return;
 			}
 
+			GrafTab.Visibility = Visibility.Hidden;
 			errorLabel.Content = "";
-			//plotter.Visibility = Visibility.Hidden;
 
 			//TODO finish, zavrsiti izlistavanje dobijenih rezultata u datagrid
+
+			string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
+
+			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
+			{
+				con.Open();
+				string query = $"SELECT * FROM [AMI_Tables] WHERE {typeMeasurment} {greatOrLower} {rez} AND DateAndTime >= '{startDate}' AND DateAndTime < '{endDate.AddDays(1)}'";
+
+				SqlCommand cmd = new SqlCommand(query, con);
+				SqlDataAdapter da = new SqlDataAdapter(cmd);
+				DataTable dt = new DataTable("Informatons");
+				da.Fill(dt);
+
+				alarmDataGrid.ItemsSource = dt.DefaultView;
+
+			}
+
 			
+
 
 		}
 
