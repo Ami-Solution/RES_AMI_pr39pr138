@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AMI_System_Management"
 		mc:Ignorable="d"
-        Title="MainWindow" Height="852.5" Width="830.5">
+        Title="MainWindow" Height="852.5" Width="852.5">
 
 	<Grid Margin="0,0,-8,0">
 		<ComboBox x:Name="deviceComboBox" SelectionChanged="deviceComboBox_SelectionChanged" FontSize="12" Loaded="devicesLoadedComboBox_Loaded" HorizontalAlignment="Left" Margin="36,36,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
@@ -28,9 +28,9 @@
 		<ComboBox x:Name="deviceStartDatesAlarmComboBox" Loaded="deviceStartDatesAlarmComboBox_Loaded" FontSize="12" HorizontalAlignment="Left" Margin="438,209,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
 		<ComboBox x:Name="deviceEndDatesAlarmComboBox" Loaded="deviceEndDatesAlarmComboBox_Loaded" FontSize="12" Margin="641,209,0,0" VerticalAlignment="Top" Height="48" HorizontalAlignment="Left" Width="151"/>
 		<Button x:Name="alarmButton" Click="alarmButton_Click" Content="GENERATE ALARM LIST" FontSize="20" HorizontalAlignment="Left" Margin="237,276,0,0" VerticalAlignment="Top" Width="351" Height="32"/>
-		<Separator Height="114" Margin="0,36,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="818"/>
-		<Separator HorizontalAlignment="Left" Height="114" Margin="0,123,0,0" VerticalAlignment="Top" Width="818"/>
-		<Separator HorizontalAlignment="Left" Height="114" Margin="0,262,0,0" VerticalAlignment="Top" Width="818"/>
+		<Separator Height="114" Margin="0,36,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="842"/>
+		<Separator HorizontalAlignment="Left" Height="114" Margin="0,123,0,0" VerticalAlignment="Top" Width="842"/>
+		<Separator HorizontalAlignment="Left" Height="114" Margin="0,262,0,0" VerticalAlignment="Top" Width="842"/>
 		<Label x:Name="labelStart" Content="Start date" HorizontalAlignment="Left" Margin="438,178,0,0" VerticalAlignment="Top" Width="150"/>
 		<Label x:Name="labelEnd" Content="End date" HorizontalAlignment="Left" Margin="642,178,0,0" VerticalAlignment="Top" Width="150"/>
 
@@ -39,7 +39,7 @@
 
 				<Canvas x:Name="CGraph" Height="330" Canvas.Left="30" Width="1570">
 
-					
+
 				</Canvas>
 
 				<!--velika gore-->
@@ -56,7 +56,8 @@
 				<Line
 					X1="20" Y1="25"
 					X2="30" Y2="5"
-					Stroke="Black"/>
+					Stroke="Black"
+					/>
 				<Line
 					X1="40" Y1="25"
 					X2="30" Y2="5"
@@ -180,6 +181,31 @@
 					X2="35" Y2="30" 
 					Stroke="Black"/>
 				<Label x:Name="label" Content="300 &#10;&#10;&#10;&#10;&#10; 200 &#10;&#10;&#10;&#10;&#10; 100" FontSize="15" Canvas.Left="-22" Canvas.Top="10" Height="320"/>
+				<Label x:Name="label1" Content="00:00&#xD;&#xA;" Canvas.Left="10" Canvas.Top="335" Width="46"/>
+				<Label x:Name="label2" Content="01:00&#xD;&#xA;" Canvas.Left="2002" Canvas.Top="340"/>
+				<Label x:Name="label3" Content="02:00&#xD;&#xA;" Canvas.Left="3991" Canvas.Top="340"/>
+				<Label x:Name="label4" Content="03:00&#xD;&#xA;" Canvas.Left="5982" Canvas.Top="340"/>
+				<Label x:Name="label5" Content="04:00&#xD;&#xA;" Canvas.Left="7971" Canvas.Top="340"/>
+				<Label x:Name="label6" Content="05:00&#xD;&#xA;" Canvas.Left="9961" Canvas.Top="340"/>
+				<Label x:Name="label7" Content="06:00&#xD;&#xA;" Canvas.Left="11952" Canvas.Top="340"/>
+				<Label x:Name="label8" Content="07:00&#xD;&#xA;" Canvas.Left="13942" Canvas.Top="340"/>
+				<Label x:Name="label9" Content="08:00&#xD;&#xA;&#xD;&#xA;" Canvas.Left="15932" Canvas.Top="340"/>
+				<Label x:Name="label10" Content="09:00&#xD;&#xA;&#xD;&#xA;" Canvas.Left="17922" Canvas.Top="340"/>
+				<Label x:Name="label11" Content="10:00&#xD;&#xA;&#xD;&#xA;" Canvas.Left="19910" Canvas.Top="340"/>
+				<Label x:Name="label12" Content="11:00&#xD;&#xA;" Canvas.Left="21901" Canvas.Top="340"/>
+				<Label x:Name="label13" Content="12:00&#xD;&#xA;" Canvas.Left="23891" Canvas.Top="340"/>
+				<Label x:Name="label14" Content="13:00&#xD;&#xA;" Canvas.Left="25880" Canvas.Top="340"/>
+				<Label x:Name="label15" Content="14:00&#xD;&#xA;" Canvas.Left="27872" Canvas.Top="340"/>
+				<Label x:Name="label16" Content="15:00&#xD;&#xA;" Canvas.Left="29860" Canvas.Top="340"/>
+				<Label x:Name="label17" Content="16:00&#xD;&#xA;" Canvas.Left="31852" Canvas.Top="340"/>
+				<Label x:Name="label18" Content="17:00&#xD;&#xA;" Canvas.Left="33839" Canvas.Top="340"/>
+				<Label x:Name="label19" Content="18:00&#xD;&#xA;" Canvas.Left="35851" Canvas.Top="340"/>
+				<Label x:Name="label20" Content="19:00&#xD;&#xA;" Canvas.Left="37841" Canvas.Top="340"/>
+				<Label x:Name="label21" Content="20:00&#xD;&#xA;" Canvas.Left="39830" Canvas.Top="340"/>
+				<Label x:Name="label22" Content="21:00&#xD;&#xA;" Canvas.Left="41820" Canvas.Top="340"/>
+				<Label x:Name="label23" Content="22:00&#xD;&#xA;&#xD;&#xA;" Canvas.Left="43812" Canvas.Top="340"/>
+				<Label x:Name="label24" Content="23:00&#xD;&#xA;" Canvas.Left="45801" Canvas.Top="340"/>
+				<Label x:Name="label25" Content="00:00&#xD;&#xA;&#xD;&#xA;" Canvas.Left="47692" Canvas.Top="340"/>
 
 			</Canvas>
 		</ScrollViewer>
