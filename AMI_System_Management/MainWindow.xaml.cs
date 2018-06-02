@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
@@ -177,7 +178,8 @@ namespace AMI_System_Management
 
 		private void plotDeviceGraph_Click(object sender, RoutedEventArgs e)
 		{
-
+			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
+			
 			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
 			{
 				errorLabel.Content = "YOU MUST SELECT DEVICE";
@@ -192,10 +194,14 @@ namespace AMI_System_Management
 			string typeMeasurment = typemeasurmentDeviceComboBox.SelectedItem.ToString();
 			DateTime selectedDate = Convert.ToDateTime(deviceDatesComboBox.SelectedItem).Date;
 
+			LMaxValue.Content = "100";
+			LAvgValue.Content = "200";
+			LMinValue.Content = "300";
+
 			if (typemeasurmentDeviceComboBox.SelectedItem.ToString() == "SELECT TYPE")
 			{
 
-				//vrsi se Iscrtavanje prosečnog merenja za izabrani uređaj za izabrani datum 
+				//vrsi se Iscrtavanje prosečnog merenja za izabrani uređaj za izabrani datum. List<double> sadrzi redom struju-napon-aktivnu-reaktivnu
 				Dictionary<DateTime, List<double>> DatesAndValues = new Dictionary<DateTime, List<double>>();
 				DatesAndValues = AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, selectedDate);
 
@@ -214,47 +220,36 @@ namespace AMI_System_Management
 				foreach (var keyValue in DatesAndValues)
 				{
 					dates.Add(keyValue.Key);
-					/* ovde dobijamo sve vrednosti za struju, napon, snagu, reaktivnu snagu
-					CurrentP.Add(keyValue.Value[0]);
-					Voltage.Add(keyValue.Value[1]);
-					ActivePower.Add(keyValue.Value[2]);
-					ReactivePower.Add(keyValue.Value[3]);
-					*/
 					cur += keyValue.Value[0];
 					vol += keyValue.Value[1];
 					act += keyValue.Value[2];
 					rea += keyValue.Value[3];
 				}
 
-				cur = cur / dates.Count();
-				vol = vol / dates.Count();
-				act = act / dates.Count();
-				rea = rea / dates.Count();
-
-				for (int i = 0; i < dates.Count(); i++)
+				List<double> curVolActRea = new List<double>() { cur / dates.Count, vol / dates.Count, act / dates.Count, rea / dates.Count };
+				List<SolidColorBrush> colors = new List<SolidColorBrush>()
 				{
-					CurrentP.Add(cur);
-					Voltage.Add(vol);
-					ActivePower.Add(act);
-					ReactivePower.Add(rea);
-				}
+					new SolidColorBrush(Colors.Yellow), // struja je zuta
+					new SolidColorBrush(Colors.Orange), // napon je narandzast
+					new SolidColorBrush(Colors.Blue), // akt snaga je plava
+					new SolidColorBrush(Colors.Black) // reak snaga je crna
+				};
 
-				IEnumerable<double> CurrentPEnumerable = CurrentP.Cast<double>();
-				IEnumerable<double> VoltageEnumerable = Voltage.Cast<double>();
-				IEnumerable<double> ActivePowerEnumerable = ActivePower.Cast<double>();
-				IEnumerable<double> ReactivePowerEnumerable = ReactivePower.Cast<double>();
-
-				List<IEnumerable<double>> vrednostiEnumerable = new List<IEnumerable<double>>()
+				for (int i = 0; i < curVolActRea.Count; i++)
+				{
+					Line line = new Line
 					{
-						CurrentPEnumerable,
-						VoltageEnumerable,
-						ActivePowerEnumerable,
-						ReactivePowerEnumerable
-					};
-				List<string> measurmentsNames = new List<string>() { "CurrentP", "Voltage", "ActivePower", "ReactivePower" };
-				List<Color> colors = new List<Color>() { Colors.Yellow, Colors.Red, Colors.Orange, Colors.Purple };
-				var x = Enumerable.Range(0, dates.Count());
+						X1 = 0, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
+						X2 = 48000,
 
+						Y1 = 330 - curVolActRea[i], //330 je 0, (0,330) --> koordinatni pocetak
+						Y2 = 330 - curVolActRea[i],
+
+						Stroke = colors[i],
+					};
+
+					CGraph.Children.Add(line);
+				}
 
 			}
 			else
@@ -280,8 +275,8 @@ namespace AMI_System_Management
 						secondsValues.Add(i, 0);
 					}
 				}
-		
-				for(int i = 0; i < secondsValues.Count - 1; i++)
+
+				for (int i = 0; i < secondsValues.Count - 1; i++)
 				{
 					Line line = new Line
 					{
@@ -295,9 +290,7 @@ namespace AMI_System_Management
 					};
 
 					CGraph.Children.Add(line);
-
 				}
-				
 
 			}
 		}
@@ -306,6 +299,7 @@ namespace AMI_System_Management
 		{
 			//TODO implementirati da se iscrta graph za agregator
 			//lines.Children.RemoveRange(0, lines.Children.Count);
+			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
 
 			if (agregatorsComboBox.SelectedValue.ToString() == "SELECT AGREGATOR")
 			{
@@ -334,58 +328,188 @@ namespace AMI_System_Management
 
 			if (((Button)sender).Content.ToString() == "PLOT SUM")
 			{
-				List<double> retrievedValues = AMISystem_Management.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate);
-				double valueSum = 0;
-				List<double> valueSumRepeated = new List<double>();
-
-				foreach (var number in retrievedValues)
+				if (typeMeasurment == "Voltage") //napon se ne sabira, nego se srednja vrednost se gleda. Jedina razlike je da ne povecavamo vrednosti na Y osi
 				{
-					valueSum += number;
-				}
+					LMaxValue.Content = "100";
+					LAvgValue.Content = "200";
+					LMinValue.Content = "300";
 
-				for (int i = 0; i < retrievedValues.Count(); i++)
+					int devicesCount = 0;
+					//imamo vreme, i vrednost u tom vremenu
+					List<Tuple<DateTime, double>> retrievedValues = AMISystem_Management.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate, out devicesCount);
+
+					Dictionary<int, double> secondsValues = new Dictionary<int, double>();
+
+					int seconds = 0;
+					foreach (var tuple in retrievedValues)
+					{
+						seconds = tuple.Item1.Hour * 60 * 60 + tuple.Item1.Minute * 60 + tuple.Item1.Second;
+
+						//proveravamo da li u recinku postoji vec taj trenutak u danu, ako postoji, dodamo vrednost na njega
+						if (secondsValues.ContainsKey(seconds))
+						{
+							secondsValues[seconds] += tuple.Item2;
+						}
+						else //ako ne postoji, dodamo tu vrednost u tom trneutku u danu
+						{
+							secondsValues.Add(seconds, tuple.Item2);
+						}
+
+					}
+
+					for (int i = 0; i < 86400; i++) //ako imamo neki treuntak u danu u kojem nema merenja, dodamo 0 tu
+					{
+						if (!secondsValues.ContainsKey(i))//ako ne postoji merenje za dati sekund, vrednost je 0
+						{
+							secondsValues.Add(i, 0);
+						}
+					}
+
+					for (int i = 0; i < secondsValues.Count - 1; i++)
+					{
+						Line line = new Line
+						{
+							X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
+							X2 = 0.552 + i * 0.552,
+
+							Y1 = 330 - (secondsValues[i] + 1) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak. +1 je mali cheat, da ne bude 0 vrednost
+							Y2 = 330 - (secondsValues[i + 1] + 1) / devicesCount,
+
+							Stroke = new SolidColorBrush(Colors.Black)
+						};
+
+						CGraph.Children.Add(line);
+					}
+
+				}
+				else
 				{
-					valueSumRepeated.Add(valueSum);
+					//broj uredjaja koji pripadaju trazenom agregatu
+					int devicesCount = 0;
+					//imamo vreme, i vrednost u tom vremenu
+					List<Tuple<DateTime, double>> retrievedValues = AMISystem_Management.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate, out devicesCount);
+
+					LMaxValue.Content = devicesCount * 300;
+					LAvgValue.Content = devicesCount * 200;
+					LMinValue.Content = devicesCount * 100;
+
+					//vreme cemo predstaviti u sekundama
+					Dictionary<int, double> secondsValues = new Dictionary<int, double>();
+
+					int seconds = 0;
+					foreach (var tuple in retrievedValues)
+					{
+						seconds = tuple.Item1.Hour * 60 * 60 + tuple.Item1.Minute * 60 + tuple.Item1.Second;
+
+						//proveravamo da li u recinku postoji vec taj trenutak u danu, ako postoji, dodamo vrednost na njega
+						if (secondsValues.ContainsKey(seconds))
+						{
+							secondsValues[seconds] += tuple.Item2;
+						}
+						else //ako ne postoji, dodamo tu vrednost u tom trneutku u danu
+						{
+							secondsValues.Add(seconds, tuple.Item2);
+						}
+
+					}
+
+					for (int i = 0; i < 86400; i++) //ako imamo neki treuntak u danu u kojem nema merenja, dodamo 0 tu
+					{
+						if (!secondsValues.ContainsKey(i))//ako ne postoji merenje za dati sekund, vrednost je 0
+						{
+							secondsValues.Add(i, 0);
+						}
+					}
+
+					for (int i = 0; i < secondsValues.Count - 1; i++)
+					{
+						Line line = new Line
+						{
+							X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
+							X2 = 0.552 + i * 0.552,
+
+							Y1 = 330 - (secondsValues[i]+1)/devicesCount, //330 je 0, (0,330) --> koordinatni pocetak. +1 je mali cheat, da ne bude 0 vrednost
+							Y2 = 330 - (secondsValues[i + 1]+1)/devicesCount,
+
+							Stroke = new SolidColorBrush(Colors.Black)
+						};
+
+						CGraph.Children.Add(line);
+					}
 				}
-
-				IEnumerable<double> vrednostiEnumerable = valueSumRepeated.Cast<double>();
-				var x = Enumerable.Range(0, retrievedValues.Count());
-
-				
-
 			}
-			else
+			else //prosecno merenje za izabrani tip, isto kao i gore kod napona. Ne menjamo samo vrednosti na Y osi
 			{
-				List<double> retrievedValues = AMISystem_Management.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate);
-				double valueSum = 0;
-				List<double> valueSumRepeated = new List<double>();
+				LMaxValue.Content = "100";
+				LAvgValue.Content = "200";
+				LMinValue.Content = "300";
 
-				foreach (var number in retrievedValues)
+				int devicesCount = 0;
+				//imamo vreme, i vrednost u tom vremenu
+				List<Tuple<DateTime, double>> retrievedValues = AMISystem_Management.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate, out devicesCount);
+
+				Dictionary<int, double> secondsValues = new Dictionary<int, double>();
+
+				int seconds = 0;
+				foreach (var tuple in retrievedValues)
 				{
-					valueSum += number;
+					seconds = tuple.Item1.Hour * 60 * 60 + tuple.Item1.Minute * 60 + tuple.Item1.Second;
+
+					//proveravamo da li u recinku postoji vec taj trenutak u danu, ako postoji, dodamo vrednost na njega
+					if (secondsValues.ContainsKey(seconds))
+					{
+						secondsValues[seconds] += tuple.Item2;
+					}
+					else //ako ne postoji, dodamo tu vrednost u tom trneutku u danu
+					{
+						secondsValues.Add(seconds, tuple.Item2);
+					}
+
 				}
 
-				for (int i = 0; i < retrievedValues.Count(); i++)
+				for (int i = 0; i < 86400; i++) //ako imamo neki treuntak u danu u kojem nema merenja, dodamo 0 tu
 				{
-					valueSumRepeated.Add(valueSum / retrievedValues.Count());
+					if (!secondsValues.ContainsKey(i))//ako ne postoji merenje za dati sekund, vrednost je 0
+					{
+						secondsValues.Add(i, 0);
+					}
 				}
 
-				IEnumerable<double> vrednostiEnumerable = valueSumRepeated.Cast<double>();
-				var x = Enumerable.Range(0, retrievedValues.Count());
+				for (int i = 0; i < secondsValues.Count - 1; i++)
+				{
+					Line line = new Line
+					{
+						X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
+						X2 = 0.552 + i * 0.552,
 
-				
+						Y1 = 330 - (secondsValues[i] + 1) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak. +1 je mali cheat, da ne bude 0 vrednost
+						Y2 = 330 - (secondsValues[i + 1] + 1) / devicesCount,
+
+						Stroke = new SolidColorBrush(Colors.Black)
+					};
+
+					CGraph.Children.Add(line);
+				}
+
 			}
 
 		}
 
-		/* za testiranje grafa
+		 //za testiranje grafa
+		 /*
 		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
 		private static System.Random rand = new System.Random();
 		*/
 
 		private void clearButton_Click(object sender, RoutedEventArgs e)
 		{
-			/* ubacivanje u bazu podataka, radi testiranja grafa
+			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
+			LMaxValue.Content = "";
+			LAvgValue.Content = "";
+			LMinValue.Content = "";
+
+			//ubacivanje u bazu podataka, radi testiranja grafa 
+			/*
 			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
 			{
 				con.Open();
@@ -414,10 +538,8 @@ namespace AMI_System_Management
 
 				}
 
-			}*/
-
-			alarmStateDataGrid.Items.Clear();
-			alarmStateDataGrid.Visibility = Visibility.Hidden;
+			}
+			*/
 
 			errorLabel.Content = "";
 			alarmTextBox.Text = "";
@@ -514,4 +636,5 @@ namespace AMI_System_Management
 		#endregion methods
 
 	}
+
 }

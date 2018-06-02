@@ -19,8 +19,8 @@
 		<Button x:Name="plotAgregatorAvgGraph" Click="plotAgregatorGraph_Click" Content="PLOT AVG" Margin="641,123,0,0" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="151"/>
 		<Label x:Name="errorLabel" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="51" Margin="36,371,44,0" VerticalAlignment="Top"/>
 
-		<DataGrid x:Name="alarmStateDataGrid" Visibility="Hidden" Margin="10,432,18,0" Height="327" VerticalAlignment="Top"/>
-
+		
+		
 		<Button x:Name="clearButton" Content="CLEAR ALL" FontSize="24" Margin="641,325,0,0" VerticalAlignment="Top" Height="46" Click="clearButton_Click" HorizontalAlignment="Left" Width="143"/>
 		<ComboBox x:Name="typemeasurmentAlarmComboBox" Loaded="typemeasurmentComboBox_Loaded" HorizontalAlignment="Left" Margin="36,209,0,0" VerticalAlignment="Top" Width="150" Height="48"/>
 		<ComboBox x:Name="greaterOrLowerComboBox" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" Loaded="alarmComboBox_Loaded" HorizontalAlignment="Left" Margin="342,209,0,0" VerticalAlignment="Top" Width="45" Height="48"/>
@@ -180,7 +180,6 @@
 					X1="25" Y1="30"
 					X2="35" Y2="30" 
 					Stroke="Black"/>
-				<Label x:Name="label" Content="300 &#10;&#10;&#10;&#10;&#10; 200 &#10;&#10;&#10;&#10;&#10; 100" FontSize="15" Canvas.Left="-22" Canvas.Top="10" Height="320"/>
 				<Label x:Name="label1" Content="00:00&#xD;&#xA;" Canvas.Left="10" Canvas.Top="335" Width="46"/>
 				<Label x:Name="label2" Content="01:00&#xD;&#xA;" Canvas.Left="2002" Canvas.Top="340"/>
 				<Label x:Name="label3" Content="02:00&#xD;&#xA;" Canvas.Left="3991" Canvas.Top="340"/>
@@ -206,6 +205,9 @@
 				<Label x:Name="label23" Content="22:00&#xD;&#xA;&#xD;&#xA;" Canvas.Left="43812" Canvas.Top="340"/>
 				<Label x:Name="label24" Content="23:00&#xD;&#xA;" Canvas.Left="45801" Canvas.Top="340"/>
 				<Label x:Name="label25" Content="00:00&#xD;&#xA;&#xD;&#xA;" Canvas.Left="47692" Canvas.Top="340"/>
+				<Label x:Name="LMaxValue" Content="" FontSize="15" Canvas.Left="-18" Canvas.Top="10" Height="32" Width="43"/>
+				<Label x:Name="LAvgValue" Content="" FontSize="15" Canvas.Left="-18" Canvas.Top="116" Height="32" Width="43"/>
+				<Label x:Name="LMinValue" Content="" FontSize="15" Canvas.Left="-18" Canvas.Top="215" Height="32" Width="43"/>
 
 			</Canvas>
 		</ScrollViewer>

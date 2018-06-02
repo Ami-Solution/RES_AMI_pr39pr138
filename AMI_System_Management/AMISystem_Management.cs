@@ -229,15 +229,15 @@ namespace AMI_System_Management
         }
 
         //koristi se za iscrtavanje prosecnog/sumarnog grafa agregata
-        public static List<double> GetValuesFromDatabase(string code, string typeMeasurment, DateTime selectedDate)
+        public static List<Tuple<DateTime, double>> GetValuesFromDatabase(string code, string typeMeasurment, DateTime selectedDate, out int devicesCount)
         {
-            List<double> retVal = new List<double>();
+			List<Tuple<DateTime, double>> retVal = new List<Tuple<DateTime, double>>();
 
-            //string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
+			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_System"].ConnectionString;
+			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
             {
                 con.Open();
-                string query = $"SELECT {typeMeasurment} FROM AMI_Tables WHERE Agregator_Code like '{code}' AND DateAndTime >= '{selectedDate}' AND DateAndTime < '{selectedDate.Date.AddDays(1)}'";
+                string query = $"SELECT DateAndTime, {typeMeasurment} FROM AMI_Tables WHERE Agregator_Code like '{code}' AND DateAndTime >= '{selectedDate}' AND DateAndTime < '{selectedDate.Date.AddDays(1)}'";
 
                 SqlCommand cmd = new SqlCommand(query, con);
 
@@ -245,12 +245,23 @@ namespace AMI_System_Management
                 {
                     while (rdr.Read())
                     {
-                        retVal.Add(Convert.ToDouble(rdr[typeMeasurment]));
+                        retVal.Add(new Tuple<DateTime, double>(Convert.ToDateTime(rdr["DateAndTime"]), Convert.ToDouble(rdr[typeMeasurment])));
                     }
                 }
             }
 
-            return retVal;
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
+			{
+				con.Open();
+				string query = $"SELECT count(*) FROM Devices_Table WHERE Agregator_Code like '{code}'";
+
+				SqlCommand cmd = new SqlCommand(query, con);
+				object count = cmd.ExecuteScalar();
+				devicesCount = Convert.ToInt32(count);
+
+			}
+
+			return retVal;
         }
 
         public static void GetAlarmingValuesFromDatabase(string typeMeasurment, double value, string greatrOrLower, DateTime startDate, DateTime endTime)
