@@ -17,7 +17,7 @@ namespace AMI_Agregator
 
 	public class AMIAgregator : IAMI_Agregator
 	{
-		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
+		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
 		
 		#region properties
 		//device_code, <TipVrednost, lista vrednosti>
