@@ -1,6 +1,6 @@
 @echo off
 
-set dllLocation=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\AMI_Device_Test\bin\Debug\AMI_Device_Test.dll
+set dllLocation=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\AMI_Agregator_Test\bin\Debug\AMI_Agregator_Test.dll
 set reportFolderLocation=.
 
 echo * Runing unit test cover *

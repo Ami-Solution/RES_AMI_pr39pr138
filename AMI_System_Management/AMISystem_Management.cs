@@ -11,13 +11,14 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Windows;
 using System.Windows.Threading;
+using System.Threading;
 
 namespace AMI_System_Management
 {
     public class AMISystem_Management : IAMI_System_Management
     {
-		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
-		private static string CS_AMI_AGREGATOR = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True;MultipleActiveResultSets=True";
+		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
+		private static string CS_AMI_AGREGATOR = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
 
 		public AMISystem_Management()
         {
@@ -102,8 +103,18 @@ namespace AMI_System_Management
                 }
             }
 
-            MainWindow m = new MainWindow();
-            m.RefreshAgregatorsAndDevices();
+            Thread thread = new Thread(() =>
+            {
+                MainWindow m = new MainWindow();
+                m.RefreshAgregatorsAndDevices();
+
+                System.Windows.Threading.Dispatcher.Run();
+            });
+
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+
+            
 
             Trace.WriteLine($"Agregat: {agregator_code}, ispraznjen buffer, kraj: {DateTime.Now} !");
             return retVal;
