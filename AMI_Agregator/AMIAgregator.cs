@@ -20,6 +20,7 @@ namespace AMI_Agregator
 		public static AgregatorDB ADB = new AgregatorDB();
 
 		#region properties
+
 		//device_code, <TipVrednost, lista vrednosti>
 		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> Buffer { get; set; }
 
