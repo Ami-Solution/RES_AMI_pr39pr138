@@ -17,7 +17,7 @@ namespace AMI_Device
 
 		}
 
-		public void LoadNotAddeDevices()
+		public void LoadNotAddedDevices()
 		{
 			using (SqlConnection con = new SqlConnection(CS))
 			{

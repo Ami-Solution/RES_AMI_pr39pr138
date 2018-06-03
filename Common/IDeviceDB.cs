@@ -8,7 +8,7 @@ namespace Common
 {
 	public interface IDeviceDB
 	{
-		void LoadNotAddeDevices();
+		void LoadNotAddedDevices();
 
 		void SaveDeviceToDataBase(string agregator_code, string device_code);
 

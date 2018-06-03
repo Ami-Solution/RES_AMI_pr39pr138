@@ -54,7 +54,7 @@ namespace AMI_Device
 
 			LoadDevicesFromLocalDatabase(); //isto kao i kod agregatora, ucitavaju se uredjaji za koje vrednosti nisu poslate
 
-			DDB.LoadNotAddeDevices(); //ucitavaju se uredjaji koji nemaju nijednu vrednost, a dodati su bili
+			DDB.LoadNotAddedDevices(); //ucitavaju se uredjaji koji nemaju nijednu vrednost, a dodati su bili
 
 			dataGrid.Items.Refresh();
 

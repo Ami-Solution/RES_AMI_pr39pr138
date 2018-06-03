@@ -89,7 +89,7 @@ namespace AMI_Agregator
 		}
 
 		//sluzi za ucitavanje agregatora i njegovih uredjaja koji nisu poslati u globanu bazu podataka
-		public void LoadAgregatorsFromLocalDataBase()
+		public void LoadAllDataFromLocalDataBase()
 		{
 			using (SqlConnection con = new SqlConnection(CS))
 			{
@@ -173,7 +173,7 @@ namespace AMI_Agregator
 		}
 
 		//sluzi za ucitavanje agregatora i njegovih uredjaja(ako ih ima) koji nemaju podatke u lokalnoj bazi podataka
-		public void LoadAllDataFromLocalDataBase()
+		public void LoadAgregatorsFromLocalDataBase()
 		{
 			using (SqlConnection con = new SqlConnection(CS))
 			{
