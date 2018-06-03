@@ -209,10 +209,10 @@ namespace AMI_Agregator
 				con.Open();
 				SqlCommand cmd;
 
-				string query = $"INSERT INTO [Agregators_Table](Agregator_Code) VALUES('{agregator_code}')";
+				string query = $"DELETE FROM Agregators_Table WHERE Agregator_Code like '{agregator_code}'";
 
 				cmd = new SqlCommand(query, con);
-				cmd.ExecuteNonQuery();
+				cmd.ExecuteReader();
 
 			}
 		}
@@ -224,10 +224,10 @@ namespace AMI_Agregator
 				con.Open();
 				SqlCommand cmd;
 
-				string query = $"DELETE FROM Agregators_Table WHERE Agregator_Code like '{agregator_code}'";
+				string query = $"INSERT INTO [Agregators_Table](Agregator_Code) VALUES('{agregator_code}')";
 
 				cmd = new SqlCommand(query, con);
-				cmd.ExecuteReader();
+				cmd.ExecuteNonQuery();
 
 			}
 		}
