@@ -17,8 +17,8 @@ namespace AMI_Agregator
 
 	public class AMIAgregator : IAMI_Agregator
 	{
-		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
-		
+		public static AgregatorDB ADB = new AgregatorDB();
+
 		#region properties
 		//device_code, <TipVrednost, lista vrednosti>
 		public Dictionary<string, Dictionary<TypeMeasurement, List<double>>> Buffer { get; set; }
@@ -50,7 +50,7 @@ namespace AMI_Agregator
 
 		}
 
-		public AMIAgregator(string name) 
+		public AMIAgregator(string name)
 		{
 			Agregator_code = name;
 			Dates = new Dictionary<string, List<DateTime>>();
@@ -137,7 +137,7 @@ namespace AMI_Agregator
 				AMIAgregator ag = MainWindow.agregators[agregator_code];
 				ag.Proxy.SendDataToSystemDataBase(ag.Agregator_code, ag.Dates, ag.Buffer); //prinudno slanje podataka u bazu, kada se brise uredjaj
 
-				DeleteFromLocalDatabase(agregator_code, device_code);
+				ADB.DeleteDeviceFromLocalDatabase(agregator_code, device_code);
 				//ag.Buffer.Remove(device_code);
 				ag.ListOfDevices.Remove(device_code);
 				//ag.Dates.Remove(device_code);
@@ -167,14 +167,14 @@ namespace AMI_Agregator
 					MainWindow.agregators[agregator_code].Dates[device_code].Add(dateTime);
 
 					//saljemo podatke u lokalnu bazu podataka
-					SendToLocalDatabase(agregator_code, dateTime, device_code, values);
+					ADB.SendToLocalDatabase(agregator_code, dateTime, device_code, values);
 				}
 			}
 		}
 
 		public void SendToSystemMenagement(AMIAgregator ag)
 		{
-			while (MainWindow.agregators.ContainsKey(ag.Agregator_code)) 
+			while (MainWindow.agregators.ContainsKey(ag.Agregator_code))
 			{
 				if (ag.State == State.OFF)
 					break;
@@ -184,31 +184,49 @@ namespace AMI_Agregator
 				//ako postoji agregat koji ima uredjaj u sebi, salje podatke
 				if (ag.Dates.Count() > 0)
 				{
-					if (ag.Proxy.SendDataToSystemDataBase(ag.Agregator_code, ag.Dates, ag.Buffer))
+					try
 					{
-						DeleteFromLocalDatabase(ag.Agregator_code);
-
-						foreach (var keyValue in ag.Buffer)
+						if (ag.Proxy.SendDataToSystemDataBase(ag.Agregator_code, ag.Dates, ag.Buffer))
 						{
-							//praznjenje bafera nakon sto se posalje u bazu podataka
-							ag.Buffer[keyValue.Key][TypeMeasurement.ActivePower] = new List<double>();
-							ag.Buffer[keyValue.Key][TypeMeasurement.ReactivePower] = new List<double>();
-							ag.Buffer[keyValue.Key][TypeMeasurement.Voltage] = new List<double>();
-							ag.Buffer[keyValue.Key][TypeMeasurement.CurrentP] = new List<double>();
-							ag.Dates[keyValue.Key] = new List<DateTime>();
+							ADB.DeleteAgregatorFromLocalDatabase(ag.Agregator_code);
+
+							foreach (var keyValue in ag.Buffer)
+							{
+								//praznjenje bafera nakon sto se posalje u bazu podataka
+								ag.Buffer[keyValue.Key][TypeMeasurement.ActivePower] = new List<double>();
+								ag.Buffer[keyValue.Key][TypeMeasurement.ReactivePower] = new List<double>();
+								ag.Buffer[keyValue.Key][TypeMeasurement.Voltage] = new List<double>();
+								ag.Buffer[keyValue.Key][TypeMeasurement.CurrentP] = new List<double>();
+								ag.Dates[keyValue.Key] = new List<DateTime>();
+							}
 						}
 					}
+					catch (Exception)
+					{
 
+					}
 
 				}
 			}
 		}
 
-		//koristi se kada se brise agregat
-		public void DeleteFromLocalDatabase(string agregator_code)
+		//sluzi da bi ami_device mogao da pokupi podatke
+		public Dictionary<string, List<string>> AgregatorsAndTheirDevices()
 		{
+			Dictionary<string, List<string>> retList = new Dictionary<string, List<string>>();
 
-			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
+			foreach (var ID in MainWindow.agregators)
+			{
+				retList.Add(ID.Key, MainWindow.agregators[ID.Key].ListOfDevices);
+			}
+
+			return retList;
+		}
+
+		/*
+		//koristi se kada se brise agregat
+		public void DeleteAgregatorFromLocalDatabase(string agregator_code)
+		{
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();
@@ -223,9 +241,8 @@ namespace AMI_Agregator
 		}
 
 		//koristi se kada se brise uredjaj iz agregata
-		private void DeleteFromLocalDatabase(string agregator_code, string device_code)
+		private void DeleteDeviceFromLocalDatabase(string agregator_code, string device_code)
 		{
-			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();
@@ -278,19 +295,8 @@ namespace AMI_Agregator
 
 			}
 		}
+		*/
 
-		//sluzi da bi ami_device mogao da pokupi podatke
-		public Dictionary<string, List<string>> AgregatorsAndTheirDevices()
-		{
-			Dictionary<string, List<string>> retList = new Dictionary<string, List<string>>();
-
-			foreach (var ID in MainWindow.agregators)
-			{
-				retList.Add(ID.Key, MainWindow.agregators[ID.Key].ListOfDevices);
-			}
-
-			return retList;
-		}
 		#endregion methods
 
 	}

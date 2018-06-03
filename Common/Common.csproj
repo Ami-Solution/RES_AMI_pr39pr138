@@ -41,9 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAgregatorDB.cs" />
     <Compile Include="IAMI_Agregator.cs" />
     <Compile Include="IAMI_System_Management.cs" />
     <Compile Include="IAMI_Device.cs" />
+    <Compile Include="IDeviceDB.cs" />
+    <Compile Include="ISystemDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

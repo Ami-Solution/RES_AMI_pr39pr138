@@ -8,6 +8,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -93,16 +94,9 @@ namespace AMI_System_Management
 
 		}
 
-		public void RefreshAgregatorsAndDevices()
-		{
-			RoutedEventArgs e = new RoutedEventArgs();
-			devicesLoadedComboBox_Loaded(deviceComboBox, e);
-			agregatorsLoadedComboBox_Loaded(agregatorsComboBox, e);
-		}
-
 		private void devicesLoadedComboBox_Loaded(object sender, RoutedEventArgs e)
 		{
-			List<string> allDevices = AMISystem_Management.GetAllDevicesFromDataBase();
+			List<string> allDevices = AMISystem_Management.SDB.GetAllDevicesFromDataBase();
 			allDevices.Insert(0, "ALL DEVICES");
 			deviceComboBox.ItemsSource = allDevices;
 			deviceComboBox.SelectedIndex = 0;
@@ -111,61 +105,89 @@ namespace AMI_System_Management
 
 		private void agregatorsLoadedComboBox_Loaded(object sender, RoutedEventArgs e)
 		{
-			List<string> allAgregators = AMISystem_Management.GetAllAgregatorsFromDataBase();
+			List<string> allAgregators = AMISystem_Management.SDB.GetAllAgregatorsFromDataBase();
 			allAgregators.Insert(0, "SELECT AGREGATOR");
 			agregatorsComboBox.ItemsSource = allAgregators;
 			agregatorsComboBox.SelectedIndex = 0;
 			agregatorsComboBox.Items.Refresh();
 		}
 
+		private void buttonRefresh_Click(object sender, RoutedEventArgs e)
+		{
+			LoadDevicesAndAgregators();
+		}
+
+		private void LoadDevicesAndAgregators()
+		{
+			List<string> allAgregators = AMISystem_Management.SDB.GetAllAgregatorsFromDataBase();
+			agregatorsComboBox.ItemsSource = allAgregators;
+			allAgregators.Insert(0, "SELECT AGREGATOR");
+			agregatorsComboBox.SelectedIndex = 0;
+			agregatorsComboBox.Items.Refresh();
+
+			List<string> allDevices = AMISystem_Management.SDB.GetAllDevicesFromDataBase();
+			deviceComboBox.ItemsSource = allDevices;
+			allDevices.Insert(0, "ALL DEVICES");
+			deviceComboBox.SelectedIndex = 0;
+			deviceComboBox.Items.Refresh();
+		}
+
 		private void deviceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			List<string> selectDate = new List<string>() { "SELECT DATE" };
-			List<DateTime> dates = new List<DateTime>();
-
-			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
+			if (deviceComboBox.SelectedValue != null)
 			{
-				deviceDatesComboBox.ItemsSource = selectDate;
-				deviceDatesComboBox.SelectedIndex = 0;
-			}
-			else
-			{
-				DateTime minDate = AMISystem_Management.GetEarliesOrLatesttDateFromDatabase(deviceComboBox.SelectedValue.ToString());
 
-				while (minDate.Date <= DateTime.Now.Date)
+				List<string> selectDate = new List<string>() { "SELECT DATE" };
+				List<DateTime> dates = new List<DateTime>();
+
+				if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
 				{
-					dates.Add(minDate.Date);
-					minDate = minDate.Date.AddDays(1);
+					deviceDatesComboBox.ItemsSource = selectDate;
+					deviceDatesComboBox.SelectedIndex = 0;
+				}
+				else
+				{
+					DateTime minDate = AMISystem_Management.SDB.GetEarliesOrLatesttDateFromDatabase(deviceComboBox.SelectedValue.ToString());
+
+					while (minDate.Date <= DateTime.Now.Date)
+					{
+						dates.Add(minDate.Date);
+						minDate = minDate.Date.AddDays(1);
+					}
+
+					deviceDatesComboBox.ItemsSource = dates;
+					deviceDatesComboBox.SelectedIndex = 0;
 				}
 
-				deviceDatesComboBox.ItemsSource = dates;
-				deviceDatesComboBox.SelectedIndex = 0;
 			}
-
 		}
 
 		private void agregatorsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			List<string> selectDate = new List<string>() { "SELECT DATE" };
-			List<DateTime> dates = new List<DateTime>();
-
-			if (agregatorsComboBox.SelectedValue.ToString() == "SELECT AGREGATOR")
+			if (agregatorsComboBox.SelectedValue != null)
 			{
-				agregatorDatesComboBox.ItemsSource = selectDate;
-				agregatorDatesComboBox.SelectedIndex = 0;
-			}
-			else
-			{
-				DateTime minDate = AMISystem_Management.GetEarliesOrLatesttDateFromDatabase(agregatorsComboBox.SelectedValue.ToString());
 
-				while (minDate.Date <= DateTime.Now.Date)
+				List<string> selectDate = new List<string>() { "SELECT DATE" };
+				List<DateTime> dates = new List<DateTime>();
+
+				if (agregatorsComboBox.SelectedValue.ToString() == "SELECT AGREGATOR")
 				{
-					dates.Add(minDate.Date);
-					minDate = minDate.Date.AddDays(1);
+					agregatorDatesComboBox.ItemsSource = selectDate;
+					agregatorDatesComboBox.SelectedIndex = 0;
 				}
+				else
+				{
+					DateTime minDate = AMISystem_Management.SDB.GetEarliesOrLatesttDateFromDatabase(agregatorsComboBox.SelectedValue.ToString());
 
-				agregatorDatesComboBox.ItemsSource = dates;
-				agregatorDatesComboBox.SelectedIndex = 0;
+					while (minDate.Date <= DateTime.Now.Date)
+					{
+						dates.Add(minDate.Date);
+						minDate = minDate.Date.AddDays(1);
+					}
+
+					agregatorDatesComboBox.ItemsSource = dates;
+					agregatorDatesComboBox.SelectedIndex = 0;
+				}
 			}
 		}
 
@@ -179,7 +201,7 @@ namespace AMI_System_Management
 		private void plotDeviceGraph_Click(object sender, RoutedEventArgs e)
 		{
 			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
-			GrafTab.Visibility = Visibility.Hidden;
+			GrafTab.Visibility = Visibility.Visible;
 
 			if (deviceComboBox.SelectedValue.ToString() == "ALL DEVICES")
 			{
@@ -191,20 +213,20 @@ namespace AMI_System_Management
 
 			errorLabel.Content = "";
 
-			string device_code = deviceComboBox.SelectedValue.ToString();
-			string typeMeasurment = typemeasurmentDeviceComboBox.SelectedItem.ToString();
-			DateTime selectedDate = Convert.ToDateTime(deviceDatesComboBox.SelectedItem).Date;
-
 			LMaxValue.Content = "100";
 			LAvgValue.Content = "200";
 			LMinValue.Content = "300";
+
+			string device_code = deviceComboBox.SelectedValue.ToString();
+			string typeMeasurment = typemeasurmentDeviceComboBox.SelectedItem.ToString();
+			DateTime selectedDate = Convert.ToDateTime(deviceDatesComboBox.SelectedItem).Date;
 
 			if (typemeasurmentDeviceComboBox.SelectedItem.ToString() == "SELECT TYPE")
 			{
 
 				//vrsi se Iscrtavanje prosečnog merenja za izabrani uređaj za izabrani datum. List<double> sadrzi redom struju-napon-aktivnu-reaktivnu
 				Dictionary<DateTime, List<double>> DatesAndValues = new Dictionary<DateTime, List<double>>();
-				DatesAndValues = AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, selectedDate);
+				DatesAndValues = AMISystem_Management.SDB.GetDatesAndValuesFromDataBase(device_code, selectedDate);
 
 				List<DateTime> dates = new List<DateTime>();
 				List<double> CurrentP = new List<double>();
@@ -255,10 +277,9 @@ namespace AMI_System_Management
 			}
 			else
 			{
-
 				//vrsi se Izcrtavanje izabranog merenja za izabrani uređaj za izabrani datum
-				Dictionary<DateTime, double> DatesAndValues = 
-					AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
+				Dictionary<DateTime, double> DatesAndValues =
+					AMISystem_Management.SDB.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
 
 				Dictionary<int, double> secondsValues = new Dictionary<int, double>(); //svaki sekund u danu ima vrednost svoju
 
@@ -296,151 +317,41 @@ namespace AMI_System_Management
 			}
 		}
 
-		private void plotAgregatorGraph_Click(object sender, RoutedEventArgs e)
+	private void plotAgregatorGraph_Click(object sender, RoutedEventArgs e)
+	{
+		//TODO implementirati da se iscrta graph za agregator
+		//lines.Children.RemoveRange(0, lines.Children.Count);
+		CGraph.Children.RemoveRange(0, CGraph.Children.Count);
+		GrafTab.Visibility = Visibility.Visible;
+
+		if (agregatorsComboBox.SelectedValue.ToString() == "SELECT AGREGATOR")
 		{
-			//TODO implementirati da se iscrta graph za agregator
-			//lines.Children.RemoveRange(0, lines.Children.Count);
-			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
-			GrafTab.Visibility = Visibility.Hidden;
+			errorLabel.Content = "YOU MUST SELECT AGREGATOR";
+			errorLabel.FontSize = 20;
+			errorLabel.Foreground = Brushes.Red;
+			return;
+		}
 
-			if (agregatorsComboBox.SelectedValue.ToString() == "SELECT AGREGATOR")
-			{
-				errorLabel.Content = "YOU MUST SELECT AGREGATOR";
-				errorLabel.FontSize = 20;
-				errorLabel.Foreground = Brushes.Red;
-				return;
-			}
+		errorLabel.Content = "";
 
-			errorLabel.Content = "";
+		if (typemeasurmentAgregatorComboBox.SelectedValue.ToString() == "SELECT TYPE")
+		{
+			errorLabel.Content = "YOU MUST SELECT TYPE";
+			errorLabel.FontSize = 20;
+			errorLabel.Foreground = Brushes.Red;
+			return;
+		}
 
-			if (typemeasurmentAgregatorComboBox.SelectedValue.ToString() == "SELECT TYPE")
-			{
-				errorLabel.Content = "YOU MUST SELECT TYPE";
-				errorLabel.FontSize = 20;
-				errorLabel.Foreground = Brushes.Red;
-				return;
-			}
+		errorLabel.Content = "";
+		//plotter.Visibility = Visibility.Visible;
 
-			errorLabel.Content = "";
-			//plotter.Visibility = Visibility.Visible;
+		string agregator_code = agregatorsComboBox.SelectedValue.ToString();
+		string typeMeasurment = typemeasurmentAgregatorComboBox.SelectedItem.ToString();
+		DateTime selectedDate = Convert.ToDateTime(agregatorDatesComboBox.SelectedItem).Date;
 
-			string agregator_code = agregatorsComboBox.SelectedValue.ToString();
-			string typeMeasurment = typemeasurmentAgregatorComboBox.SelectedItem.ToString();
-			DateTime selectedDate = Convert.ToDateTime(agregatorDatesComboBox.SelectedItem).Date;
-
-			if (((Button)sender).Content.ToString() == "PLOT SUM")
-			{
-				if (typeMeasurment == "Voltage") //napon se ne sabira, nego se srednja vrednost se gleda. Jedina razlike je da ne povecavamo vrednosti na Y osi
-				{
-					LMaxValue.Content = "100";
-					LAvgValue.Content = "200";
-					LMinValue.Content = "300";
-
-					int devicesCount = 0;
-					//imamo vreme, i vrednost u tom vremenu
-					List<Tuple<DateTime, double>> retrievedValues = AMISystem_Management.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate, out devicesCount);
-
-					Dictionary<int, double> secondsValues = new Dictionary<int, double>();
-
-					int seconds = 0;
-					foreach (var tuple in retrievedValues)
-					{
-						seconds = tuple.Item1.Hour * 60 * 60 + tuple.Item1.Minute * 60 + tuple.Item1.Second;
-
-						//proveravamo da li u recinku postoji vec taj trenutak u danu, ako postoji, dodamo vrednost na njega
-						if (secondsValues.ContainsKey(seconds))
-						{
-							secondsValues[seconds] += tuple.Item2;
-						}
-						else //ako ne postoji, dodamo tu vrednost u tom trneutku u danu
-						{
-							secondsValues.Add(seconds, tuple.Item2);
-						}
-
-					}
-
-					for (int i = 0; i < 86400; i++) //ako imamo neki treuntak u danu u kojem nema merenja, dodamo 0 tu
-					{
-						if (!secondsValues.ContainsKey(i))//ako ne postoji merenje za dati sekund, vrednost je 0
-						{
-							secondsValues.Add(i, 0);
-						}
-					}
-
-					for (int i = 0; i < secondsValues.Count - 1; i++)
-					{
-						Line line = new Line
-						{
-							X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
-							X2 = 0.552 + i * 0.552,
-
-							Y1 = 330 - (secondsValues[i] + 1) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak. +1 je mali cheat, da ne bude 0 vrednost
-							Y2 = 330 - (secondsValues[i + 1] + 1) / devicesCount,
-
-							Stroke = new SolidColorBrush(Colors.Black)
-						};
-
-						CGraph.Children.Add(line);
-					}
-
-				}
-				else
-				{
-					//broj uredjaja koji pripadaju trazenom agregatu
-					int devicesCount = 0;
-					//imamo vreme, i vrednost u tom vremenu
-					List<Tuple<DateTime, double>> retrievedValues = AMISystem_Management.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate, out devicesCount);
-
-					LMaxValue.Content = devicesCount * 300;
-					LAvgValue.Content = devicesCount * 200;
-					LMinValue.Content = devicesCount * 100;
-
-					//vreme cemo predstaviti u sekundama
-					Dictionary<int, double> secondsValues = new Dictionary<int, double>();
-
-					int seconds = 0;
-					foreach (var tuple in retrievedValues)
-					{
-						seconds = tuple.Item1.Hour * 60 * 60 + tuple.Item1.Minute * 60 + tuple.Item1.Second;
-
-						//proveravamo da li u recinku postoji vec taj trenutak u danu, ako postoji, dodamo vrednost na njega
-						if (secondsValues.ContainsKey(seconds))
-						{
-							secondsValues[seconds] += tuple.Item2;
-						}
-						else //ako ne postoji, dodamo tu vrednost u tom trneutku u danu
-						{
-							secondsValues.Add(seconds, tuple.Item2);
-						}
-
-					}
-
-					for (int i = 0; i < 86400; i++) //ako imamo neki treuntak u danu u kojem nema merenja, dodamo 0 tu
-					{
-						if (!secondsValues.ContainsKey(i))//ako ne postoji merenje za dati sekund, vrednost je 0
-						{
-							secondsValues.Add(i, 0);
-						}
-					}
-
-					for (int i = 0; i < secondsValues.Count - 1; i++)
-					{
-						Line line = new Line
-						{
-							X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
-							X2 = 0.552 + i * 0.552,
-
-							Y1 = 330 - (secondsValues[i]+1)/devicesCount, //330 je 0, (0,330) --> koordinatni pocetak. +1 je mali cheat, da ne bude 0 vrednost
-							Y2 = 330 - (secondsValues[i + 1]+1)/devicesCount,
-
-							Stroke = new SolidColorBrush(Colors.Black)
-						};
-
-						CGraph.Children.Add(line);
-					}
-				}
-			}
-			else //prosecno merenje za izabrani tip, isto kao i gore kod napona. Ne menjamo samo vrednosti na Y osi
+		if (((Button)sender).Content.ToString() == "PLOT SUM")
+		{
+			if (typeMeasurment == "Voltage") //napon se ne sabira, nego se srednja vrednost se gleda. Jedina razlike je da ne povecavamo vrednosti na Y osi
 			{
 				LMaxValue.Content = "100";
 				LAvgValue.Content = "200";
@@ -448,7 +359,7 @@ namespace AMI_System_Management
 
 				int devicesCount = 0;
 				//imamo vreme, i vrednost u tom vremenu
-				List<Tuple<DateTime, double>> retrievedValues = AMISystem_Management.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate, out devicesCount);
+				List<Tuple<DateTime, double>> retrievedValues = AMISystem_Management.SDB.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate, out devicesCount);
 
 				Dictionary<int, double> secondsValues = new Dictionary<int, double>();
 
@@ -494,176 +405,283 @@ namespace AMI_System_Management
 				}
 
 			}
-
-		}
-
-		 //za testiranje grafa
-		 
-		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
-		private static System.Random rand = new System.Random();
-		
-
-		private void clearButton_Click(object sender, RoutedEventArgs e)
-		{
-			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
-			LMaxValue.Content = "";
-			LAvgValue.Content = "";
-			LMinValue.Content = "";
-			alarmDataGrid.Visibility = Visibility.Hidden;
-			GrafTab.Visibility = Visibility.Hidden;
-
-			//ubacivanje u bazu podataka, radi testiranja grafa 
-
-			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
+			else
 			{
-				con.Open();
-				SqlCommand cmd;
+				//broj uredjaja koji pripadaju trazenom agregatu
+				int devicesCount = 0;
+				//imamo vreme, i vrednost u tom vremenu
+				List<Tuple<DateTime, double>> retrievedValues = AMISystem_Management.SDB.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate, out devicesCount);
 
-				TimeSpan time;
-				StringBuilder s;
+				LMaxValue.Content = devicesCount * 300;
+				LAvgValue.Content = devicesCount * 200;
+				LMinValue.Content = devicesCount * 100;
 
-				for (int i = 0; i < 100; i++)
+				//vreme cemo predstaviti u sekundama
+				Dictionary<int, double> secondsValues = new Dictionary<int, double>();
+
+				int seconds = 0;
+				foreach (var tuple in retrievedValues)
 				{
-					s = new StringBuilder((DateTime.Now.Date).ToShortDateString());
-					time = TimeSpan.FromSeconds(i);
+					seconds = tuple.Item1.Hour * 60 * 60 + tuple.Item1.Minute * 60 + tuple.Item1.Second;
 
-					StringBuilder answer = new StringBuilder(string.Format("{0:D2}:{1:D2}:{2:D2}",
-						time.Hours,
-						time.Minutes,
-						time.Seconds));
-
-					s.Append(" " + answer);
-
-					string query = $"INSERT INTO [AMI_Tables](Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
-					$"VALUES('agregator10', 'deviceqwer', {rand.Next(300)}, {rand.Next(300)}, {rand.Next(300)}, {rand.Next(300)}, '{s.ToString()}')";
-
-					cmd = new SqlCommand(query, con);
-					cmd.ExecuteNonQuery();
+					//proveravamo da li u recinku postoji vec taj trenutak u danu, ako postoji, dodamo vrednost na njega
+					if (secondsValues.ContainsKey(seconds))
+					{
+						secondsValues[seconds] += tuple.Item2;
+					}
+					else //ako ne postoji, dodamo tu vrednost u tom trneutku u danu
+					{
+						secondsValues.Add(seconds, tuple.Item2);
+					}
 
 				}
 
+				for (int i = 0; i < 86400; i++) //ako imamo neki treuntak u danu u kojem nema merenja, dodamo 0 tu
+				{
+					if (!secondsValues.ContainsKey(i))//ako ne postoji merenje za dati sekund, vrednost je 0
+					{
+						secondsValues.Add(i, 0);
+					}
+				}
+
+				for (int i = 0; i < secondsValues.Count - 1; i++)
+				{
+					Line line = new Line
+					{
+						X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
+						X2 = 0.552 + i * 0.552,
+
+						Y1 = 330 - (secondsValues[i] + 1) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak. +1 je mali cheat, da ne bude 0 vrednost
+						Y2 = 330 - (secondsValues[i + 1] + 1) / devicesCount,
+
+						Stroke = new SolidColorBrush(Colors.Black)
+					};
+
+					CGraph.Children.Add(line);
+				}
 			}
-			
-
-			errorLabel.Content = "";
-			alarmTextBox.Text = "";
 		}
-
-		private void deviceStartDatesAlarmComboBox_Loaded(object sender, RoutedEventArgs e)
+		else //prosecno merenje za izabrani tip, isto kao i gore kod napona. Ne menjamo samo vrednosti na Y osi
 		{
-			List<string> selectDate = new List<string>() { "START DATE" };
-			List<DateTime> dates = new List<DateTime>();
+			LMaxValue.Content = "100";
+			LAvgValue.Content = "200";
+			LMinValue.Content = "300";
 
-			DateTime minDate = AMISystem_Management.GetEarliesOrLatesttDateFromDatabase("EARLIEST");
-			DateTime maxDate = AMISystem_Management.GetEarliesOrLatesttDateFromDatabase("LATEST");
+			int devicesCount = 0;
+			//imamo vreme, i vrednost u tom vremenu
+			List<Tuple<DateTime, double>> retrievedValues = AMISystem_Management.SDB.GetValuesFromDatabase(agregator_code, typeMeasurment, selectedDate, out devicesCount);
 
-			while (minDate.Date <= maxDate)
+			Dictionary<int, double> secondsValues = new Dictionary<int, double>();
+
+			int seconds = 0;
+			foreach (var tuple in retrievedValues)
 			{
-				dates.Add(minDate.Date);
-				minDate = minDate.Date.AddDays(1);
-			}
+				seconds = tuple.Item1.Hour * 60 * 60 + tuple.Item1.Minute * 60 + tuple.Item1.Second;
 
-			deviceStartDatesAlarmComboBox.ItemsSource = dates;
-			deviceStartDatesAlarmComboBox.SelectedIndex = 0;
-		}
-
-		private void deviceEndDatesAlarmComboBox_Loaded(object sender, RoutedEventArgs e)
-		{
-			List<string> selectDate = new List<string>() { "START DATE" };
-			List<DateTime> dates = new List<DateTime>();
-
-			DateTime minDate = AMISystem_Management.GetEarliesOrLatesttDateFromDatabase("EARLIEST");
-			DateTime maxDate = AMISystem_Management.GetEarliesOrLatesttDateFromDatabase("LATEST");
-
-			while (minDate.Date <= maxDate)
-			{
-				dates.Add(minDate.Date);
-				minDate = minDate.Date.AddDays(1);
-			}
-
-			deviceEndDatesAlarmComboBox.ItemsSource = dates;
-			deviceEndDatesAlarmComboBox.SelectedIndex = dates.Count() - 1;
-		}
-
-		private void alarmButton_Click(object sender, RoutedEventArgs e)
-		{
-			string typeMeasurment = (typemeasurmentAlarmComboBox.SelectedValue.ToString());
-			string greatOrLower = greaterOrLowerComboBox.SelectedValue.ToString();
-
-			if (typeMeasurment == "SELECT TYPE")
-			{
-				errorLabel.Content = "YOU MUST SELECT TYPE";
-				errorLabel.FontSize = 20;
-				errorLabel.Foreground = Brushes.Red;
-				return;
-			}
-
-			DateTime startDate = (DateTime)deviceStartDatesAlarmComboBox.SelectedItem;
-			DateTime endDate = (DateTime)deviceEndDatesAlarmComboBox.SelectedItem;
-
-			int greater = (startDate.CompareTo(endDate));
-			
-			if (greater == 1)
-			{
-				errorLabel.Content = "START DATE CAN'T BE GREATER THAN END DATE";
-				errorLabel.FontSize = 20;
-				errorLabel.Foreground = Brushes.Red;
-				return;
-			}
-
-			if (alarmTextBox.Text.ToString() == "")
-			{
-				errorLabel.Content = "YOU MUST ENTER NUMBER TO COMPARE TO";
-				errorLabel.FontSize = 20;
-				errorLabel.Foreground = Brushes.Red;
-				return;
-			}
-
-			double rez = 0;
-			if (!(Double.TryParse(alarmTextBox.Text.ToString(), out rez)))
-			{
-				errorLabel.Content = "YOU MUST ENTER NUMBER";
-				errorLabel.FontSize = 20;
-				errorLabel.Foreground = Brushes.Red;
-				return;
-			}
-
-			GrafTab.Visibility = Visibility.Hidden;
-			alarmDataGrid.Visibility = Visibility.Visible;
-			errorLabel.Content = "";
-
-			//TODO finish, zavrsiti izlistavanje dobijenih rezultata u datagrid
-
-			string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
-
-			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
-			{
-				con.Open();
-				string query = $"SELECT * FROM [AMI_Tables] WHERE {typeMeasurment} {greatOrLower} {rez} AND DateAndTime >= '{startDate}' AND DateAndTime < '{endDate.AddDays(1)}'";
-
-				SqlCommand cmd = new SqlCommand(query, con);
-				SqlDataAdapter da = new SqlDataAdapter(cmd);
-				DataTable dt = new DataTable("Informatons");
-				da.Fill(dt);
-
-				alarmDataGrid.ItemsSource = dt.DefaultView;
+				//proveravamo da li u recinku postoji vec taj trenutak u danu, ako postoji, dodamo vrednost na njega
+				if (secondsValues.ContainsKey(seconds))
+				{
+					secondsValues[seconds] += tuple.Item2;
+				}
+				else //ako ne postoji, dodamo tu vrednost u tom trneutku u danu
+				{
+					secondsValues.Add(seconds, tuple.Item2);
+				}
 
 			}
 
-			
+			for (int i = 0; i < 86400; i++) //ako imamo neki treuntak u danu u kojem nema merenja, dodamo 0 tu
+			{
+				if (!secondsValues.ContainsKey(i))//ako ne postoji merenje za dati sekund, vrednost je 0
+				{
+					secondsValues.Add(i, 0);
+				}
+			}
 
+			for (int i = 0; i < secondsValues.Count - 1; i++)
+			{
+				Line line = new Line
+				{
+					X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
+					X2 = 0.552 + i * 0.552,
+
+					Y1 = 330 - (secondsValues[i] + 1) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak. +1 je mali cheat, da ne bude 0 vrednost
+					Y2 = 330 - (secondsValues[i + 1] + 1) / devicesCount,
+
+					Stroke = new SolidColorBrush(Colors.Black)
+				};
+
+				CGraph.Children.Add(line);
+			}
 
 		}
-
-		private void alarmComboBox_Loaded(object sender, RoutedEventArgs e)
-		{
-			List<string> GreaterOrLess = new List<string>() { "<", ">" };
-			greaterOrLowerComboBox.ItemsSource = GreaterOrLess;
-			greaterOrLowerComboBox.SelectedIndex = 0;
-		}
-		
-		#endregion methods
 
 	}
+
+	//za testiranje grafa
+	/*
+   private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
+   private static System.Random rand = new System.Random();
+   */
+
+	private void clearButton_Click(object sender, RoutedEventArgs e)
+	{
+		CGraph.Children.RemoveRange(0, CGraph.Children.Count);
+		LMaxValue.Content = "";
+		LAvgValue.Content = "";
+		LMinValue.Content = "";
+		alarmDataGrid.Visibility = Visibility.Hidden;
+		GrafTab.Visibility = Visibility.Hidden;
+
+		//ubacivanje u bazu podataka, radi testiranja grafa 
+		/*
+		using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
+		{
+			con.Open();
+			SqlCommand cmd;
+
+			TimeSpan time;
+			StringBuilder s;
+
+			for (int i = 0; i < 100; i++)
+			{
+				s = new StringBuilder((DateTime.Now.Date).ToShortDateString());
+				time = TimeSpan.FromSeconds(i);
+
+				StringBuilder answer = new StringBuilder(string.Format("{0:D2}:{1:D2}:{2:D2}",
+					time.Hours,
+					time.Minutes,
+					time.Seconds));
+
+				s.Append(" " + answer);
+
+				string query = $"INSERT INTO [AMI_Tables](Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
+				$"VALUES('agregator10', 'deviceqwer', {rand.Next(300)}, {rand.Next(300)}, {rand.Next(300)}, {rand.Next(300)}, '{s.ToString()}')";
+
+				cmd = new SqlCommand(query, con);
+				cmd.ExecuteNonQuery();
+
+			}
+
+		}
+		*/
+
+		errorLabel.Content = "";
+		alarmTextBox.Text = "";
+	}
+
+	private void deviceStartDatesAlarmComboBox_Loaded(object sender, RoutedEventArgs e)
+	{
+		List<string> selectDate = new List<string>() { "START DATE" };
+		List<DateTime> dates = new List<DateTime>();
+
+		DateTime minDate = AMISystem_Management.SDB.GetEarliesOrLatesttDateFromDatabase("EARLIEST");
+		DateTime maxDate = AMISystem_Management.SDB.GetEarliesOrLatesttDateFromDatabase("LATEST");
+
+		while (minDate.Date <= maxDate)
+		{
+			dates.Add(minDate.Date);
+			minDate = minDate.Date.AddDays(1);
+		}
+
+		deviceStartDatesAlarmComboBox.ItemsSource = dates;
+		deviceStartDatesAlarmComboBox.SelectedIndex = 0;
+	}
+
+	private void deviceEndDatesAlarmComboBox_Loaded(object sender, RoutedEventArgs e)
+	{
+		List<string> selectDate = new List<string>() { "START DATE" };
+		List<DateTime> dates = new List<DateTime>();
+
+		DateTime minDate = AMISystem_Management.SDB.GetEarliesOrLatesttDateFromDatabase("EARLIEST");
+		DateTime maxDate = AMISystem_Management.SDB.GetEarliesOrLatesttDateFromDatabase("LATEST");
+
+		while (minDate.Date <= maxDate)
+		{
+			dates.Add(minDate.Date);
+			minDate = minDate.Date.AddDays(1);
+		}
+
+		deviceEndDatesAlarmComboBox.ItemsSource = dates;
+		deviceEndDatesAlarmComboBox.SelectedIndex = dates.Count() - 1;
+	}
+
+	private void alarmButton_Click(object sender, RoutedEventArgs e)
+	{
+		string typeMeasurment = (typemeasurmentAlarmComboBox.SelectedValue.ToString());
+		string greatOrLower = greaterOrLowerComboBox.SelectedValue.ToString();
+
+		if (typeMeasurment == "SELECT TYPE")
+		{
+			errorLabel.Content = "YOU MUST SELECT TYPE";
+			errorLabel.FontSize = 20;
+			errorLabel.Foreground = Brushes.Red;
+			return;
+		}
+
+		DateTime startDate = (DateTime)deviceStartDatesAlarmComboBox.SelectedItem;
+		DateTime endDate = (DateTime)deviceEndDatesAlarmComboBox.SelectedItem;
+
+		int greater = (startDate.CompareTo(endDate));
+
+		if (greater == 1)
+		{
+			errorLabel.Content = "START DATE CAN'T BE GREATER THAN END DATE";
+			errorLabel.FontSize = 20;
+			errorLabel.Foreground = Brushes.Red;
+			return;
+		}
+
+		if (alarmTextBox.Text.ToString() == "")
+		{
+			errorLabel.Content = "YOU MUST ENTER NUMBER TO COMPARE TO";
+			errorLabel.FontSize = 20;
+			errorLabel.Foreground = Brushes.Red;
+			return;
+		}
+
+		double rez = 0;
+		if (!(Double.TryParse(alarmTextBox.Text.ToString(), out rez)))
+		{
+			errorLabel.Content = "YOU MUST ENTER NUMBER";
+			errorLabel.FontSize = 20;
+			errorLabel.Foreground = Brushes.Red;
+			return;
+		}
+
+		GrafTab.Visibility = Visibility.Hidden;
+		alarmDataGrid.Visibility = Visibility.Visible;
+		errorLabel.Content = "";
+
+		//TODO finish, zavrsiti izlistavanje dobijenih rezultata u datagrid
+
+		string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
+
+		using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
+		{
+			con.Open();
+			string query = $"SELECT * FROM [AMI_Tables] WHERE {typeMeasurment} {greatOrLower} {rez} AND DateAndTime >= '{startDate}' AND DateAndTime < '{endDate.AddDays(1)}'";
+
+			SqlCommand cmd = new SqlCommand(query, con);
+			SqlDataAdapter da = new SqlDataAdapter(cmd);
+			DataTable dt = new DataTable("Informatons");
+			da.Fill(dt);
+
+			alarmDataGrid.ItemsSource = dt.DefaultView;
+
+		}
+
+	}
+
+	private void alarmComboBox_Loaded(object sender, RoutedEventArgs e)
+	{
+		List<string> GreaterOrLess = new List<string>() { "<", ">" };
+		greaterOrLowerComboBox.ItemsSource = GreaterOrLess;
+		greaterOrLowerComboBox.SelectedIndex = 0;
+	}
+
+	#endregion methods
+
+}
 
 }

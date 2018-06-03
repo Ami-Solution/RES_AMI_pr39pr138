@@ -102,8 +102,16 @@ namespace AMI_Device
 			}
 			else
 			{
-				ami.Proxy.ReceiveDataFromDevice(agrID, DateTime.Now, devID, measurement);
-				ami.GenerateRandomValues();
+				try
+				{
+					ami.Proxy.ReceiveDataFromDevice(agrID, DateTime.Now, devID, measurement);
+					ami.GenerateRandomValues();
+				}
+				catch (Exception)
+				{
+					
+				}
+				
 			}
 
 		}

@@ -36,9 +36,9 @@ namespace AMI_Agregator
 
 			AMIAgregator initialise = new AMIAgregator();
 
-			LoadFromLocalDataBase(); //ucitavanje podataka iz lokalne baze
+			LoadAgregatorsFromLocalDataBase(); //ucitavanje podataka iz lokalne baze
 
-			LoadAgregatorsFromLocalDataBase(); //ucitavanje agregatora koji nemaju podatke u lokalnoj bazi (poslali su sve, ili nisu ni imali)
+			LoadAllDataFromLocalDataBase(); //ucitavanje agregatora koji nemaju podatke u lokalnoj bazi (poslali su sve, ili nisu ni imali)
 
 			OpenServices();
 
@@ -50,7 +50,7 @@ namespace AMI_Agregator
 		#region methods
 
 		//sluzi za ucitavanje agregatora i njegovih uredjaja(ako ih ima) koji nemaju podatke u lokalnoj bazi podataka
-		private void LoadAgregatorsFromLocalDataBase()
+		private void LoadAllDataFromLocalDataBase()
 		{
 			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
@@ -80,7 +80,7 @@ namespace AMI_Agregator
 		}
 
 		//sluzi za ucitavanje agregatora i njegovih uredjaja koji nisu poslati u globanu bazu podataka
-		private void LoadFromLocalDataBase()
+		private void LoadAgregatorsFromLocalDataBase()
 		{
 			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
@@ -258,7 +258,7 @@ namespace AMI_Agregator
 				//prinudno slanje podataka u bazu, posto se agregator brise
 				agregators[keyValue.Key].Proxy.SendDataToSystemDataBase(keyValue.Key, agregators[keyValue.Key].Dates, agregators[keyValue.Key].Buffer);
 				//brisanje iz lokalne baze
-				agregators[keyValue.Key].DeleteFromLocalDatabase(keyValue.Key);
+				AMIAgregator.ADB.DeleteAgregatorFromLocalDatabase(keyValue.Key);
 				agregators.Remove(keyValue.Key);
 				//brisanje iz tabele koja sadrzi sve agregatore
 				RemoveAgregatorFromDataBase(keyValue.Key);
