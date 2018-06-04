@@ -2,6 +2,7 @@
 using AMI_System_Management;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,11 @@ namespace User
         public MainWindow()
         {
             InitializeComponent();
-        }
+			Process.Start(@"..\..\..\Container\bin\Debug\Container.exe");
+			Process.Start(@"..\..\..\Container\bin\Debug\Container.exe");
+			Process.Start(@"..\..\..\Container\bin\Debug\Container.exe");
+
+		}
 
         private void devBtn_Click(object sender, RoutedEventArgs e)
         {
