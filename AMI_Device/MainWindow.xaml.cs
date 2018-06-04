@@ -30,8 +30,6 @@ namespace AMI_Device
 	{
 		#region static fields
 
-		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
-
 		private static Dictionary<string, AMICharacteristics> availableAMIDevices = new Dictionary<string, AMICharacteristics>();
 
 		public static Dictionary<string, AMICharacteristics> AvailableAMIDevices { get => availableAMIDevices; set => availableAMIDevices = value; }
@@ -39,6 +37,8 @@ namespace AMI_Device
 		private static Random rand = new Random();
 
 		public static IAMI_Agregator defaultProxy; //za pocetku konekciju koja uvek traje
+
+		public static DeviceDB DDB = new DeviceDB();
 
 		#endregion static fields
 
@@ -54,7 +54,9 @@ namespace AMI_Device
 
 			LoadDevicesFromLocalDatabase(); //isto kao i kod agregatora, ucitavaju se uredjaji za koje vrednosti nisu poslate
 
-			LoadNotAddeDevices(); //ucitavaju se uredjaji koji nemaju nijednu vrednost, a dodati su bili
+			DDB.LoadNotAddedDevices(); //ucitavaju se uredjaji koji nemaju nijednu vrednost, a dodati su bili
+
+			dataGrid.Items.Refresh();
 
 			this.DataContext = this;
 		}
@@ -63,44 +65,18 @@ namespace AMI_Device
 
 		#region methods
 
-		private void LoadNotAddeDevices()
-		{
-			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
-			using (SqlConnection con = new SqlConnection(CS))
-			{
-				SqlCommand cmd = new SqlCommand();
-				con.Open();
-				cmd.Connection = con;
-
-				cmd.CommandText = "SELECT Agregator_Code, Device_Code FROM Devices_Table";
-
-				//sada izaberemo sve uredjaje koji pripadaju odredjenim agregatima, i gledamo da li smo ih vec dodali u funkciji
-				//koja ucitava uredjaje iz lokalne baze gde se nalaze neposlati podaci
-				using (SqlDataReader rdr = cmd.ExecuteReader())
-				{
-					while (rdr.Read())
-					{
-						string agregator_code = rdr["Agregator_Code"].ToString();
-						string device_code = rdr["Device_Code"].ToString();
-
-						if (!AvailableAMIDevices.ContainsKey(device_code))
-						{
-							AMICharacteristics newAmi = new AMICharacteristics(device_code, agregator_code);
-							newAmi.Added = false;
-							AvailableAMIDevices.Add(device_code, newAmi);
-						}
-
-					}
-				}
-			}
-
-			dataGrid.Items.Refresh();
-		}
-
 		private void LoadDevicesFromLocalDatabase()
 		{
+			Dictionary<string, List<string>> list = new Dictionary<string, List<string>>();
 			//prihvatamo dictionary: agregator_code - device_codes (svi njegovi uredjaji)
-			var list = defaultProxy.AgregatorsAndTheirDevices();
+			try
+			{
+				list = defaultProxy.AgregatorsAndTheirDevices();
+			}
+			catch (Exception)
+			{
+				this.Close();
+			}
 
 			//prolazimo kroz svaki par u recniku
 			foreach (var keyValue in list)
@@ -142,7 +118,7 @@ namespace AMI_Device
 				else
 				{
 					AvailableAMIDevices.Add(ami.Device_code, ami); //ako nema, dodaj ga
-					SaveDeviceToDataBase(ami.AgregatorID, ami.Device_code);
+					DDB.SaveDeviceToDataBase(ami.AgregatorID, ami.Device_code);
 				}
 
 				dataGrid.Items.Refresh();
@@ -156,7 +132,7 @@ namespace AMI_Device
 				KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
 				AvailableAMIDevices.Remove(obj.Key);
 				dataGrid.Items.Refresh();
-				RemoveDeviceFromDataBase(obj.Key);
+				DDB.RemoveDeviceFromDataBase(obj.Key);
 				defaultProxy.RemoveDevice(obj.Value.AgregatorID, obj.Key); //mora i agregat da obrise uredjaj iz svog bafera
 			}
 		}
@@ -220,41 +196,6 @@ namespace AMI_Device
 			}
 
 		}
-
-		//prilikom dodavanja uredjaja, cuva se uredjaj u posebnoj tabeli koja ima device_code - agregator_code
-		private void SaveDeviceToDataBase(string agregator_code, string device_code)
-		{
-			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
-			using (SqlConnection con = new SqlConnection(CS))
-			{
-				con.Open();
-				SqlCommand cmd;
-
-				string query = $"INSERT INTO [Devices_Table](Agregator_Code, Device_Code) VALUES('{agregator_code}', '{device_code}')";
-
-				cmd = new SqlCommand(query, con);
-				cmd.ExecuteNonQuery();
-
-			}
-		}
-
-		//prilikom brisanja uredjaja, brise se iz te tabele
-		private void RemoveDeviceFromDataBase(string device_code)
-		{
-			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
-			using (SqlConnection con = new SqlConnection(CS))
-			{
-				con.Open();
-				SqlCommand cmd;
-
-				string query = $"DELETE FROM Devices_Table WHERE Device_Code like '{device_code}'";
-
-				cmd = new SqlCommand(query, con);
-				cmd.ExecuteReader();
-
-			}
-		}
-
 
 		#endregion methods
 	}

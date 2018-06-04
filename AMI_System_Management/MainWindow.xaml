@@ -214,10 +214,11 @@
 
 		<DataGrid x:Name="alarmDataGrid" Visibility="Hidden" HorizontalAlignment="Left" Height="384" Margin="10,427,0,0" VerticalAlignment="Top" Width="812">
 			<DataGrid.Columns>
-				
-				
+
+
 			</DataGrid.Columns>
 		</DataGrid>
+		<Button x:Name="button" Click="buttonRefresh_Click" Content="REFRESH" FontSize="22" HorizontalAlignment="Left" Margin="36,325,0,0" VerticalAlignment="Top" Width="150" Height="46"/>
 
 	</Grid>
 </Window>

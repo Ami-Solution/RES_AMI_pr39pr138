@@ -86,7 +86,7 @@ namespace AMI_System_Management_Test
         {
             AMISystem_Management sys = new AMISystem_Management();
 
-            List<string> list = AMISystem_Management.GetAllDevicesFromDataBase();
+            List<string> list = AMISystem_Management.SDB.GetAllDevicesFromDataBase();
 
             CollectionAssert.IsNotEmpty(list);
         }
@@ -97,7 +97,7 @@ namespace AMI_System_Management_Test
             AMISystem_Management sys = new AMISystem_Management();
             DateTime time = DateTime.Now;
 
-            DateTime newTime= AMISystem_Management.GetEarliesOrLatesttDateFromDatabase("EARLIEST");
+            DateTime newTime= AMISystem_Management.SDB.GetEarliesOrLatesttDateFromDatabase("EARLIEST");
 
             Assert.AreNotEqual(time, newTime);
         }
@@ -108,7 +108,7 @@ namespace AMI_System_Management_Test
             AMISystem_Management sys = new AMISystem_Management();
             DateTime time = DateTime.Now;
 
-            DateTime newTime = AMISystem_Management.GetEarliesOrLatesttDateFromDatabase("LATEST");
+            DateTime newTime = AMISystem_Management.SDB.GetEarliesOrLatesttDateFromDatabase("LATEST");
 
             Assert.AreNotEqual(time, newTime);
         }
@@ -126,7 +126,7 @@ namespace AMI_System_Management_Test
         {
             //Dictionary<DateTime, double> empty = new Dictionary<DateTime, double>();
 
-            Dictionary<DateTime, double> retVal = AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
+            Dictionary<DateTime, double> retVal = AMISystem_Management.SDB.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
 
             CollectionAssert.IsEmpty(retVal);
         }
@@ -145,7 +145,7 @@ namespace AMI_System_Management_Test
             //List<Tuple<DateTime, double>> empty = new List<Tuple<DateTime, double>>();
             devicesCount = 1;
 
-            List<Tuple<DateTime, double>> retValue = AMISystem_Management.GetValuesFromDatabase(code, typeMeasurment, selectedDate, out devicesCount);
+            List<Tuple<DateTime, double>> retValue = AMISystem_Management.SDB.GetValuesFromDatabase(code, typeMeasurment, selectedDate, out devicesCount);
 
             CollectionAssert.IsEmpty(retValue);
         }
@@ -160,7 +160,7 @@ namespace AMI_System_Management_Test
         [TestCaseSource(nameof(Fifth))] //treba da ide notEmpty
         public void GetDatesAndValuesFromDataBase(string device_code, DateTime selectedDate)
         {
-            Dictionary<DateTime, List<double>> retVal = AMISystem_Management.GetDatesAndValuesFromDataBase(device_code, selectedDate);
+            Dictionary<DateTime, List<double>> retVal = AMISystem_Management.SDB.GetDatesAndValuesFromDataBase(device_code, selectedDate);
 
             CollectionAssert.IsEmpty(retVal);
         }
