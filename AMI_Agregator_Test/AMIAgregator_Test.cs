@@ -28,7 +28,7 @@ namespace AMI_Agregator_Test
         }
 
         [Test]
-        [TestCase("agregator2","aksjfkelds")]
+        [TestCase("agregator2000","aksjfkelds")]
         public void AddDevice_StatusOnNotDuplicate_ReturnsAdded(string agregator_code, string device_code)
         {
             
@@ -114,11 +114,6 @@ namespace AMI_Agregator_Test
                         { TypeMeasurement.CurrentP, new List<double>() },
                         { TypeMeasurement.Voltage, new List<double>() },
                         });
-            //ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap();
-            //// You may want to map to your own exe.config file here.
-            //fileMap.ExeConfigFilename = @"C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\AMI_Agregator\App.config";
-            //// You can add here LocalUserConfigFilename, MachineConfigFilename and RoamingUserConfigFilename, too
-            //System.Configuration.Configuration config = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
 
             agr.ReceiveDataFromDevice(agregator_code, dateTime, device_code, values); 
 
@@ -344,15 +339,15 @@ namespace AMI_Agregator_Test
             Mock<IAMI_System_Management> moq1 = new Mock<IAMI_System_Management>();
             moq1.Setup(x => x.SendDataToSystemDataBase(It.IsAny<string>(), It.IsAny<Dictionary<string, List<DateTime>>>(), It.IsAny<Dictionary<string, Dictionary<TypeMeasurement, List<double>>>>())).Returns(true);
             IAMI_System_Management sys = moq1.Object;
-            MainWindow.agregators[agregator_code].Buffer.Add(
-                        device_code,
-                        new Dictionary<TypeMeasurement, List<double>>()
-                        {
-                        { TypeMeasurement.ActivePower, new List<double>() },
-                        { TypeMeasurement.ReactivePower, new List<double>() },
-                        { TypeMeasurement.CurrentP, new List<double>() },
-                        { TypeMeasurement.Voltage, new List<double>() },
-                        });
+            //MainWindow.agregators[agregator_code].Buffer.Add(
+            //            device_code,
+            //            new Dictionary<TypeMeasurement, List<double>>()
+            //            {
+            //            { TypeMeasurement.ActivePower, new List<double>() },
+            //            { TypeMeasurement.ReactivePower, new List<double>() },
+            //            { TypeMeasurement.CurrentP, new List<double>() },
+            //            { TypeMeasurement.Voltage, new List<double>() },
+            //            });
             agr.Proxy = sys;
 
             string ret= agr.RemoveDevice(agregator_code, device_code);

@@ -314,16 +314,18 @@ var assemblies = [
   {
     "name" : "AMI_Agregator",
     "classes" : [
-    {  "name" : "AMI_Agregator.AMIAgregator", "reportPath" : "AMI_Agregator_AMIAgregator.htm", "coveredLines" : 33, "uncoveredLines" : 138, "coverableLines" : 171, "totalLines" : 297, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 28, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Agregator.AgregatorDB", "reportPath" : "AMI_Agregator_AgregatorDB.htm", "coveredLines" : 65, "uncoveredLines" : 85, "coverableLines" : 150, "totalLines" : 235, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 8, "totalBranches" : 20, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Agregator.AMIAgregator", "reportPath" : "AMI_Agregator_AMIAgregator.htm", "coveredLines" : 33, "uncoveredLines" : 100, "coverableLines" : 133, "totalLines" : 304, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 20, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
     {  "name" : "AMI_Agregator.App", "reportPath" : "AMI_Agregator_App.htm", "coveredLines" : 0, "uncoveredLines" : 2, "coverableLines" : 2, "totalLines" : 79, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
-    {  "name" : "AMI_Agregator.MainWindow", "reportPath" : "AMI_Agregator_MainWindow.htm", "coveredLines" : 3, "uncoveredLines" : 191, "coverableLines" : 194, "totalLines" : 333, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 22, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Agregator.MainWindow", "reportPath" : "AMI_Agregator_MainWindow.htm", "coveredLines" : 3, "uncoveredLines" : 87, "coverableLines" : 90, "totalLines" : 183, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 10, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
     {  "name" : "AMI_Agregator.Properties.Resources", "reportPath" : "AMI_Agregator_Resources.htm", "coveredLines" : 0, "uncoveredLines" : 17, "coverableLines" : 17, "totalLines" : 71, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 2, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
     {  "name" : "AMI_Agregator.Properties.Settings", "reportPath" : "AMI_Agregator_Settings.htm", "coveredLines" : 0, "uncoveredLines" : 4, "coverableLines" : 4, "totalLines" : 30, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
   ]},
   {
     "name" : "AMI_Agregator_Test",
     "classes" : [
-    {  "name" : "AMI_Agregator_Test.AMIAgregator_Test", "reportPath" : "AMI_Agregator_Test_AMIAgregator_Test.htm", "coveredLines" : 45, "uncoveredLines" : 211, "coverableLines" : 256, "totalLines" : 363, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Agregator_Test.AgregatorDB_Test", "reportPath" : "AMI_Agregator_Test_AgregatorDB_Test.htm", "coveredLines" : 44, "uncoveredLines" : 5, "coverableLines" : 49, "totalLines" : 103, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Agregator_Test.AMIAgregator_Test", "reportPath" : "AMI_Agregator_Test_AMIAgregator_Test.htm", "coveredLines" : 45, "uncoveredLines" : 202, "coverableLines" : 247, "totalLines" : 358, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
   ]},
   {
     "name" : "Common",

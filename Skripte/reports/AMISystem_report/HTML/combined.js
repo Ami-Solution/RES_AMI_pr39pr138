@@ -314,16 +314,18 @@ var assemblies = [
   {
     "name" : "AMI_System_Management_Test",
     "classes" : [
-    {  "name" : "AMI_System_Management_Test.AMISystem_Test", "reportPath" : "AMI_System_Management_Test_AMISystem_Test.htm", "coveredLines" : 85, "uncoveredLines" : 0, "coverableLines" : 85, "totalLines" : 168, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_System_Management_Test.AMISystem_Test", "reportPath" : "AMI_System_Management_Test_AMISystem_Test.htm", "coveredLines" : 46, "uncoveredLines" : 0, "coverableLines" : 46, "totalLines" : 168, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_System_Management_Test.SystemDB_Test", "reportPath" : "AMI_System_Management_Test_SystemDB_Test.htm", "coveredLines" : 40, "uncoveredLines" : 0, "coverableLines" : 40, "totalLines" : 164, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
   ]},
   {
     "name" : "AMY_System_Management",
     "classes" : [
-    {  "name" : "AMI_System_Management.AMISystem_Management", "reportPath" : "AMY_System_Management_AMISystem_Management.htm", "coveredLines" : 152, "uncoveredLines" : 38, "coverableLines" : 190, "totalLines" : 307, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 22, "totalBranches" : 32, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_System_Management.AMISystem_Management", "reportPath" : "AMY_System_Management_AMISystem_Management.htm", "coveredLines" : 7, "uncoveredLines" : 0, "coverableLines" : 7, "totalLines" : 33, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
     {  "name" : "AMI_System_Management.App", "reportPath" : "AMY_System_Management_App.htm", "coveredLines" : 0, "uncoveredLines" : 2, "coverableLines" : 2, "totalLines" : 79, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
-    {  "name" : "AMI_System_Management.MainWindow", "reportPath" : "AMY_System_Management_MainWindow.htm", "coveredLines" : 2, "uncoveredLines" : 420, "coverableLines" : 422, "totalLines" : 856, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 66, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_System_Management.MainWindow", "reportPath" : "AMY_System_Management_MainWindow.htm", "coveredLines" : 0, "uncoveredLines" : 460, "coverableLines" : 460, "totalLines" : 911, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 70, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
     {  "name" : "AMI_System_Management.Properties.Resources", "reportPath" : "AMY_System_Management_Resources.htm", "coveredLines" : 0, "uncoveredLines" : 17, "coverableLines" : 17, "totalLines" : 71, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 2, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
     {  "name" : "AMI_System_Management.Properties.Settings", "reportPath" : "AMY_System_Management_Settings.htm", "coveredLines" : 0, "uncoveredLines" : 4, "coverableLines" : 4, "totalLines" : 30, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMY_System_Management.SystemDB", "reportPath" : "AMY_System_Management_SystemDB.htm", "coveredLines" : 153, "uncoveredLines" : 23, "coverableLines" : 176, "totalLines" : 281, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 22, "totalBranches" : 32, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
   ]},
   {
     "name" : "Common",

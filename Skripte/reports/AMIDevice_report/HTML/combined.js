@@ -314,17 +314,19 @@ var assemblies = [
   {
     "name" : "AMI_Device",
     "classes" : [
-    {  "name" : "AMI_Device.AgregatorChoosing", "reportPath" : "AMI_Device_AgregatorChoosing.htm", "coveredLines" : 0, "uncoveredLines" : 23, "coverableLines" : 23, "totalLines" : 67, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 2, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
-    {  "name" : "AMI_Device.AMICharacteristics", "reportPath" : "AMI_Device_AMICharacteristics.htm", "coveredLines" : 63, "uncoveredLines" : 1, "coverableLines" : 64, "totalLines" : 112, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 5, "totalBranches" : 6, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Device.AgregatorChoosing", "reportPath" : "AMI_Device_AgregatorChoosing.htm", "coveredLines" : 0, "uncoveredLines" : 23, "coverableLines" : 23, "totalLines" : 82, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 2, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Device.AMICharacteristics", "reportPath" : "AMI_Device_AMICharacteristics.htm", "coveredLines" : 65, "uncoveredLines" : 4, "coverableLines" : 69, "totalLines" : 138, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 5, "totalBranches" : 6, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
     {  "name" : "AMI_Device.App", "reportPath" : "AMI_Device_App.htm", "coveredLines" : 0, "uncoveredLines" : 2, "coverableLines" : 2, "totalLines" : 79, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
-    {  "name" : "AMI_Device.MainWindow", "reportPath" : "AMI_Device_MainWindow.htm", "coveredLines" : 3, "uncoveredLines" : 150, "coverableLines" : 153, "totalLines" : 271, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 24, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Device.DeviceDB", "reportPath" : "AMI_Device_DeviceDB.htm", "coveredLines" : 45, "uncoveredLines" : 0, "coverableLines" : 45, "totalLines" : 82, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 3, "totalBranches" : 4, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Device.MainWindow", "reportPath" : "AMI_Device_MainWindow.htm", "coveredLines" : 4, "uncoveredLines" : 113, "coverableLines" : 117, "totalLines" : 226, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 20, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
     {  "name" : "AMI_Device.Properties.Resources", "reportPath" : "AMI_Device_Resources.htm", "coveredLines" : 0, "uncoveredLines" : 17, "coverableLines" : 17, "totalLines" : 71, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 2, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
     {  "name" : "AMI_Device.Properties.Settings", "reportPath" : "AMI_Device_Settings.htm", "coveredLines" : 0, "uncoveredLines" : 4, "coverableLines" : 4, "totalLines" : 30, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
   ]},
   {
     "name" : "AMI_Device_Test",
     "classes" : [
-    {  "name" : "AMI_Device_Test.AMICharacteristics_Test", "reportPath" : "AMI_Device_Test_AMICharacteristics_Test.htm", "coveredLines" : 90, "uncoveredLines" : 0, "coverableLines" : 90, "totalLines" : 182, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Device_Test.AMICharacteristics_Test", "reportPath" : "AMI_Device_Test_AMICharacteristics_Test.htm", "coveredLines" : 90, "uncoveredLines" : 0, "coverableLines" : 90, "totalLines" : 171, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
+    {  "name" : "AMI_Device_Test.DeviceDB_Test", "reportPath" : "AMI_Device_Test_DeviceDB_Test.htm", "coveredLines" : 19, "uncoveredLines" : 0, "coverableLines" : 19, "totalLines" : 50, "coverageType" : "LineCoverage", "methodCoverage" : "-", "coveredBranches" : 0, "totalBranches" : 0, "lineCoverageHistory" : [], "branchCoverageHistory" : [] },
   ]},
   {
     "name" : "Common",

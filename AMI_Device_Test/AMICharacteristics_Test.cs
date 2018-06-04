@@ -93,13 +93,9 @@ namespace AMI_Device_Test
         {
             AMICharacteristics ami = new AMICharacteristics();
             Mock<IAMI_Agregator> moq1 = new Mock<IAMI_Agregator>();
-            //Mock<IAMI_Agregator> moq2 = new Mock<IAMI_Agregator>();
-            //mock.Setup(x => x.DoSomething(It.IsAny<string>(), It.IsAny<int>())).Returns((string x, int y) => x);
             moq1.Setup(x => x.AddDevice(It.IsAny<string>(), It.IsAny<string>())).Returns("ADDED");
             moq1.Setup(x => x.ReceiveDataFromDevice(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<Dictionary<TypeMeasurement, double>>()));
             IAMI_Agregator agr1 = moq1.Object;
-           // IAMI_Agregator agr2 = moq2.Object;
-           //samo da nes commit
             MainWindow.AvailableAMIDevices.Add(devID, ami);
             ami.Proxy = agr1;
 
@@ -128,12 +124,9 @@ namespace AMI_Device_Test
         {
             AMICharacteristics ami = new AMICharacteristics();
             Mock<IAMI_Agregator> moq1 = new Mock<IAMI_Agregator>();
-            //Mock<IAMI_Agregator> moq2 = new Mock<IAMI_Agregator>();
-            //mock.Setup(x => x.DoSomething(It.IsAny<string>(), It.IsAny<int>())).Returns((string x, int y) => x);
             moq1.Setup(x => x.AddDevice(It.IsAny<string>(), It.IsAny<string>())).Returns("DUPLICATE");
             moq1.Setup(x => x.ReceiveDataFromDevice(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<Dictionary<TypeMeasurement, double>>()));
             IAMI_Agregator agr1 = moq1.Object;
-            // IAMI_Agregator agr2 = moq2.Object;
 
             MainWindow.AvailableAMIDevices.Add(devID, ami);
             ami.Proxy = agr1;
@@ -163,12 +156,8 @@ namespace AMI_Device_Test
         {
             AMICharacteristics ami = new AMICharacteristics();
             Mock<IAMI_Agregator> moq1 = new Mock<IAMI_Agregator>();
-            //Mock<IAMI_Agregator> moq2 = new Mock<IAMI_Agregator>();
-            //mock.Setup(x => x.DoSomething(It.IsAny<string>(), It.IsAny<int>())).Returns((string x, int y) => x);
-            //moq1.Setup(x => x.AddDevice(It.IsAny<string>(), It.IsAny<string>())).Returns("DUPLICATE");
             moq1.Setup(x => x.ReceiveDataFromDevice(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<Dictionary<TypeMeasurement, double>>()));
             IAMI_Agregator agr1 = moq1.Object;
-            // IAMI_Agregator agr2 = moq2.Object;
 
             MainWindow.AvailableAMIDevices.Add(devID, ami);
             ami.Added = true;
