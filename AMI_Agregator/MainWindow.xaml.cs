@@ -34,11 +34,11 @@ namespace AMI_Agregator
 		{
 			InitializeComponent();
 
-			AMIAgregator initialise = new AMIAgregator();
+			AMIAgregator initialise = new AMIAgregator(); 
 
-			ADB.LoadAgregatorsFromLocalDataBase(); //ucitavanje podataka iz lokalne baze
+			ADB.LoadAllDataFromLocalDataBase(); //ucitavanje podataka iz lokalne baze 
 
-			ADB.LoadAllDataFromLocalDataBase(); //ucitavanje agregatora koji nemaju podatke u lokalnoj bazi (poslali su sve, ili nisu ni imali)
+			ADB.LoadAgregatorsFromLocalDataBase(); //ucitavanje agregatora koji nemaju podatke u lokalnoj bazi (poslali su sve, ili nisu ni imali)
 
 			OpenServices();
 

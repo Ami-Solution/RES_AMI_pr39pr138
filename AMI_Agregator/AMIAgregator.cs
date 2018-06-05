@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
@@ -180,7 +181,9 @@ namespace AMI_Agregator
 				if (ag.State == State.OFF)
 					break;
 
-				Thread.Sleep(5000);
+				int milliseconds = ReadConfig();
+
+				Thread.Sleep(milliseconds);
 
 				//ako postoji agregat koji ima uredjaj u sebi, salje podatke
 				if (ag.Dates.Count() > 0)
@@ -224,79 +227,24 @@ namespace AMI_Agregator
 			return retList;
 		}
 
-		/*
-		//koristi se kada se brise agregat
-		public void DeleteAgregatorFromLocalDatabase(string agregator_code)
+		private int ReadConfig()
 		{
-			using (SqlConnection con = new SqlConnection(CS))
+			int retVal = 5; //default vreme je 5 minuta, ako je config prazan, ili ako je neki tekst unutra
+
+			using (TextReader tr = new StreamReader("../../ConfigFile.txt"))
 			{
-				con.Open();
-				SqlCommand cmd;
+				string s = string.Empty;
+				if ((s = tr.ReadLine()) != null)
+				{
+					Int32.TryParse(s, out retVal);
+				}
 
-				string query = $"DELETE FROM AMI_LocalData_Table WHERE Agregator_Code like '{agregator_code}'";
-
-				cmd = new SqlCommand(query, con);
-				cmd.ExecuteReader();
-
+				if (retVal == 0)
+					retVal = 5;
 			}
+
+			return retVal * 60000; //*6000 -> u milisekunde pretvaramo
 		}
-
-		//koristi se kada se brise uredjaj iz agregata
-		private void DeleteDeviceFromLocalDatabase(string agregator_code, string device_code)
-		{
-			using (SqlConnection con = new SqlConnection(CS))
-			{
-				con.Open();
-				SqlCommand cmd;
-
-				string query = $"DELETE FROM AMI_LocalData_Table WHERE Agregator_Code like '{agregator_code}' and Device_Code like '{device_code}'";
-
-				cmd = new SqlCommand(query, con);
-				cmd.ExecuteReader();
-
-			}
-		}
-
-		private void SendToLocalDatabase(string agregator_code, DateTime dateTime, string device_code, Dictionary<TypeMeasurement, double> values)
-		{
-			double Voltage = 0;
-			double CurrentP = 0;
-			double ActivePower = 0;
-			double ReactivePower = 0;
-
-			//vadimo rednosti iz recninka
-			foreach (var keyValue in values)
-			{
-
-				if (keyValue.Key == TypeMeasurement.CurrentP)
-					CurrentP = keyValue.Value;
-
-				if (keyValue.Key == TypeMeasurement.ActivePower)
-					ActivePower = keyValue.Value;
-
-				if (keyValue.Key == TypeMeasurement.Voltage)
-					Voltage = keyValue.Value;
-
-				if (keyValue.Key == TypeMeasurement.ReactivePower)
-					ReactivePower = keyValue.Value;
-
-			}
-
-			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
-			using (SqlConnection con = new SqlConnection(CS))
-			{
-				con.Open();
-				SqlCommand cmd;
-
-				string query = $"INSERT INTO [AMI_LocalData_Table](Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
-				$"VALUES('{agregator_code}', '{device_code}', {Voltage}, {CurrentP}, {ActivePower}, {ReactivePower}, '{dateTime}')";
-
-				cmd = new SqlCommand(query, con);
-				cmd.ExecuteNonQuery();
-
-			}
-		}
-		*/
 
 		#endregion methods
 
