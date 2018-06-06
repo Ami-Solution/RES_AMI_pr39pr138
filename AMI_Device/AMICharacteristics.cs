@@ -78,7 +78,8 @@ namespace AMI_Device
 			this.proxy = factory.CreateChannel();
 		}
 
-		public void SendDataToAgregator(string agrID, string devID, Dictionary<TypeMeasurement, double> measurement) //ako stoji AMIChar ne mogu da dodam u interfejs, a ako ne dodam u interfejs, ne mozemo UNIT test
+        //salje podatke agregatoru
+		public void SendDataToAgregator(string agrID, string devID, Dictionary<TypeMeasurement, double> measurement) 
 		{
 			string retVal = "";
 			AMICharacteristics ami = MainWindow.AvailableAMIDevices[devID];
