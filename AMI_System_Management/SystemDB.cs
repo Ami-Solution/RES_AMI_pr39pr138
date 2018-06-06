@@ -12,8 +12,8 @@ namespace AMY_System_Management
 {
 	public class SystemDB : ISystemDB
 	{
-		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
-		private static string CS_AMI_AGREGATOR = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
+		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
+		private static string CS_AMI_AGREGATOR = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
 
 		public List<string> GetAllAgregatorsFromDataBase()
 		{
@@ -76,7 +76,8 @@ namespace AMY_System_Management
 				{
 					while (rdr.Read())
 					{
-						retVal.Add(Convert.ToDateTime(rdr["DateAndTime"]), Convert.ToDouble(rdr[typeMeasurment]));
+						if (!retVal.ContainsKey(Convert.ToDateTime(rdr["DateAndTime"])))
+							retVal.Add(Convert.ToDateTime(rdr["DateAndTime"]), Convert.ToDouble(rdr[typeMeasurment]));
 					}
 				}
 			}
@@ -107,7 +108,9 @@ namespace AMY_System_Management
 						Values.Add(Convert.ToDouble(rdr["Voltage"]));
 						Values.Add(Convert.ToDouble(rdr["ActivePower"]));
 						Values.Add(Convert.ToDouble(rdr["ReactivePower"]));
-						retVal.Add(Convert.ToDateTime(rdr["DateAndTime"]), Values);
+
+						if(!retVal.ContainsKey(Convert.ToDateTime(rdr["DateAndTime"])))
+							retVal.Add(Convert.ToDateTime(rdr["DateAndTime"]), Values);
 
 					}
 				}
@@ -255,24 +258,8 @@ namespace AMY_System_Management
 						dateTimeList[keyValue.Key] = new List<DateTime>();
 					}
 
-					//brisanje vremena
-
 				}
 			}
-
-			/*
-            Thread thread = new Thread(() =>
-            {
-                MainWindow m = new MainWindow();
-                m.RefreshAgregatorsAndDevices();
-
-                System.Windows.Threading.Dispatcher.Run();
-            });
-
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-			nepotrebno */
-
 
 			Trace.WriteLine($"Agregat: {agregator_code}, ispraznjen buffer, kraj: {DateTime.Now} !");
 			return retVal;
