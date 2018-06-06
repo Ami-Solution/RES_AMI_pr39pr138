@@ -54,7 +54,7 @@ namespace AMI_Device
 
 			LoadDevicesFromLocalDatabase(); //isto kao i kod agregatora, ucitavaju se uredjaji za koje vrednosti nisu poslate
 
-			DDB.LoadNotAddedDevices(); //ucitavaju se uredjaji koji nemaju nijednu vrednost, a dodati su bili
+			DDB.LoadNotAddedDevices(); //ucitavaju se uredjaji koji nisu bili povezani, a dodati su bili
 
 			dataGrid.Items.Refresh();
 
@@ -65,6 +65,7 @@ namespace AMI_Device
 
 		#region methods
 
+        //ucitava uredjaje koji su spojeni sa agregatima
 		private void LoadDevicesFromLocalDatabase()
 		{
 			Dictionary<string, List<string>> list = new Dictionary<string, List<string>>();
@@ -91,6 +92,7 @@ namespace AMI_Device
 			dataGrid.Items.Refresh();
 		}
 
+        //dodavanje novog uredjaja
 		private void AddBtn_Click(object sender, RoutedEventArgs e)
 		{
 			AMICharacteristics ami = new AMICharacteristics();
@@ -127,7 +129,7 @@ namespace AMI_Device
 
 		private void RmvBtn_Click(object sender, RoutedEventArgs e)
 		{
-			if (dataGrid.SelectedItem != null)
+			if (dataGrid.SelectedItem != null)// ako nije selektovan
 			{
 				KeyValuePair<string, AMICharacteristics> obj = (KeyValuePair<string, AMICharacteristics>)dataGrid.SelectedItem;
 				AvailableAMIDevices.Remove(obj.Key);
@@ -159,9 +161,9 @@ namespace AMI_Device
 
 					Task t = Task.Factory.StartNew(() =>
 					{
-						while (AvailableAMIDevices.ContainsKey(keyValue.Key))  //dok imamo uredjaj u listi, slace podatke, ali samo -->
+						while (AvailableAMIDevices.ContainsKey(keyValue.Key))  //dok postoji u listi 
 						{
-							if (AvailableAMIDevices[keyValue.Key].Status == State.OFF) // --> ako je ukljucen. Zato sto ako obrisemo, treba da izadje iz petlje
+							if (AvailableAMIDevices[keyValue.Key].Status == State.OFF) // ako se ugasi u medjuvremenu
 								break;
 
 							AvailableAMIDevices[keyValue.Key].SendDataToAgregator(AvailableAMIDevices[keyValue.Key].AgregatorID, keyValue.Key, AvailableAMIDevices[keyValue.Key].Measurements);

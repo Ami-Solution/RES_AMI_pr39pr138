@@ -31,7 +31,6 @@ namespace AMI_Agregator_Test
         [TestCase("agregator2000","aksjfkelds")]
         public void AddDevice_StatusOnNotDuplicate_ReturnsAdded(string agregator_code, string device_code)
         {
-            
             AMIAgregator agr = new AMIAgregator(agregator_code);
             MainWindow.agregators.Add(agr.Agregator_code,agr);
             MainWindow.agregatorNumber++;
@@ -175,13 +174,13 @@ namespace AMI_Agregator_Test
             MainWindow.agregators.Add(agr.Agregator_code, agr);
             MainWindow.agregatorNumber++;
             agr.State = State.ON;
-            agr.Dates.Add("aassffggaewa", new List<DateTime>());
+            agr.Dates.Add("llaallddkk", new List<DateTime>());
             Mock<IAMI_System_Management> moq1 = new Mock<IAMI_System_Management>();
             moq1.Setup(x => x.SendDataToSystemDataBase(It.IsAny<string>(), It.IsAny<Dictionary<string, List<DateTime>>>(),It.IsAny<Dictionary<string, Dictionary<TypeMeasurement, List<double>>>>())).Returns(true);
             IAMI_System_Management sys = moq1.Object;
 
             MainWindow.agregators["agregator7"].Buffer.Add(
-                        "aassffggaewa",
+                        "llaallddkk",
                         new Dictionary<TypeMeasurement, List<double>>()
                         {
                         { TypeMeasurement.ActivePower, new List<double>() },
@@ -192,7 +191,7 @@ namespace AMI_Agregator_Test
 
             Dictionary<string, Dictionary<TypeMeasurement, List<double>>> oldBuffer = new Dictionary<string, Dictionary<TypeMeasurement, List<double>>>();
             oldBuffer.Add(
-                        "aassffggaewa",
+                        "llaallddkk",
                         new Dictionary<TypeMeasurement, List<double>>()
                         {
                         { TypeMeasurement.ActivePower, new List<double>() },
@@ -200,10 +199,10 @@ namespace AMI_Agregator_Test
                         { TypeMeasurement.CurrentP, new List<double>() },
                         { TypeMeasurement.Voltage, new List<double>() },
                         });
-            MainWindow.agregators["agregator7"].Buffer["aassffggaewa"][TypeMeasurement.ActivePower].Add(233);
-            MainWindow.agregators["agregator7"].Buffer["aassffggaewa"][TypeMeasurement.CurrentP].Add(123);
-            MainWindow.agregators["agregator7"].Buffer["aassffggaewa"][TypeMeasurement.ReactivePower].Add(56);
-            MainWindow.agregators["agregator7"].Buffer["aassffggaewa"][TypeMeasurement.Voltage].Add(12.12);
+            MainWindow.agregators["agregator7"].Buffer["llaallddkk"][TypeMeasurement.ActivePower].Add(233);
+            MainWindow.agregators["agregator7"].Buffer["llaallddkk"][TypeMeasurement.CurrentP].Add(123);
+            MainWindow.agregators["agregator7"].Buffer["llaallddkk"][TypeMeasurement.ReactivePower].Add(56);
+            MainWindow.agregators["agregator7"].Buffer["llaallddkk"][TypeMeasurement.Voltage].Add(12.12);
 
             agr.Proxy = sys;
 
@@ -339,15 +338,7 @@ namespace AMI_Agregator_Test
             Mock<IAMI_System_Management> moq1 = new Mock<IAMI_System_Management>();
             moq1.Setup(x => x.SendDataToSystemDataBase(It.IsAny<string>(), It.IsAny<Dictionary<string, List<DateTime>>>(), It.IsAny<Dictionary<string, Dictionary<TypeMeasurement, List<double>>>>())).Returns(true);
             IAMI_System_Management sys = moq1.Object;
-            //MainWindow.agregators[agregator_code].Buffer.Add(
-            //            device_code,
-            //            new Dictionary<TypeMeasurement, List<double>>()
-            //            {
-            //            { TypeMeasurement.ActivePower, new List<double>() },
-            //            { TypeMeasurement.ReactivePower, new List<double>() },
-            //            { TypeMeasurement.CurrentP, new List<double>() },
-            //            { TypeMeasurement.Voltage, new List<double>() },
-            //            });
+
             agr.Proxy = sys;
 
             string ret= agr.RemoveDevice(agregator_code, device_code);

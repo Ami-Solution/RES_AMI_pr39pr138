@@ -15,7 +15,7 @@ if "%4" == ""	set type="*"
 set NUNIT_CONSOLE_PATH=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\NUnit-2.6.4\NUnit-2.6.4\bin\nunit-console.exe
 set OPEN_COVER_RUNNER=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\opencover.4.6.519\OpenCover.Console.exe
 set REPORT_GENERATOR=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\ReportGenerator_2.5.1.0\ReportGenerator.exe
-set report_dir=AMISystem_report
+set report_dir=AMIAgregator_report
 
 mkdir %out%\%report_dir%
 %OPEN_COVER_RUNNER% -register:user -target:%NUNIT_CONSOLE_PATH% -targetargs:"/noshadow %library% " -filter:+[%assembly%]%type% -output:"%out%\%report_dir%\report.xml"

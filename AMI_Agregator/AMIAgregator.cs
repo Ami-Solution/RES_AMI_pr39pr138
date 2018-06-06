@@ -140,9 +140,7 @@ namespace AMI_Agregator
 				ag.Proxy.SendDataToSystemDataBase(ag.Agregator_code, ag.Dates, ag.Buffer); //prinudno slanje podataka u bazu, kada se brise uredjaj
 
 				ADB.DeleteDeviceFromLocalDatabase(agregator_code, device_code);
-				//ag.Buffer.Remove(device_code);
 				ag.ListOfDevices.Remove(device_code);
-				//ag.Dates.Remove(device_code);
 
 				MainWindow.agregators.Remove(agregator_code);
 
@@ -159,7 +157,6 @@ namespace AMI_Agregator
 			{
 				if (ag.State == State.ON)
 				{
-					//Trace.WriteLine("Prihvatam podatke");
 					foreach (var keyValue in values)
 					{
 						MainWindow.agregators[agregator_code].Buffer[device_code][keyValue.Key].Add(keyValue.Value);
@@ -183,10 +180,13 @@ namespace AMI_Agregator
 
 				int milliseconds = ReadConfig();
 
-				Thread.Sleep(milliseconds);
+				Thread.Sleep(5000); //promeni posle
 
-				//ako postoji agregat koji ima uredjaj u sebi, salje podatke
-				if (ag.Dates.Count() > 0)
+                if (ag.State == State.OFF) // ako je nakon spavanja ugasen
+                    break;
+
+                //ako postoji agregat koji ima uredjaj u sebi, salje podatke, ako postoje vremena postoje podaci
+                if (ag.Dates.Count() > 0)
 				{
 					try
 					{
@@ -243,7 +243,7 @@ namespace AMI_Agregator
 					retVal = 5;
 			}
 
-			return retVal * 60000; //*6000 -> u milisekunde pretvaramo
+			return retVal * 60000; //*60000 -> u milisekunde pretvaramo
 		}
 
 		#endregion methods

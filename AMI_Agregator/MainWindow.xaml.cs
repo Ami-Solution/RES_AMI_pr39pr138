@@ -38,7 +38,7 @@ namespace AMI_Agregator
 
 			ADB.LoadAllDataFromLocalDataBase(); //ucitavanje podataka iz lokalne baze 
 
-			ADB.LoadAgregatorsFromLocalDataBase(); //ucitavanje agregatora koji nemaju podatke u lokalnoj bazi (poslali su sve, ili nisu ni imali)
+			ADB.LoadAllAgregators(); //ucitavanje agregatora koji nemaju podatke u lokalnoj bazi (poslali su sve, ili nisu ni imali)
 
 			OpenServices();
 

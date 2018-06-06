@@ -10,7 +10,7 @@ namespace AMI_Device
 {
 	public class DeviceDB : IDeviceDB
 	{
-		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
+		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
 
 		public DeviceDB()
 		{
@@ -27,8 +27,7 @@ namespace AMI_Device
 
 				cmd.CommandText = "SELECT Agregator_Code, Device_Code FROM Devices_Table";
 
-				//sada izaberemo sve uredjaje koji pripadaju odredjenim agregatima, i gledamo da li smo ih vec dodali u funkciji
-				//koja ucitava uredjaje iz lokalne baze gde se nalaze neposlati podaci
+				//sada izaberemo sve uredjaje koji postoje u sistemu, i gledamo da li smo ih vec dodali 
 				using (SqlDataReader rdr = cmd.ExecuteReader())
 				{
 					while (rdr.Read())

@@ -17,7 +17,7 @@ namespace Common
 
 		void LoadAllDataFromLocalDataBase();
 
-		void LoadAgregatorsFromLocalDataBase();
+		void LoadAllAgregators();
 
 		void SaveAgragatorToDataBase(string agregator_code);
 

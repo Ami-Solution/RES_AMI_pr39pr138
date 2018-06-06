@@ -71,7 +71,7 @@ namespace AMI_Agregator_Test
             MainWindow.agregators.Add(ami.Agregator_code, ami);
             MainWindow.agregatorNumber++;
 
-            db.LoadAgregatorsFromLocalDataBase();
+            db.LoadAllAgregators();
 
             Assert.NotNull(db);
         }

@@ -210,12 +210,13 @@ namespace AMI_System_Management
 			}
 
 			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
+            alarmDataGrid.Visibility = Visibility.Hidden;
 			GrafTab.Visibility = Visibility.Visible;
 
 			errorLabel.Content = "";
-			LMaxValue.Content = "100";
+			LMaxValue.Content = "300";
 			LAvgValue.Content = "200";
-			LMinValue.Content = "300";
+			LMinValue.Content = "100";
 
 			string device_code = deviceComboBox.SelectedValue.ToString();
 			string typeMeasurment = typemeasurmentDeviceComboBox.SelectedItem.ToString();
@@ -337,7 +338,8 @@ namespace AMI_System_Management
 
 			errorLabel.Content = "";
 			CGraph.Children.RemoveRange(0, CGraph.Children.Count);
-			GrafTab.Visibility = Visibility.Visible;
+            alarmDataGrid.Visibility = Visibility.Hidden;
+            GrafTab.Visibility = Visibility.Visible;
 
 			string agregator_code = agregatorsComboBox.SelectedValue.ToString();
 			string typeMeasurment = typemeasurmentAgregatorComboBox.SelectedItem.ToString();
@@ -347,9 +349,9 @@ namespace AMI_System_Management
 			{
 				if (typeMeasurment == "Voltage") //napon se ne sabira, nego se srednja vrednost se gleda. Jedina razlike je da ne povecavamo vrednosti na Y osi
 				{
-					LMaxValue.Content = "100";
+					LMaxValue.Content = "300";
 					LAvgValue.Content = "200";
-					LMinValue.Content = "300";
+					LMinValue.Content = "100";
 
 					int devicesCount = 0;
 					//imamo vreme, i vrednost u tom vremenu
@@ -457,9 +459,9 @@ namespace AMI_System_Management
 			}
 			else //prosecno merenje za izabrani tip, isto kao i gore kod napona. Ne menjamo samo vrednosti na Y osi
 			{
-				LMaxValue.Content = "100";
+				LMaxValue.Content = "300";
 				LAvgValue.Content = "200";
-				LMinValue.Content = "300";
+				LMinValue.Content = "100";
 
 				int devicesCount = 0;
 				//imamo vreme, i vrednost u tom vremenu
@@ -513,9 +515,10 @@ namespace AMI_System_Management
 		}
 
 		//za testiranje grafa
-		/*
-	   private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True;MultipleActiveResultSets=True;";
-	   private static System.Random rand = new System.Random();
+		
+            /*
+	   private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
+       private static System.Random rand = new System.Random();
 	   */
 
 		private void clearButton_Click(object sender, RoutedEventArgs e)
@@ -550,7 +553,7 @@ namespace AMI_System_Management
 				TimeSpan time;
 				StringBuilder s;
 
-				for (int i = 0; i < 100; i++)
+				for (int i = 1200; i < 3000; i++)
 				{
 					s = new StringBuilder((DateTime.Now.Date).ToShortDateString());
 					time = TimeSpan.FromSeconds(i);
@@ -563,15 +566,15 @@ namespace AMI_System_Management
 					s.Append(" " + answer);
 
 					string query = $"INSERT INTO [AMI_Tables](Agregator_Code, Device_Code, Voltage, CurrentP, ActivePower, ReactivePower, DateAndTime) " +
-					$"VALUES('agregator10', 'deviceqwer', {rand.Next(300)}, {rand.Next(300)}, {rand.Next(300)}, {rand.Next(300)}, '{s.ToString()}')";
+					$"VALUES('agregator10', 'deviceqwey', {rand.Next(300)}, {rand.Next(300)}, {rand.Next(300)}, {rand.Next(300)}, '{s.ToString()}')";
 
 					cmd = new SqlCommand(query, con);
 					cmd.ExecuteNonQuery();
 
 				}
 
-			}
-			*/
+			}*/
+			
 
 
 		}
@@ -659,9 +662,8 @@ namespace AMI_System_Management
 			alarmDataGrid.Visibility = Visibility.Visible;
 			errorLabel.Content = "";
 
-			string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
-
-			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
+            string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
 			{
 				con.Open();
 				string query = $"SELECT * FROM [AMI_Tables] WHERE {typeMeasurment} {greatOrLower} {rez} AND DateAndTime >= '{startDate}' AND DateAndTime < '{endDate.AddDays(1)}'";

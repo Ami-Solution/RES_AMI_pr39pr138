@@ -38,7 +38,6 @@ namespace AMI_Device_Test
             AMICharacteristics ami = new AMICharacteristics();
 
             Assert.IsNotEmpty(ami.Device_code);
-            //CollectionAssert.IsEmpty(ami.Measurements);
         }
 
         [Test]
@@ -46,9 +45,7 @@ namespace AMI_Device_Test
         {
             AMICharacteristics ami = new AMICharacteristics();
 
-            //Assert.IsNotEmpty(ami.Device_code);
             CollectionAssert.IsEmpty(ami.Measurements);
-            //Assert.IsInstanceOf(typeof(AMICharacteristics), ami);
         }
 
         [Test]
@@ -152,7 +149,7 @@ namespace AMI_Device_Test
 
         [Test]
         [TestCaseSource(nameof(DuplicateMethod2))]
-        public void SendDataToAgregator_DeviceAdded_DifferentDeviceCode(string agrID, string devID, Dictionary<TypeMeasurement, double> measurement)
+        public void SendDataToAgregator_DeviceAdded_DifferentMeaurements(string agrID, string devID, Dictionary<TypeMeasurement, double> measurement)
         {
             AMICharacteristics ami = new AMICharacteristics();
             Mock<IAMI_Agregator> moq1 = new Mock<IAMI_Agregator>();

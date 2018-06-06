@@ -11,14 +11,15 @@ namespace AMI_Agregator
 {
 	public class AgregatorDB : IAgregatorDB
 	{
-		private string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
+		private string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
 
 		public AgregatorDB()
 		{
 
 		}
 
-		public void DeleteAgregatorFromLocalDatabase(string agregator_code)
+        //brise CEO agregator i sve u njemu
+		public void DeleteAgregatorFromLocalDatabase(string agregator_code) 
 		{
 			using (SqlConnection con = new SqlConnection(CS))
 			{
@@ -33,6 +34,7 @@ namespace AMI_Agregator
 			}
 		}
 
+        //brise odredjeni device iz odredjenog agregatora
 		public void DeleteDeviceFromLocalDatabase(string agregator_code, string device_code)
 		{
 			using (SqlConnection con = new SqlConnection(CS))
@@ -73,7 +75,6 @@ namespace AMI_Agregator
 
 			}
 
-			//string CS = ConfigurationManager.ConnectionStrings["DBCS_AMI_Agregator"].ConnectionString;
 			using (SqlConnection con = new SqlConnection(CS))
 			{
 				con.Open();
@@ -173,7 +174,7 @@ namespace AMI_Agregator
 		}
 
 		//sluzi za ucitavanje agregatora i njegovih uredjaja(ako ih ima) koji nemaju podatke u lokalnoj bazi podataka
-		public void LoadAgregatorsFromLocalDataBase()
+		public void LoadAllAgregators()
 		{
 			using (SqlConnection con = new SqlConnection(CS))
 			{
