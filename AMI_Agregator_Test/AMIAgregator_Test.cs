@@ -169,12 +169,12 @@ namespace AMI_Agregator_Test
 
         [Test]
         public void SendToSystem_MenagementDatesOver0_EmptyAtEnd()
-        { //string agregator_code, Dictionary<string, List<DateTime>> dateTimeList, Dictionary<string, Dictionary<TypeMeasurement, List<double>>> buffer
+        { 
             AMIAgregator agr = new AMIAgregator("agregator7");
             MainWindow.agregators.Add(agr.Agregator_code, agr);
             MainWindow.agregatorNumber++;
             agr.State = State.ON;
-            agr.Dates.Add("llaallddkk", new List<DateTime>());
+            agr.Dates.Add("llaallddkk", new List<DateTime>() { DateTime.Now});
             Mock<IAMI_System_Management> moq1 = new Mock<IAMI_System_Management>();
             moq1.Setup(x => x.SendDataToSystemDataBase(It.IsAny<string>(), It.IsAny<Dictionary<string, List<DateTime>>>(),It.IsAny<Dictionary<string, Dictionary<TypeMeasurement, List<double>>>>())).Returns(true);
             IAMI_System_Management sys = moq1.Object;
@@ -199,10 +199,6 @@ namespace AMI_Agregator_Test
                         { TypeMeasurement.CurrentP, new List<double>() },
                         { TypeMeasurement.Voltage, new List<double>() },
                         });
-            MainWindow.agregators["agregator7"].Buffer["llaallddkk"][TypeMeasurement.ActivePower].Add(233);
-            MainWindow.agregators["agregator7"].Buffer["llaallddkk"][TypeMeasurement.CurrentP].Add(123);
-            MainWindow.agregators["agregator7"].Buffer["llaallddkk"][TypeMeasurement.ReactivePower].Add(56);
-            MainWindow.agregators["agregator7"].Buffer["llaallddkk"][TypeMeasurement.Voltage].Add(12.12);
 
             agr.Proxy = sys;
 
@@ -212,8 +208,8 @@ namespace AMI_Agregator_Test
 
             });
             Thread.Sleep(8000);
-            
-            Assert.AreEqual(oldBuffer, agr.Buffer);
+
+            Assert.AreEqual(oldBuffer["llaallddkk"][TypeMeasurement.ActivePower], agr.Buffer["llaallddkk"][TypeMeasurement.ActivePower]);
         }
 
         [Test]
