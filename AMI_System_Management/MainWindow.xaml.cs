@@ -406,8 +406,8 @@ namespace AMI_System_Management
 							X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
 							X2 = 0.552 + i * 0.552,
 
-							Y1 = 330 - (secondsValues[i] + 1) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak. +1 je mali cheat, da ne bude 0 vrednost
-							Y2 = 330 - (secondsValues[i + 1] + 1) / devicesCount,
+							Y1 = 330 - (secondsValues[i]) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak.
+							Y2 = 330 - (secondsValues[i + 1]) / devicesCount,
 
 							Stroke = new SolidColorBrush(Colors.Black)
 						};
@@ -475,8 +475,8 @@ namespace AMI_System_Management
 							X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
 							X2 = 0.552 + i * 0.552,
 
-							Y1 = 330 - (secondsValues[i] + 1) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak. +1 je mali cheat, da ne bude 0 vrednost
-							Y2 = 330 - (secondsValues[i + 1] + 1) / devicesCount,
+							Y1 = 330 - (secondsValues[i]) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak.
+							Y2 = 330 - (secondsValues[i + 1]) / devicesCount,
 
 							Stroke = new SolidColorBrush(Colors.Black)
 						};
@@ -561,10 +561,10 @@ namespace AMI_System_Management
 
 		//za testiranje grafa
 		
-            /*
-	   private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
-       private static System.Random rand = new System.Random();
-	   */
+            
+	   private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
+		private static System.Random rand = new System.Random();
+	   
 
 		private void clearButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -590,7 +590,7 @@ namespace AMI_System_Management
 			typeLabel.Content = "";
 
 			//ubacivanje u bazu podataka, radi testiranja grafa 
-			/*
+			
 			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
 			{
 				con.Open();
@@ -619,7 +619,7 @@ namespace AMI_System_Management
 
 				}
 
-			}*/
+			}
 			
 
 

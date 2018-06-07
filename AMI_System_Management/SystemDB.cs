@@ -176,10 +176,11 @@ namespace AMY_System_Management
 				}
 			}
 
-			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
+			
+			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
 			{
 				con.Open();
-				string query = $"SELECT count(*) FROM Devices_Table WHERE Agregator_Code like '{code}'";
+				string query = $"SELECT COUNT(DISTINCT Device_Code) FROM AMI_TABLES WHERE Agregator_Code LIKE '{code}'";
 
 				SqlCommand cmd = new SqlCommand(query, con);
 				object count = cmd.ExecuteScalar();
