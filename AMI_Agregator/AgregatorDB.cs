@@ -11,7 +11,7 @@ namespace AMI_Agregator
 {
 	public class AgregatorDB : IAgregatorDB
 	{
-		private string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
+		private static string CS_AMI_AGREGATOR = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
 
 		public AgregatorDB()
 		{
@@ -21,7 +21,7 @@ namespace AMI_Agregator
         //brise CEO agregator i sve u njemu
 		public void DeleteAgregatorFromLocalDatabase(string agregator_code) 
 		{
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
 			{
 				con.Open();
 				SqlCommand cmd;
@@ -37,7 +37,7 @@ namespace AMI_Agregator
         //brise odredjeni device iz odredjenog agregatora
 		public void DeleteDeviceFromLocalDatabase(string agregator_code, string device_code)
 		{
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
 			{
 				con.Open();
 				SqlCommand cmd;
@@ -75,7 +75,7 @@ namespace AMI_Agregator
 
 			}
 
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
 			{
 				con.Open();
 				SqlCommand cmd;
@@ -92,7 +92,7 @@ namespace AMI_Agregator
 		//sluzi za ucitavanje agregatora i njegovih uredjaja koji nisu poslati u globanu bazu podataka
 		public void LoadAllDataFromLocalDataBase()
 		{
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
 			{
 				SqlCommand cmd = new SqlCommand();
 				con.Open();
@@ -176,7 +176,7 @@ namespace AMI_Agregator
 		//sluzi za ucitavanje agregatora i njegovih uredjaja(ako ih ima) koji nemaju podatke u lokalnoj bazi podataka
 		public void LoadAllAgregators()
 		{
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
 			{
 				SqlCommand cmd = new SqlCommand();
 				con.Open();
@@ -205,7 +205,7 @@ namespace AMI_Agregator
 		//prilikom dodavanja novo agregatora, doda se i u bazu koja sadrzi sve agregatore
 		public void RemoveAgregatorFromDataBase(string agregator_code)
 		{
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
 			{
 				con.Open();
 				SqlCommand cmd;
@@ -220,7 +220,7 @@ namespace AMI_Agregator
 
 		public void SaveAgragatorToDataBase(string agregator_code)
 		{
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
 			{
 				con.Open();
 				SqlCommand cmd;

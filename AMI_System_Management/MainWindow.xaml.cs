@@ -250,6 +250,8 @@ namespace AMI_System_Management
 					rea += keyValue.Value[3];
 				}
 
+				typeLabel.Content = "YELLOW = I(A), ORANGE = U(V), BLUE = P(W), BLACK = Q(W)";
+
 				List<double> curVolActRea = new List<double>() { cur / 86400, vol / 86400, act / 86400, rea / 86400 }; //ovo je prosecno merenje za ceo dan (kada nije radio, vrednost je 0)
 				List<SolidColorBrush> colors = new List<SolidColorBrush>()
 				{
@@ -278,6 +280,16 @@ namespace AMI_System_Management
 			}
 			else
 			{
+				if (typeMeasurment == "Voltage") {
+					typeLabel.Content = "U(V)";
+				} else if (typeMeasurment == "CurrentP") {
+					typeLabel.Content = "I(A)";
+				} else if (typeMeasurment == "ActivePower") {
+					typeLabel.Content = "P(W)";
+				} else {
+					typeLabel.Content = "P(W)";
+				}
+				
 				//vrsi se Izcrtavanje izabranog merenja za izabrani uređaj za izabrani datum
 				Dictionary<DateTime, double> DatesAndValues =
 					AMISystem_Management.SDB.GetDatesAndValuesFromDataBase(device_code, typeMeasurment, selectedDate);
@@ -349,6 +361,9 @@ namespace AMI_System_Management
 			{
 				if (typeMeasurment == "Voltage") //napon se ne sabira, nego se srednja vrednost se gleda. Jedina razlike je da ne povecavamo vrednosti na Y osi
 				{
+
+					typeLabel.Content = "U(V)";
+
 					LMaxValue.Content = "300";
 					LAvgValue.Content = "200";
 					LMinValue.Content = "100";
@@ -403,6 +418,19 @@ namespace AMI_System_Management
 				}
 				else
 				{
+					if (typeMeasurment == "CurrentP")
+					{
+						typeLabel.Content = "I(A)";
+					}
+					else if (typeMeasurment == "ActivePower")
+					{
+						typeLabel.Content = "P(W)";
+					}
+					else
+					{
+						typeLabel.Content = "P(W)";
+					}
+
 					//broj uredjaja koji pripadaju trazenom agregatu
 					int devicesCount = 0;
 					//imamo vreme, i vrednost u tom vremenu
@@ -459,6 +487,23 @@ namespace AMI_System_Management
 			}
 			else //prosecno merenje za izabrani tip, isto kao i gore kod napona. Ne menjamo samo vrednosti na Y osi
 			{
+				if (typeMeasurment == "Voltage")
+				{
+					typeLabel.Content = "U(V)";
+				}
+				else if (typeMeasurment == "CurrentP")
+				{
+					typeLabel.Content = "I(A)";
+				}
+				else if (typeMeasurment == "ActivePower")
+				{
+					typeLabel.Content = "P(W)";
+				}
+				else
+				{
+					typeLabel.Content = "P(W)";
+				}
+
 				LMaxValue.Content = "300";
 				LAvgValue.Content = "200";
 				LMinValue.Content = "100";
@@ -501,8 +546,8 @@ namespace AMI_System_Management
 						X1 = 0 + i * 0.552, // koordinate na x osi, od X do X+1 (po sekundama se pomeramo)
 						X2 = 0.552 + i * 0.552,
 
-						Y1 = 330 - (secondsValues[i] + 1) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak. +1 je mali cheat, da ne bude 0 vrednost
-						Y2 = 330 - (secondsValues[i + 1] + 1) / devicesCount,
+						Y1 = 330 - (secondsValues[i]) / devicesCount, //330 je 0, (0,330) --> koordinatni pocetak.
+						Y2 = 330 - (secondsValues[i + 1]) / devicesCount,
 
 						Stroke = new SolidColorBrush(Colors.Black)
 					};
@@ -542,6 +587,7 @@ namespace AMI_System_Management
 			LMinValue.Content = "";
 			errorLabel.Content = "";
 			alarmTextBox.Text = "";
+			typeLabel.Content = "";
 
 			//ubacivanje u bazu podataka, radi testiranja grafa 
 			/*

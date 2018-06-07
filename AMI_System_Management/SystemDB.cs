@@ -12,10 +12,10 @@ namespace AMY_System_Management
 {
 	public class SystemDB : ISystemDB
 	{
-		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
-		private static string CS_AMI_AGREGATOR = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
+		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
+		private static string CS_AMI_AGREGATOR = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
 
-        //vraca agregatore kako bismo prikazali u combo boxu sve agr
+		//vraca agregatore kako bismo prikazali u combo boxu sve agr
 		public List<string> GetAllAgregatorsFromDataBase()
 		{
 			List<string> retVal = new List<string>();

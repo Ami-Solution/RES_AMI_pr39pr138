@@ -10,7 +10,7 @@ namespace AMI_Device
 {
 	public class DeviceDB : IDeviceDB
 	{
-		private static string CS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Serlok\source\repos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
+		private static string CS_AMI_AGREGATOR = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_Agregator.mdf;Integrated Security=True";
 
 		public DeviceDB()
 		{
@@ -19,7 +19,7 @@ namespace AMI_Device
 
 		public void LoadNotAddedDevices()
 		{
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
 			{
 				SqlCommand cmd = new SqlCommand();
 				con.Open();
@@ -50,7 +50,7 @@ namespace AMI_Device
 
 		public void RemoveDeviceFromDataBase(string device_code)
 		{
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
 			{
 				con.Open();
 				SqlCommand cmd;
@@ -65,7 +65,7 @@ namespace AMI_Device
 
 		public void SaveDeviceToDataBase(string agregator_code, string device_code)
 		{
-			using (SqlConnection con = new SqlConnection(CS))
+			using (SqlConnection con = new SqlConnection(CS_AMI_AGREGATOR))
 			{
 				con.Open();
 				SqlCommand cmd;

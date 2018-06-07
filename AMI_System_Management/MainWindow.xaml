@@ -34,7 +34,7 @@
 		<Label x:Name="labelStart" Content="Start date" HorizontalAlignment="Left" Margin="438,178,0,0" VerticalAlignment="Top" Width="150"/>
 		<Label x:Name="labelEnd" Content="End date" HorizontalAlignment="Left" Margin="642,178,0,0" VerticalAlignment="Top" Width="150"/>
 
-		<ScrollViewer Name="GrafTab" Visibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" Margin="0,381,30,0">
+		<ScrollViewer Name="GrafTab" Visibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" Margin="0,381,30,0">
 			<Canvas HorizontalAlignment="Left" Background="PapayaWhip" Height="370" Margin="20,45,0,0" VerticalAlignment="Top" Width="48000">
 
 				<Canvas x:Name="CGraph" Height="330" Canvas.Left="30" Width="1570">
@@ -205,9 +205,10 @@
 				<Label x:Name="label23" Content="22:00&#xD;&#xA;&#xD;&#xA;" Canvas.Left="43812" Canvas.Top="340"/>
 				<Label x:Name="label24" Content="23:00&#xD;&#xA;" Canvas.Left="45801" Canvas.Top="340"/>
 				<Label x:Name="label25" Content="00:00&#xD;&#xA;&#xD;&#xA;" Canvas.Left="47692" Canvas.Top="340"/>
-				<Label x:Name="LMaxValue" Content="" FontSize="15" Canvas.Left="-18" Canvas.Top="10" Height="32" Width="43"/>
+				<Label x:Name="LMaxValue" Content="" FontSize="15" Canvas.Left="-18" Canvas.Top="17" Height="32" Width="43"/>
 				<Label x:Name="LAvgValue" Content="" FontSize="15" Canvas.Left="-18" Canvas.Top="116" Height="32" Width="43"/>
 				<Label x:Name="LMinValue" Content="" FontSize="15" Canvas.Left="-18" Canvas.Top="215" Height="32" Width="43"/>
+				<Label x:Name="typeLabel" FontSize="18" Content="" Canvas.Left="45" Canvas.Top="-1"/>
 
 			</Canvas>
 		</ScrollViewer>
