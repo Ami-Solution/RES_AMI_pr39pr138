@@ -559,12 +559,10 @@ namespace AMI_System_Management
 
 		}
 
-		//za testiranje grafa
-		
-            
-	   private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
+		/* //za testiranje grafa       
+		private static string CS_AMI_SYSTEM = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Dalibor\Desktop\GithubRepos\RES_AMI_pr39pr138\Enums\AMI_System.mdf;Integrated Security=True";
 		private static System.Random rand = new System.Random();
-	   
+		*/
 
 		private void clearButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -590,7 +588,7 @@ namespace AMI_System_Management
 			typeLabel.Content = "";
 
 			//ubacivanje u bazu podataka, radi testiranja grafa 
-			
+			/*
 			using (SqlConnection con = new SqlConnection(CS_AMI_SYSTEM))
 			{
 				con.Open();
@@ -620,7 +618,7 @@ namespace AMI_System_Management
 				}
 
 			}
-			
+			*/
 
 
 		}
